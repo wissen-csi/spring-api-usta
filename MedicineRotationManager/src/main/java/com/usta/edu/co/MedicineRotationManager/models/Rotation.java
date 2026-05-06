@@ -46,7 +46,7 @@ public class Rotation {
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "completion_date")
+    @Column(name = "completion_date", nullable = false)
     private LocalDate completionDate;
 
     @Column(name = "capacity", nullable = false)

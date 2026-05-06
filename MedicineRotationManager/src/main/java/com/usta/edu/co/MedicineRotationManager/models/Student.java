@@ -6,6 +6,7 @@ import java.util.List;
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicConnection;
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
 import com.usta.edu.co.MedicineRotationManager.enumerations.Language;
+import com.usta.edu.co.MedicineRotationManager.enumerations.StudentStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,6 +41,10 @@ public class Student extends Person {
     @Column(name = "academic_connection", nullable = false)
     private AcademicConnection academicConnection;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "student_status", nullable = false)
+    private StudentStatus studentStatus;
+
     @Column(name = "current_semester", nullable = false)
     private int currentSemester;
 
@@ -51,6 +56,18 @@ public class Student extends Person {
 
     @Column(name = "entry_date_academic_program", nullable = false)
     private LocalDate entryDateAcademicProgram;
+
+    @Column(name = "start_induction_date", nullable = false)
+    private LocalDate startInductionDate;
+
+    @Column(name = "end_induction_date", nullable = false)
+    private LocalDate endInductionDate;
+
+    @Column(name = "arl_start_date", nullable = false)
+    private LocalDate arlStartDate;
+
+    @Column(name = "arl_end_date", nullable = false)
+    private LocalDate arlEndDate;
 
     @Column(name = "hobbies", nullable = false, columnDefinition = "TEXT")
     private String hobbies;
@@ -73,6 +90,8 @@ public class Student extends Person {
 
     @OneToMany(mappedBy = "student")
     private List<GroupAssignment> groupAssignments;
+    @OneToMany(mappedBy = "student")
+    private List<StudentAcademicPeriod> studentAcademicPeriods;
 
     @ManyToOne
     @JoinColumn(name = "university_id", nullable = false)

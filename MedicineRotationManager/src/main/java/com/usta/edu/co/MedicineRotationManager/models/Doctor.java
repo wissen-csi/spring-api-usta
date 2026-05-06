@@ -33,10 +33,6 @@ public class Doctor extends Person {
     @JoinColumn(name = "university_id", nullable = false)
     private University university;
 
-    @ManyToOne
-    @JoinColumn(name = "admin_id")
-    private Admin admin;
-
     @OneToMany(mappedBy = "doctor")
     private List<Rotation> rotations;
 }

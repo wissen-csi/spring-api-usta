@@ -84,13 +84,10 @@ public abstract class Person {
     @Column(name = "imc", nullable = false)
     private double imc;
 
-    @Column(name = "photo_url", nullable = false, length = 255)
-    private String photoUrl;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private RoleApp role;
 
     @OneToMany(mappedBy = "person")
-    private List<Archive> archives;
+    private List<File> file;
 }
