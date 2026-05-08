@@ -2,9 +2,12 @@ package com.usta.edu.co.MedicineRotationManager.handlers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.usta.edu.co.MedicineRotationManager.dtos.DiaseaseDTO;
 import com.usta.edu.co.MedicineRotationManager.services.CieService;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +25,7 @@ public class ContrellerCie {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<String> search(@RequestParam String term) {
-        return ResponseEntity.ok(cieService.search(term));
+    public List<DiaseaseDTO> search(@RequestParam String term) {
+        return cieService.search(term);
     }
 }

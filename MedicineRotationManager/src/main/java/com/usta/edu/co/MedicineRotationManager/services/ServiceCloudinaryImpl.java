@@ -20,7 +20,7 @@ public class ServiceCloudinaryImpl implements IServicioClaudinaty {
     private Cloudinary cloudinary;
     @Override
     public Map<?, ?> uplaud(MultipartFile multipartFile) throws IOException {
-        File file = Converter.converMultipartFileToFile(multipartFile);
+        File file = Converter.convertMultipartFileToFile(multipartFile);
         Map<String,String> resut = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
         Files.deleteIfExists(file.toPath());
         Map<String,String> reponse = new HashMap<>();

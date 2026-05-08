@@ -19,7 +19,7 @@ public class SegurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/test/**").permitAll() // ← permite tus endpoints
+                .requestMatchers("/api/test/**").permitAll() 
                 .anyRequest().authenticated()
             )
             .csrf(csrf -> csrf.disable());
