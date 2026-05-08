@@ -1,7 +1,9 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -17,13 +19,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "admins")
 public class Admin extends Person {
-
-    @OneToMany(mappedBy = "admin")
-    private List<Student> studentManagement;
-
-    @OneToMany(mappedBy = "admin")
-    private List<Doctor> doctorManagement;
-
+    @Column(name = "hiring_date",nullable = false)
+    private LocalDate hiringDate;
+    @Column(name = "end_Date", nullable = false)
+    private LocalDate endDate;
     @OneToMany(mappedBy = "admin")
     private List<Task> tasks;
 

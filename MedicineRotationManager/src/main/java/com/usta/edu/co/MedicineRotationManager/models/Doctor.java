@@ -35,4 +35,5 @@ public class Doctor extends Person {
 
     @OneToMany(mappedBy = "doctor")
     private List<Rotation> rotations;
+
 }
