@@ -2,13 +2,17 @@ package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
-import com.usta.edu.co.MedicineRotationManager.enumerations.RoleApp;
+import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
 import jakarta.persistence.Column;
@@ -25,6 +29,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
@@ -34,7 +39,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "people")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Person {
+public abstract class Person implements UserDetails {
 
     @Id
     private String id;
@@ -86,8 +91,23 @@ public abstract class Person {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private RoleApp role;
+    private AppRole role;
 
     @OneToMany(mappedBy = "person")
     private List<File> file;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(getRole().name()));
+    }
+
+    @Override
+    public @NonNull String getPassword() {
+        return getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return getEmail();
+    }
+
 }
