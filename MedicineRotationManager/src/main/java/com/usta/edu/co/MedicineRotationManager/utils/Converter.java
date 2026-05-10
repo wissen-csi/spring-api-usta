@@ -21,4 +21,7 @@ public class Converter {
     public static String convertHTMLToString(@NonNull String html){
         return Jsoup.parse(html).text();
     }
+    public static String convertURI(String uri){
+        return uri.substring(uri.indexOf("/release")); 
+    }
 }
