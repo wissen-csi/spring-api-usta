@@ -75,7 +75,7 @@ public abstract class Person implements UserDetails {
 
     @Column(name = "phone_number", nullable = false, length = 11)
     private String phoneNumber;
-
+    
     @Column(name = "email", nullable = false, length = 150, unique = true)
     private String email;
 
@@ -95,6 +95,10 @@ public abstract class Person implements UserDetails {
 
     @OneToMany(mappedBy = "person")
     private List<File> file;
+
+    @Column(name = "password", nullable = false, length = 100, unique = true)
+    private String password;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(getRole().name()));
@@ -102,12 +106,13 @@ public abstract class Person implements UserDetails {
 
     @Override
     public @NonNull String getPassword() {
-        return getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return getEmail();
+        return dni;
     }
+    
 
 }

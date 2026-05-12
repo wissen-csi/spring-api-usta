@@ -13,17 +13,18 @@ import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
 @Configuration
 public class ConfigSecurity {
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers(HttpMethod.GET, "/api/v1/test/**").hasRole(AppRole.ROLE_DOCTOR.name())
-            .requestMatchers(HttpMethod.POST, "/api/v1/test/**").hasRole(AppRole.ROLE_ADMIN.name())
 
-        );
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/api/v1/test/**").hasAuthority(AppRole.ROLE_DOCTOR.name())
+                        .requestMatchers(HttpMethod.POST, "/api/v1/test/**").hasAuthority(AppRole.ROLE_ADMIN.name())
+
+                );
         return httpSecurity.build();
     }
 
