@@ -26,6 +26,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -77,6 +78,7 @@ public abstract class Person implements UserDetails {
     private String phoneNumber;
     
     @Column(name = "email", nullable = false, length = 150, unique = true)
+    @Email
     private String email;
 
     @Enumerated(EnumType.STRING)

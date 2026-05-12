@@ -8,8 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
-
 @Configuration
 public class ConfigSecurity {
     @Bean
@@ -21,8 +19,8 @@ public class ConfigSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/v1/test/**").hasAuthority(AppRole.ROLE_DOCTOR.name())
-                        .requestMatchers(HttpMethod.POST, "/api/v1/test/**").hasAuthority(AppRole.ROLE_ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/test/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/test/**").permitAll()
 
                 );
         return httpSecurity.build();

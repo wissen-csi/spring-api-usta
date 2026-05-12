@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<body
+    style="
+        font-family:Arial;
+        background:#f4f4f4;
+        padding:20px;
+    ">
+
+<div
+    style="
+        background:white;
+        max-width:600px;
+        margin:auto;
+        padding:30px;
+        border-radius:10px;
+    ">
+
+    <h1 style="color:#2563eb;">
+
+        Hola
+        <span th:text="${name}">
+            Usuario
+        </span>
+
+    </h1>
+
+    <p>
+
+        Gracias por registrarte en
+        Medicine Rotation Manager.
+
+    </p>
+
+    <p>
+
+        Tu código de verificación es:
+
+    </p>
+
+    <div
+        style="
+            background:#e5e7eb;
+            padding:15px;
+            border-radius:8px;
+            text-align:center;
+            font-size:24px;
+            font-weight:bold;
+            letter-spacing:5px;
+        ">
+
+        <span th:text="${code}">
+            123456
+        </span>
+
+    </div>
+
+    <br>
+
+    <a
+        th:href="${url}"
+
+        style="
+            display:inline-block;
+            background:#2563eb;
+            color:white;
+            padding:12px 20px;
+            text-decoration:none;
+            border-radius:8px;
+        ">
+
+        Verificar cuenta
+
+    </a>
+
+</div>
+
+</body>
+</html>
