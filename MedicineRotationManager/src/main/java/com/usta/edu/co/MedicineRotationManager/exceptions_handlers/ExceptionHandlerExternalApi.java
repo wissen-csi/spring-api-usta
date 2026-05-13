@@ -10,7 +10,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 
-import com.usta.edu.co.MedicineRotationManager.dtos.Err;
+import com.usta.edu.co.MedicineRotationManager.dto.Err;
 
 @RestControllerAdvice
 public class ExceptionHandlerExternalApi {

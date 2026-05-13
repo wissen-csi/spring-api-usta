@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.usta.edu.co.MedicineRotationManager.dtos.Err;
+import com.usta.edu.co.MedicineRotationManager.dto.Err;
 
 import jakarta.persistence.QueryTimeoutException;
 
