@@ -7,14 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 
-public interface RepositoriStudent extends JpaRepository<Student,String> {
+public interface StudentRepositori extends JpaRepository<Student,String> {
     @Query(value = """
             SELECT *
             FROM students
-            WHERE DATEDIFF(arl_end_date, NOW())
-                  BETWEEN 0 AND 5
+            WHERE DATEDIFF(arl_end_date,CURDATE())<=5
             """,
-            nativeQuery = true
-    )
-   public List<Student> findByCloseToExpireArl();
+        nativeQuery = true)
+    public List<Student> findByCloseToExpireArl();
+
 }

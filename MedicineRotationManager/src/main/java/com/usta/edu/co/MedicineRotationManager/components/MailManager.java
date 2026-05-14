@@ -1,6 +1,5 @@
-package com.usta.edu.co.MedicineRotationManager.services;
+package com.usta.edu.co.MedicineRotationManager.components;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import com.usta.edu.co.MedicineRotationManager.dto.MessageStudentDTO;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TemplateEnum;
 
 import jakarta.mail.MessagingException;
@@ -29,7 +27,7 @@ public class MailManager {
         this.templateEngine = templateEngine;
     }
 
-    public void sendMessageHTML(String email,TemplateEnum type,Context context,String reason) throws MessagingException{
+    public void sendNotifyArl(String email,TemplateEnum type,Context context,String reason) throws MessagingException{
         String html =templateEngine.process(type.getName(), context);
 
         MimeMessage  mimeMessage = javaMailSender.createMimeMessage();
@@ -42,7 +40,6 @@ public class MailManager {
         
     }
 
-    @Deprecated
     public void sendMessage(String email,String message) throws MessagingException{
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
