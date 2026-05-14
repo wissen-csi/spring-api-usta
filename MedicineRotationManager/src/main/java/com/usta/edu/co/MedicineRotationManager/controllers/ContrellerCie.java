@@ -1,9 +1,9 @@
-package com.usta.edu.co.MedicineRotationManager.handlers;
+package com.usta.edu.co.MedicineRotationManager.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.usta.edu.co.MedicineRotationManager.dtos.DiseaseCieDTO;
-import com.usta.edu.co.MedicineRotationManager.dtos.DiseaseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.DiseaseCieDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.DiseaseDTO;
 import com.usta.edu.co.MedicineRotationManager.services.CieService;
 
 import lombok.NonNull;

@@ -7,8 +7,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import com.usta.edu.co.MedicineRotationManager.dtos.DiseaseCieDTO;
-import com.usta.edu.co.MedicineRotationManager.dtos.DiseaseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.DiseaseCieDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.DiseaseDTO;
 import com.usta.edu.co.MedicineRotationManager.utils.Converter;
 
 import tools.jackson.databind.JsonNode;
