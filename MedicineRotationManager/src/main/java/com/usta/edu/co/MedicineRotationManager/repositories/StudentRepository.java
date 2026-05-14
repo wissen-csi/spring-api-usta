@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 
-public interface StudentRepositori extends JpaRepository<Student,String> {
+public interface StudentRepository extends JpaRepository<Student,String> {
     @Query(value = """
             SELECT *
             FROM students

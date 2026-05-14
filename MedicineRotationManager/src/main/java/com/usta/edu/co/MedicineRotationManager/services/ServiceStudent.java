@@ -5,30 +5,30 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.usta.edu.co.MedicineRotationManager.models.Student;
-import com.usta.edu.co.MedicineRotationManager.repositories.StudentRepositori;
+import com.usta.edu.co.MedicineRotationManager.repositories.StudentRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 @Service
 public class ServiceStudent {
 
-    private StudentRepositori repositoriStudent;
+    private StudentRepository studentRepository;
 
     
-    public ServiceStudent(StudentRepositori repositoriStudent) {
-        this.repositoriStudent = repositoriStudent;
+    public ServiceStudent(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
 
     public Student findById(String id){
-        return repositoriStudent.findById(id).orElseThrow(()-> new EntityNotFoundException()); 
+        return studentRepository.findById(id).orElseThrow(()-> new EntityNotFoundException()); 
     }
 
 
     public List<Student> findCloseToExpireARL(){
-        return repositoriStudent.findByCloseToExpireArl();
+        return studentRepository.findByCloseToExpireArl();
     }
     public List<Student> findAll(){
-        return repositoriStudent.findAll();
+        return studentRepository.findAll();
     }
 
 }

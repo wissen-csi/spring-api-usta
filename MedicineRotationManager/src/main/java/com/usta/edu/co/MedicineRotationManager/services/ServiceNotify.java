@@ -11,7 +11,6 @@ import com.usta.edu.co.MedicineRotationManager.dto.MessageStudentDTO;
 import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TemplateEnum;
 
-import jakarta.mail.MessageRemovedException;
 import jakarta.mail.MessagingException;
 
 @Service

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
 import com.usta.edu.co.MedicineRotationManager.models.Person;
 
-public interface PersonRepositori  extends JpaRepository<Person,String> {
+public interface PersonRepository  extends JpaRepository<Person,String> {
     @Query(value = """
             SELECT s.email
             FROM Person s

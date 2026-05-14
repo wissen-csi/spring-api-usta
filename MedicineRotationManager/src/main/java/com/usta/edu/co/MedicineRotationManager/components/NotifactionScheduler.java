@@ -26,7 +26,7 @@ public class NotifactionScheduler {
     }
 
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void sendNotification() throws Exception{
            Context context = new Context();
    List<MessageStudentDTO> list = new LinkedList<>();
