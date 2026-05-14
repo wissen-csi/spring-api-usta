@@ -8,7 +8,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.usta.edu.co.MedicineRotationManager.dtos.Err;
+import com.usta.edu.co.MedicineRotationManager.dto.Err;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
 public class ExceptionHandlerGeneric {
@@ -16,6 +18,7 @@ public class ExceptionHandlerGeneric {
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionHandlerGeneric.class);
 
     @ExceptionHandler(Exception.class)
+
     public ResponseEntity<Err> generic(Exception exception) {
         LOG.warn("generic", exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -27,6 +30,11 @@ public class ExceptionHandlerGeneric {
         LOG.warn("User not found", usernameNotFoundException);
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new Err(404, "User not found", HttpStatus.NOT_FOUND.name()));
+    }
+
+@ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Err> genmeicfound(EntityNotFoundException exception){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Err(404, "not found", HttpStatus.NOT_FOUND.name()));
     }
 
 }

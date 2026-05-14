@@ -1,11 +1,9 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
-import java.util.Collection;
+
 import java.util.List;
 
-import org.jspecify.annotations.Nullable;
-import org.springframework.security.core.GrantedAuthority;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicConnection;
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
