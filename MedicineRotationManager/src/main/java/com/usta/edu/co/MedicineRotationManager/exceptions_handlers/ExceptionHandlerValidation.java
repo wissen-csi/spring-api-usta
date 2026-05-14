@@ -1,6 +1,5 @@
 package com.usta.edu.co.MedicineRotationManager.exceptions_handlers;
 
-
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +17,16 @@ public class ExceptionHandlerValidation {
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionHandlerValidation.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Err> failsValid(MethodArgumentNotValidException exception){
+    public ResponseEntity<Err> failsValid(MethodArgumentNotValidException exception) {
         LOG.warn("invalid paramethers", exception);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Err(400, "invalid paramthers", HttpStatus.BAD_REQUEST.name()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new Err(400, "invalid paramthers", HttpStatus.BAD_REQUEST.name()));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Err> constrainsViolation(ConstraintViolationException exception){
-        LOG.warn("Constrains Violation Jakarta",exception);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Err(400, "Constrains Violation Jakarta", HttpStatus.BAD_REQUEST.name()));
+    public ResponseEntity<Err> constrainsViolation(ConstraintViolationException exception) {
+        LOG.warn("Constrains Violation Jakarta", exception);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new Err(400, "Constrains Violation Jakarta", HttpStatus.BAD_REQUEST.name()));
     }
 }

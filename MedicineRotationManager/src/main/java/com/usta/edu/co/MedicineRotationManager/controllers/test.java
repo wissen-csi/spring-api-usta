@@ -1,4 +1,4 @@
-package com.usta.edu.co.MedicineRotationManager.handlers;
+package com.usta.edu.co.MedicineRotationManager.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.aspectj.weaver.ast.Test;

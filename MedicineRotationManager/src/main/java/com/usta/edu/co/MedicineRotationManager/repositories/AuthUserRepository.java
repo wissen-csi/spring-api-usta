@@ -1,4 +1,4 @@
-package com.usta.edu.co.repositories;
+package com.usta.edu.co.MedicineRotationManager.repositories;
 
 import java.util.Optional;
 
