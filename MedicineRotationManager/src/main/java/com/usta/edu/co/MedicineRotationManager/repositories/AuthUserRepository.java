@@ -10,5 +10,6 @@ import com.usta.edu.co.MedicineRotationManager.models.*;
 @Repository
 public interface AuthUserRepository extends JpaRepository<AuthUser, String> {
 
-    Optional<AuthUser> findByDni(String dni);
+     Optional<AuthUser> findByDni(String dni);
+     
 }
