@@ -1,6 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.HospitalLocation;
@@ -17,6 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +28,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "rotations")
 public class Rotation {
 
@@ -53,6 +56,7 @@ public class Rotation {
     @Column(name = "capacity", nullable = false)
     private int capacity;
 
+    @Builder.Default
     @OneToMany(mappedBy = "rotation", fetch = FetchType.LAZY)
-    private List<Group> groups;
+    private List<Group> groups= new LinkedList<>();
 }
