@@ -1,11 +1,10 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
-
+import java.util.LinkedList;
 import java.util.List;
 
 
-import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicConnection;
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
 import com.usta.edu.co.MedicineRotationManager.enumerations.Language;
 import com.usta.edu.co.MedicineRotationManager.enumerations.StudentStatus;
@@ -20,15 +19,18 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 @Table(name = "students")
 public class Student extends Person {
 
@@ -41,18 +43,8 @@ public class Student extends Person {
     private AcademicPrograms academicPrograms;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "academic_connection", nullable = false)
-    private AcademicConnection academicConnection;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "student_status", nullable = false)
     private StudentStatus studentStatus;
-
-    @Column(name = "current_semester", nullable = false)
-    private int currentSemester;
-
-    @Column(name = "cumulative_average", nullable = false)
-    private double cumulativeAverage;
 
     @Column(name = "course_approved", nullable = false)
     private boolean courseApproved;
@@ -60,10 +52,10 @@ public class Student extends Person {
     @Column(name = "entry_date_academic_program", nullable = false)
     private LocalDate entryDateAcademicProgram;
 
-    @Column(name = "start_induction_date", nullable = false)
+    @Column(name = "start_induction_date", nullable = true)
     private LocalDate startInductionDate;
 
-    @Column(name = "end_induction_date", nullable = false)
+    @Column(name = "end_induction_date", nullable = true)
     private LocalDate endInductionDate;
 
     @Column(name = "arl_start_date", nullable = false)
@@ -75,26 +67,30 @@ public class Student extends Person {
     @Column(name = "hobbies", nullable = false, columnDefinition = "TEXT")
     private String hobbies;
 
-    @ManyToOne
-    @JoinColumn(name = "admin_id")
-    private Admin admin;
 
+    @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
-    private List<Attendant> relatives;
+    private List<Attendant> relatives = new LinkedList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
-    private List<MedicationTreatment> medicationTreatments;
+    private List<MedicationTreatment> medicationTreatments = new LinkedList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
-    private List<StudentDisease> studentDiseases;
+    private List<StudentDisease> studentDiseases = new LinkedList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
-    private List<ResearchParticipant> researchParticipants;
+    private List<ResearchParticipant> researchParticipants = new LinkedList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "student" ,fetch = FetchType.LAZY)
-    private List<GroupAssignment> groupAssignments;
+    private List<GroupAssignment> groupAssignments = new LinkedList<>();
+
+    @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
-    private List<StudentAcademicPeriod> studentAcademicPeriods;
+    private List<StudentAcademicPeriod> studentAcademicPeriods = new LinkedList<>();
 
     @ManyToOne
     @JoinColumn(name = "university_id", nullable = false)

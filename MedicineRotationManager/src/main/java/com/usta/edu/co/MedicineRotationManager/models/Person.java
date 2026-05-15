@@ -101,7 +101,7 @@ public abstract class Person implements UserDetails {
     @OneToMany(mappedBy = "person")
     private List<File> file = new LinkedList<>();
 
-    @Column(name = "password", nullable = false, length = 100, unique = true)
+    @Column(name = "password", nullable = false, length = 100)
     private String password;
 
     @Override

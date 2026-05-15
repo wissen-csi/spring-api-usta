@@ -1,6 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +24,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "universities")
 public class University {
@@ -36,6 +39,9 @@ public class University {
     @Column(name = "email", nullable = false, length = 150, unique = true)
     private String email;
 
+    @Column(nullable = false,length = 150)
+    private String name;
+
     @Column(name = "phone_number", nullable = false, length = 11)
     private String phoneNumber;
 
@@ -45,10 +51,10 @@ public class University {
     @CreationTimestamp
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDate creationDate;
-    
+    @Builder.Default
     @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
-    private List<Doctor> teachers;
-
+    private List<Doctor> teachers = new LinkedList<>();
+    @Builder.Default
     @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
-    private List<Student> students;
+    private List<Student> students = new LinkedList<>();
 }

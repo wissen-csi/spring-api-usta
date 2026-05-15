@@ -1,5 +1,6 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
+import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicConnection;
 import com.usta.edu.co.MedicineRotationManager.enumerations.Semester;
 
 import jakarta.persistence.Column;
@@ -26,6 +27,8 @@ public class StudentAcademicPeriod {
     private String id;
     @Column(name = "academic_period_id", nullable = false, length = 100)
     private String academicPeriodId;
+    @Column(name = "cumulative_average", nullable = false)
+    private double cumulativeAverage;
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
@@ -35,5 +38,8 @@ public class StudentAcademicPeriod {
     @Enumerated(EnumType.STRING)
     @Column(name = "semester", nullable = false)
     private Semester semester;
-
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "academic_connection", nullable = false)
+    private AcademicConnection academicConnection;
 }
