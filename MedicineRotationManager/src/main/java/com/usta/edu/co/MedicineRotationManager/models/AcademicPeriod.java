@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -30,6 +31,6 @@ public class AcademicPeriod {
     private LocalDate endDate;
     @Column(name = "is_Active", nullable = false)
     private boolean isActive;
-    @OneToMany(mappedBy = "academicPeriod")
+    @OneToMany(mappedBy = "academicPeriod", fetch = FetchType.LAZY)
     private List<StudentAcademicPeriod> studentAcademicPeriod;
 }

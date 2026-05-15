@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -32,6 +33,6 @@ public class Medicine {
     @Column(name = "description_atc", nullable = false, columnDefinition = "TEXT")
     private String descriptionAtc;
 
-    @OneToMany(mappedBy = "medicine")
+    @OneToMany(mappedBy = "medicine", fetch = FetchType.LAZY)
     private List<MedicationTreatment> medicationTreatments;
 }
