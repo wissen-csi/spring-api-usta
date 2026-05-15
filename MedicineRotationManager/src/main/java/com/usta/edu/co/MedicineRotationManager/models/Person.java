@@ -3,6 +3,7 @@ package com.usta.edu.co.MedicineRotationManager.models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,16 +29,17 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 @Table(name = "people")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person implements UserDetails {
@@ -95,8 +97,9 @@ public abstract class Person implements UserDetails {
     @Column(name = "role", nullable = false)
     private AppRole role;
 
+    @Builder.Default
     @OneToMany(mappedBy = "person")
-    private List<File> file;
+    private List<File> file = new LinkedList<>();
 
     @Column(name = "password", nullable = false, length = 100, unique = true)
     private String password;
@@ -115,6 +118,6 @@ public abstract class Person implements UserDetails {
     public String getUsername() {
         return dni;
     }
-    
+    public Person(){}
 
 }
