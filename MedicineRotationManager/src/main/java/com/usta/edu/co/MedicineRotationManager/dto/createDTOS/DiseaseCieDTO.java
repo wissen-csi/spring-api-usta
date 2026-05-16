@@ -1,4 +1,4 @@
-package com.usta.edu.co.MedicineRotationManager.dto;
+package com.usta.edu.co.MedicineRotationManager.dto.createDTOS;
 
 import lombok.Getter;
 

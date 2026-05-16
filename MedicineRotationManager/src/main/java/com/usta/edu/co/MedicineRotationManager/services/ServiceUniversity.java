@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.usta.edu.co.MedicineRotationManager.dto.UniversityCreationDto;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.UniversityCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.models.University;
 import com.usta.edu.co.MedicineRotationManager.repositories.UniversityRepository;
@@ -24,7 +24,7 @@ public class ServiceUniversity {
         this.serviceLocation = serviceLocation;
         this.objectMapper=objectMapper;
     }
-    public void save(UniversityCreationDto dto){
+    public void save(UniversityCreateDTO dto){
         Location location = serviceLocation.findOrCreate(dto.address());
         repository.save(University.builder()
     .id(UUIDGenerator.newId())

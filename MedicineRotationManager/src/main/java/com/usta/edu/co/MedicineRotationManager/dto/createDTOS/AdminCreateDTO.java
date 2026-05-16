@@ -1,19 +1,22 @@
-package com.usta.edu.co.MedicineRotationManager.dto;
-
+package com.usta.edu.co.MedicineRotationManager.dto.createDTOS;
+import java.time.LocalDate;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
-public record AdminUpdateDTO(
+public record AdminCreateDTO(
     String name,
     String lastName,
+    String dni,
     MaritalStatus maritalStatus,
-    LocationDTO residenceAddress,
+    LocationCreateDTO placeBirth,
+    LocationCreateDTO residenceAddress,
     String phoneNumber,
     String email,
     TypeBlood typeBlood,
     double weight,
-    double imc
-) {
-
-}
+    double imc,
+    String password,
+    LocalDate hiringDate,
+    LocalDate endDate
+) {}
