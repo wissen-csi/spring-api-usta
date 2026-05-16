@@ -1,6 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -26,14 +27,19 @@ public class EntryPractice {
     @Id
     private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "group_assignment_id", nullable = false)
-    private GroupAssignment groupAssignment;
+    @Column(name = "start_time", nullable = false)
+    private LocalTime startTime;
 
-    @CreationTimestamp
-    @Column(name = "assistance", nullable = false, updatable = false)
-    private LocalDateTime assistance;
+    @Column(name = "end_time", nullable = false)
+    private LocalTime endTime;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id", nullable = false)
+    private GroupAssignment group;
+
 
     @Column(name = "qr_code", nullable = false, length = 255)
     private String qrCode;
+    
+    
 }
