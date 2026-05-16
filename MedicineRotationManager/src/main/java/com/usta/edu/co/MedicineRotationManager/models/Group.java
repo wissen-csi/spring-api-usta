@@ -31,12 +31,8 @@ public class Group {
     @JoinColumn(name = "rotation_id", nullable = false)
     private Rotation rotation;
 
-    @Column(name = "start_time", nullable = false)
-    private LocalTime startTime;
-
-    @Column(name = "end_time", nullable = false)
-    private LocalTime endTime;
-
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private List<GroupAssignment> groupAssignments;
+    @OneToMany(mappedBy = "group",fetch=FetchType.LAZY)
+    private List<GroupAssignment> entryPractices;
 }

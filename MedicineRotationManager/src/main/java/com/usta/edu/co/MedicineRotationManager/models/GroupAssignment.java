@@ -30,9 +30,8 @@ public class GroupAssignment {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
+    @JoinColumn(name = "group_id")
     private Group group;
 
-    @OneToMany(mappedBy = "groupAssignment", fetch = FetchType.LAZY)
-    private List<EntryPractice> entryPractices;
+
 }

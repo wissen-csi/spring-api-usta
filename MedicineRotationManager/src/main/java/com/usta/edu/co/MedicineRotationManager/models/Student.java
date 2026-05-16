@@ -95,7 +95,9 @@ public class Student extends Person {
     @ManyToOne
     @JoinColumn(name = "university_id", nullable = false)
     private University university;
-
+    @Builder.Default
+    @OneToMany(mappedBy = "student",fetch = FetchType.LAZY)
+    private List<Entry> entries = new LinkedList<>();
 
 
 }
