@@ -33,6 +33,6 @@ public class Group {
 
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private List<GroupAssignment> groupAssignments;
-    @OneToMany(mappedBy = "group",fetch=FetchType.LAZY)
-    private List<GroupAssignment> entryPractices;
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private List<EntryPractice> entryPractices;
 }

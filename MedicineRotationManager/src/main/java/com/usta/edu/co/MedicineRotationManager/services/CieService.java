@@ -7,8 +7,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import com.usta.edu.co.MedicineRotationManager.dto.DiseaseCieDTO;
-import com.usta.edu.co.MedicineRotationManager.dto.DiseaseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DiseaseCieDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DiseaseCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.utils.Converter;
 
 import tools.jackson.databind.JsonNode;
@@ -47,7 +47,7 @@ public class CieService {
 
     }
     
-    public DiseaseDTO searchSpecificDiaseasse(DiseaseCieDTO diseaseCieDTO){
+    public DiseaseCreateDTO searchSpecificDiaseasse(DiseaseCieDTO diseaseCieDTO){
                 JsonNode response=  restClient.get()
                 .uri(Converter.convertURI(diseaseCieDTO.getFundationURI()))
                 .header("Authorization", "Bearer " + cieTokenService.getToken())
@@ -56,7 +56,7 @@ public class CieService {
                 .header("Accept-Language", "es")
                 .retrieve()
                 .body(JsonNode.class);
-                return new DiseaseDTO(response.get("@id").asString(),
+                return new DiseaseCreateDTO(response.get("@id").asString(),
                  response.path("code").asString(), response.path("definition").path("@value").asString(), response.path("title").path("@value").asString());
 
     }

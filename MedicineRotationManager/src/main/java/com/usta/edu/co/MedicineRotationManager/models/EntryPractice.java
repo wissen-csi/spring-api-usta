@@ -28,18 +28,16 @@ public class EntryPractice {
     private String id;
 
     @Column(name = "start_time", nullable = false)
-    private LocalTime startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "end_time", nullable = false)
-    private LocalTime endTime;
+    private LocalDateTime endTime;
 
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
-    private GroupAssignment group;
-
+    private Group group;
 
     @Column(name = "qr_code", nullable = false, length = 255)
     private String qrCode;
-    
-    
+
 }

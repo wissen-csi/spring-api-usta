@@ -8,11 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class UUIDGenerator {
     @Autowired
     private static PasswordEncoder passwordEncoder;
-    
-    public static String newId(){
+
+    public static String generateNewId() {
         return UUID.randomUUID().toString();
     }
-    public static String encryptUUID(){
+
+    public static String encryptUUID() {
         return passwordEncoder.encode(UUID.randomUUID().toString());
     }
 }

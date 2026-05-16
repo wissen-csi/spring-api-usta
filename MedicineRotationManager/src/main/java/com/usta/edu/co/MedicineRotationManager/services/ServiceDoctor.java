@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.usta.edu.co.MedicineRotationManager.dto.DoctorCrationDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DoctorCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Doctor;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.models.University;
@@ -26,6 +26,7 @@ public class ServiceDoctor {
     private ServiceLocation serviceLocation;
     private PasswordEncoder passwordEncoder;
     private ServiceUniversity serviceUniversity;
+
     public ServiceDoctor(DoctorRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation,
             PasswordEncoder passwordEncoder, ServiceUniversity serviceUniversity) {
         this.repository = repository;
@@ -34,20 +35,24 @@ public class ServiceDoctor {
         this.passwordEncoder = passwordEncoder;
         this.serviceUniversity = serviceUniversity;
     }
-    public Doctor findById(String id){
-        return repository.findById(id).orElseThrow(()-> new EntityNotFoundException());
+
+    public Doctor findById(String id) {
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
     }
-    public Page<Doctor> findAll(Pageable pageable ){
+
+    public Page<Doctor> findAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
+
     @Transactional
-    public void delete(String id){
-        Doctor doctor = repository.findById(id).orElseThrow(()-> new EntityNotFoundException());
+    public void delete(String id) {
+        Doctor doctor = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
         repository.delete(doctor);
     }
+
     @Transactional
-    public void patch(String id, JsonNode node){
-        Doctor doctor = repository.findById(id).orElseThrow(()->new EntityNotFoundException());
+    public void patch(String id, JsonNode node) {
+        Doctor doctor = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
         try {
             objectMapper.readerForUpdating(doctor).readValue(node);
         } catch (Exception e) {
@@ -55,29 +60,29 @@ public class ServiceDoctor {
         }
         repository.save(doctor);
     }
+
     @Transactional
-    public void save(DoctorCrationDTO dto){
-    Location placeBirth= serviceLocation.findOrCreate(dto.placeBirth());
-    Location residenceAddress= serviceLocation.findOrCreate(dto.residenceAddress());
-    University university = serviceUniversity.findById(dto.universityId());
+    public void save(DoctorCreateDTO dto) {
+        Location placeBirth = serviceLocation.findOrCreate(dto.placeBirth());
+        Location residenceAddress = serviceLocation.findOrCreate(dto.residenceAddress());
+        University university = serviceUniversity.findById(dto.universityId());
         repository.save(Doctor.builder()
-    .id(UUIDGenerator.newId())
-    .name(dto.name())
-    .lastName(dto.lastName())
-    .dni(dto.dni())
-    .maritalStatus(dto.maritalStatus())
-    .placeBirth(placeBirth)
-    .residenceAddress(residenceAddress)
-    .phoneNumber(dto.phoneNumber())
-    .email(dto.email())
-    .typeBlood(dto.typeBlood())
-    .weight(dto.weight())
-    .imc(dto.imc())
-    .password(passwordEncoder.encode(dto.password()))
-    .specialty(dto.specialty())
-    .university(university)
-    .build()
-    );
-        
+                .id(UUIDGenerator.generateNewId())
+                .name(dto.name())
+                .lastName(dto.lastName())
+                .dni(dto.dni())
+                .maritalStatus(dto.maritalStatus())
+                .placeBirth(placeBirth)
+                .residenceAddress(residenceAddress)
+                .phoneNumber(dto.phoneNumber())
+                .email(dto.email())
+                .typeBlood(dto.typeBlood())
+                .weight(dto.weight())
+                .imc(dto.imc())
+                .password(passwordEncoder.encode(dto.password()))
+                .specialty(dto.specialty())
+                .university(university)
+                .build());
+
     }
 }
