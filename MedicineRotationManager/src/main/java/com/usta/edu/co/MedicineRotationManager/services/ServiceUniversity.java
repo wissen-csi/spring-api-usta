@@ -27,7 +27,7 @@ public class ServiceUniversity {
     public void save(UniversityCreateDTO dto){
         Location location = serviceLocation.findOrCreate(dto.address());
         repository.save(University.builder()
-    .id(UUIDGenerator.newId())
+    .id(UUIDGenerator.generateNewId())
     .address(location)
     .name(dto.name())
     .phoneNumber(dto.phoneNumberm())

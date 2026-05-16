@@ -84,7 +84,7 @@ public class ServiceAdmin {
         Location placeBirth = serviceLocation.findOrCreate(dto.placeBirth());
         Location residenceAddress = serviceLocation.findOrCreate(dto.residenceAddress());
         Admin admin = Admin.builder()
-                .id(UUIDGenerator.newId())
+                .id(UUIDGenerator.generateNewId())
                 .name(dto.name())
                 .lastName(dto.lastName())
                 .dni(dto.dni())

@@ -52,7 +52,7 @@ public class ServiceLocation {
 
     @Transactional
     public void save(LocationCreateDTO dto) {
-        repository.save(new Location(UUIDGenerator.newId(), dto.address(), dto.city(), dto.department()));
+        repository.save(new Location(UUIDGenerator.generateNewId(), dto.address(), dto.city(), dto.department()));
 
     }
 
@@ -76,7 +76,7 @@ public class ServiceLocation {
                         dto.address())
                 .orElseGet(() -> repository.save(
                         new Location(
-                                UUIDGenerator.newId(),
+                                UUIDGenerator.generateNewId(),
                                 dto.address(),
                                 dto.city(),
                                 dto.department())));

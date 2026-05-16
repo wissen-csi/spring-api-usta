@@ -77,7 +77,7 @@ public class ServiceStudent {
 
         repository.save(
             Student.builder()
-                .id(UUIDGenerator.newId())
+                .id(UUIDGenerator.generateNewId())
 
                 .name(dto.name())
                 .lastName(dto.lastName())
