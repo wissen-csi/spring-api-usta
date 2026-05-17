@@ -10,8 +10,7 @@ public record RotationCreationDTO(
     HospitalLocation hospitalLocation,
     TypeRotation typeRotation,
     LocalDate startDate,
-    LocalDate completionDate,
-    int capacity
+    LocalDate completionDate
 ) {
 
 }

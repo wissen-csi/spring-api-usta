@@ -1,7 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -53,8 +53,8 @@ public class University {
     private LocalDate creationDate;
     @Builder.Default
     @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
-    private List<Doctor> teachers = new LinkedList<>();
+    private List<Doctor> teachers = new ArrayList<>();
     @Builder.Default
     @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
-    private List<Student> students = new LinkedList<>();
+    private List<Student> students = new ArrayList<>();
 }

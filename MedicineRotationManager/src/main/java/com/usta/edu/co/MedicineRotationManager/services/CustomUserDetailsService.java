@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private final AuthUserRepository authUserRepository;
+    private  AuthUserRepository authUserRepository;
 
     /* Devuelve AuthUser (lo busca por DNI):) */
     @Override

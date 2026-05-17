@@ -46,7 +46,6 @@ public class ServiceRotation {
                 .typeRotation(dto.typeRotation())
                 .startDate(dto.startDate())
                 .completionDate(dto.completionDate())
-                .capacity(dto.capacity())
                 .build();
 
         repository.save(rotation);
@@ -82,7 +81,6 @@ public class ServiceRotation {
         rotation.setTypeRotation(dto.typeRotation());
         rotation.setStartDate(dto.startDate());
         rotation.setCompletionDate(dto.completionDate());
-        rotation.setCapacity(dto.capacity());
 
         repository.save(rotation);
     }

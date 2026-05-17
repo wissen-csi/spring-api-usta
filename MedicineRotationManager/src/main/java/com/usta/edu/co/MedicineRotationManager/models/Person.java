@@ -2,8 +2,8 @@ package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -99,7 +99,7 @@ public abstract class Person implements UserDetails {
 
     @Builder.Default
     @OneToMany(mappedBy = "person")
-    private List<File> file = new LinkedList<>();
+    private List<File> file = new ArrayList<>();
 
     @Column(name = "password", nullable = false, length = 100)
     private String password;
