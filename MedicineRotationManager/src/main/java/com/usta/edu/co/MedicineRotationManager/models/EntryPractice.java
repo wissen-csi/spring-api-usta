@@ -37,9 +37,7 @@ public class EntryPractice {
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
-
     @Column(name = "qr_code", nullable = false, length = 255)
     private String qrCode;
-    
-    
+
 }

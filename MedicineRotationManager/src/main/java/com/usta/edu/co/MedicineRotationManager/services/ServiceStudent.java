@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.usta.edu.co.MedicineRotationManager.dto.StudentCreationDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.StudentCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 import com.usta.edu.co.MedicineRotationManager.models.University;
@@ -64,7 +64,7 @@ public class ServiceStudent {
     }
 
     @Transactional
-    public void save(StudentCreationDTO dto){
+    public void save(StudentCreateDTO dto){
 
         Location placeBirth =
             serviceLocation.findOrCreate(dto.placeBirth());
@@ -77,7 +77,7 @@ public class ServiceStudent {
 
         repository.save(
             Student.builder()
-                .id(UUIDGenerator.newId())
+                .id(UUIDGenerator.generateNewId())
 
                 .name(dto.name())
                 .lastName(dto.lastName())

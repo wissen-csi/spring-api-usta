@@ -33,7 +33,7 @@ public class ServiceEntryPractice {
                     .startTime(dto.starTime())
                     .group(group)
                     .qrCode(UUIDGenerator.encryptUUID())
-                    .id(UUIDGenerator.newId())
+                    .id(UUIDGenerator.generateNewId())
                     .build());
         }
     }

@@ -43,4 +43,5 @@ public class Group {
     @OneToMany(mappedBy = "group",fetch=FetchType.LAZY)
     private List<EntryPractice> entryPractices = new ArrayList<>();
     
+
 }

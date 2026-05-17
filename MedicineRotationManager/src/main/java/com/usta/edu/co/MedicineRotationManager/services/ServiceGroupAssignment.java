@@ -31,7 +31,7 @@ public class ServiceGroupAssignment {
         Rotation rotation = group.getRotation();
         if (repository.countByGroupId(dto.idGroup())<group.getCapacity()&&!repository.existsScheduleConflict(student, rotation.getStartDate()    , rotation.getCompletionDate())) {
             repository.save(GroupAssignment.builder()
-        .id(UUIDGenerator.newId())
+        .id(UUIDGenerator.generateNewId())
         .student(student)
         .group(group)
         .build()

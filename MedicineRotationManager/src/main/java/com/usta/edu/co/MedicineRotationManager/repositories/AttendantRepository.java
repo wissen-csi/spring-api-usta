@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.usta.edu.co.MedicineRotationManager.models.Attendant;
 
-public interface AttendantRepository extends JpaRepository<Attendant,String> {
+public interface AttendantRepository extends JpaRepository<Attendant, String> {
 
 }

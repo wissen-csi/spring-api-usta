@@ -2,8 +2,8 @@ package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
+import java.util.List;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
 import com.usta.edu.co.MedicineRotationManager.enumerations.Language;
@@ -67,10 +67,10 @@ public class Student extends Person {
     @Column(name = "hobbies", nullable = false, columnDefinition = "TEXT")
     private String hobbies;
 
-
     @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private List<Attendant> relatives = new ArrayList<>();
+
 
     @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
@@ -80,9 +80,6 @@ public class Student extends Person {
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private List<StudentDisease> studentDiseases = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
-    private List<ResearchParticipant> researchParticipants = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "student" ,fetch = FetchType.LAZY)
@@ -90,6 +87,7 @@ public class Student extends Person {
 
     @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+
     private List<StudentAcademicPeriod> studentAcademicPeriods = new ArrayList<>();
 
     @ManyToOne
@@ -99,5 +97,9 @@ public class Student extends Person {
     @OneToMany(mappedBy = "student",fetch = FetchType.LAZY)
     private List<Entry> entries = new ArrayList<>();
 
+    // Un estudiante puede tener muchas investigaciones :)
+    @Builder.Default
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    private List<Investigation> investigations = new ArrayList<>();
 
 }

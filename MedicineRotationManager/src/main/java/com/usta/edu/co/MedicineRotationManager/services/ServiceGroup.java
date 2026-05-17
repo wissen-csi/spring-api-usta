@@ -38,7 +38,7 @@ public class ServiceGroup {
     public void save(GroupCreationDTO dto){
         Rotation rotation = serviceRotation.findById(dto.rotationId());
         repository.save(Group.builder()
-        .id(UUIDGenerator.newId())
+        .id(UUIDGenerator.generateNewId())
         .rotation(rotation)
         .capacity(dto.capacity())
         .build()

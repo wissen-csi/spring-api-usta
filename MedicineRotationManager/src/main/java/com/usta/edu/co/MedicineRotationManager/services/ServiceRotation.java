@@ -23,8 +23,8 @@ public class ServiceRotation {
     private final ObjectMapper objectMapper;
 
     public ServiceRotation(RotationRepository repository,
-                           ServiceDoctor serviceDoctor,
-                           ObjectMapper objectMapper) {
+            ServiceDoctor serviceDoctor,
+            ObjectMapper objectMapper) {
         this.repository = repository;
         this.serviceDoctor = serviceDoctor;
         this.objectMapper = objectMapper;
@@ -40,7 +40,7 @@ public class ServiceRotation {
         }
 
         Rotation rotation = Rotation.builder()
-                .id(UUIDGenerator.newId())
+                .id(UUIDGenerator.generateNewId())
                 .doctor(doctor)
                 .hospitalLocation(dto.hospitalLocation())
                 .typeRotation(dto.typeRotation())
@@ -84,9 +84,10 @@ public class ServiceRotation {
 
         repository.save(rotation);
     }
+
     @Transactional
-    public void patch(String id, JsonNode node){
-        Rotation rotation = repository.findById(id).orElseThrow(()-> new EntityNotFoundException());
+    public void patch(String id, JsonNode node) {
+        Rotation rotation = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
         try {
             objectMapper.readerForUpdating(rotation).readValue(node);
         } catch (Exception e) {
@@ -95,5 +96,5 @@ public class ServiceRotation {
         repository.save(rotation);
 
     }
-    
+
 }
