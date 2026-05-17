@@ -3,6 +3,8 @@ package com.usta.edu.co.MedicineRotationManager.models;
 import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "auth_users")
 public class AuthUser implements UserDetails {
@@ -23,8 +26,8 @@ public class AuthUser implements UserDetails {
     @Column(name = "auth_user_id", nullable = false, updatable = false)
     private String id;
 
-    @Column(name = "dni", nullable = false, unique = true, length = 20)
-    private String dni;
+    @Column(name = "user_name", nullable = false, unique = true, length = 20)
+    private String userName;
 
     @Column(name = "password", nullable = false, length = 255)
     private String password;
@@ -32,29 +35,29 @@ public class AuthUser implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 30)
     private AppRole role;
-
+    @Builder.Default
     @Column(name = "enabled", nullable = false)
     private boolean enabled = true;
-
+    @Builder.Default
     @Column(name = "account_locked", nullable = false)
     private boolean accountLocked = false;
-
+    @Builder.Default
     @Column(name = "failed_attempts", nullable = false)
     private int failedAttempts = 0;
-
-    @Column(name = "last_login")
+    @Column(name = "last_login", nullable = true)
     private LocalDateTime lastLogin;
-
-    @Column(name = "password_change_date")
+    
+    @Column(name = "password_change_date", nullable =  true)
     private LocalDateTime passwordChangeDate;
 
-    @Column(name = "refresh_token", length = 500)
+    @Column(name = "refresh_token", length = 500, nullable = true)
     private String refreshToken;
 
-    @Column(name = "refresh_token_expiration")
+    @Column(name = "refresh_token_expiration", nullable = true)
     private LocalDateTime refreshTokenExpiration;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
     @JoinColumn(name = "person_id", nullable = false, unique = true)
     private Person person;
 
@@ -68,7 +71,7 @@ public class AuthUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return dni;
+        return userName;
     }
 
     @Override

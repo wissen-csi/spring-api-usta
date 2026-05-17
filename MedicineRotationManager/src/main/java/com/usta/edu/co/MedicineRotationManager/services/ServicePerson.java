@@ -15,6 +15,6 @@ public ServicePerson(PersonRepository personRepository) {
     this.personRepository = personRepository;
 }
 public List<String> findEmailsByRole(AppRole role){
-    return personRepository.findEmailsByRole(role);
+    return personRepository.findEmailsByRole(role.name());
 }
 }

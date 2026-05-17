@@ -28,23 +28,20 @@ public class ServiceStudent {
 
     private ServiceLocation serviceLocation;
 
-    private PasswordEncoder passwordEncoder;
+    private AuthUserService userService;
 
     private ServiceUniversity serviceUniversity;
 
-    public ServiceStudent(
-        StudentRepository repository,
-        ObjectMapper objectMapper,
-        ServiceLocation serviceLocation,
-        PasswordEncoder passwordEncoder,
-        ServiceUniversity serviceUniversity
-    ) {
+    public ServiceStudent(StudentRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation,
+            AuthUserService userService, ServiceUniversity serviceUniversity) {
         this.repository = repository;
         this.objectMapper = objectMapper;
         this.serviceLocation = serviceLocation;
-        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
         this.serviceUniversity = serviceUniversity;
     }
+
+
 
     public Student findById(String id){
         return repository.findById(id)
@@ -74,9 +71,7 @@ public class ServiceStudent {
 
         University university =
             serviceUniversity.findById(dto.universityId());
-
-        repository.save(
-            Student.builder()
+        Student student =             Student.builder()
                 .id(UUIDGenerator.generateNewId())
 
                 .name(dto.name())
@@ -96,9 +91,6 @@ public class ServiceStudent {
                 .weight(dto.weight())
                 .imc(dto.imc())
 
-                .password(
-                    passwordEncoder.encode(dto.password())
-                )
 
                 .secondLanguage(dto.secondLanguage())
 
@@ -128,8 +120,11 @@ public class ServiceStudent {
 
                 .university(university)
 
-                .build()
+                .build();
+        student= repository.save(
+            student
         );
+        userService.createUser(student, dto.password());
     }
 
     @Transactional

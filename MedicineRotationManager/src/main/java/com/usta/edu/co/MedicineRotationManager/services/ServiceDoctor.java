@@ -23,16 +23,19 @@ public class ServiceDoctor {
     private DoctorRepository repository;
     private ObjectMapper objectMapper;
     private ServiceLocation serviceLocation;
-    private PasswordEncoder passwordEncoder;
     private ServiceUniversity serviceUniversity;
+    private AuthUserService userService;
+
+
+
 
     public ServiceDoctor(DoctorRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation,
-            PasswordEncoder passwordEncoder, ServiceUniversity serviceUniversity) {
+            ServiceUniversity serviceUniversity, AuthUserService userService) {
         this.repository = repository;
         this.objectMapper = objectMapper;
         this.serviceLocation = serviceLocation;
-        this.passwordEncoder = passwordEncoder;
         this.serviceUniversity = serviceUniversity;
+        this.userService = userService;
     }
 
     public Doctor findById(String id) {
@@ -57,7 +60,8 @@ public class ServiceDoctor {
         } catch (Exception e) {
             throw new RuntimeException();
         }
-        repository.save(doctor);
+        doctor=repository.save(doctor);
+        userService.updateUsername(doctor);
     }
 
     @Transactional
@@ -65,7 +69,7 @@ public class ServiceDoctor {
         Location placeBirth = serviceLocation.findOrCreate(dto.placeBirth());
         Location residenceAddress = serviceLocation.findOrCreate(dto.residenceAddress());
         University university = serviceUniversity.findById(dto.universityId());
-        repository.save(Doctor.builder()
+        Doctor doctor = Doctor.builder()
                 .id(UUIDGenerator.generateNewId())
                 .name(dto.name())
                 .lastName(dto.lastName())
@@ -78,10 +82,10 @@ public class ServiceDoctor {
                 .typeBlood(dto.typeBlood())
                 .weight(dto.weight())
                 .imc(dto.imc())
-                .password(passwordEncoder.encode(dto.password()))
                 .specialty(dto.specialty())
                 .university(university)
-                .build());
-
+                .build();
+        doctor = repository.save(doctor);
+        userService.createUser(doctor, dto.password());
     }
 }

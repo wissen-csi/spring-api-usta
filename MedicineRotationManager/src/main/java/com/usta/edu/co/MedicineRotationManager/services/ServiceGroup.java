@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.usta.edu.co.MedicineRotationManager.dto.GroupCreationDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.GroupCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Group;
 import com.usta.edu.co.MedicineRotationManager.models.Rotation;
 import com.usta.edu.co.MedicineRotationManager.repositories.GroupRepository;
@@ -35,7 +35,7 @@ public class ServiceGroup {
         repository.delete(group);
     }
     @Transactional
-    public void save(GroupCreationDTO dto){
+    public void save(GroupCreateDTO dto){
         Rotation rotation = serviceRotation.findById(dto.rotationId());
         repository.save(Group.builder()
         .id(UUIDGenerator.generateNewId())

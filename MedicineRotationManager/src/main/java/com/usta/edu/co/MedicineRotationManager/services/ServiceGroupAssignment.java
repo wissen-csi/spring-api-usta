@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.usta.edu.co.MedicineRotationManager.dto.GroupAssignmentCreationDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.GroupAssignmentCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Group;
 import com.usta.edu.co.MedicineRotationManager.models.GroupAssignment;
 import com.usta.edu.co.MedicineRotationManager.models.Rotation;
@@ -25,7 +25,7 @@ public class ServiceGroupAssignment {
         this.serviceStudent = serviceStudent;
     }
     @Transactional
-    public void save(GroupAssignmentCreationDTO dto){
+    public void save(GroupAssignmentCreateDTO dto){
         Group group = serviceGroup.findById(dto.idGroup());
         Student student = serviceStudent.findById(dto.idStudent());
         Rotation rotation = group.getRotation();
@@ -53,7 +53,7 @@ public class ServiceGroupAssignment {
         return repository.findAll(pageable);
     }
     @Transactional
-    public void update(String id, GroupAssignmentCreationDTO dto){
+    public void update(String id, GroupAssignmentCreateDTO dto){
         GroupAssignment groupAssignment = repository.findById(id).orElseThrow(()-> new EntityNotFoundException());
         Group group = serviceGroup.findById(dto.idGroup());
         Student student = serviceStudent.findById(dto.idStudent());
