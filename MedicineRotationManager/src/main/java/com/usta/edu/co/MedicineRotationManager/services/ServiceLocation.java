@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.usta.edu.co.MedicineRotationManager.dto.*;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.LocationCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.repositories.LocationRepository;
@@ -79,5 +78,20 @@ public class ServiceLocation {
                                 dto.address(),
                                 dto.city(),
                                 dto.department())));
+    }
+
+    @Transactional
+    public Location findOrCreate(String city, String department, String address) {
+        return repository
+                .findByCityAndDepartmentAndAddress(
+                        city,
+                        department,
+                        address)
+                .orElseGet(() -> repository.save(
+                        new Location(
+                                UUIDGenerator.generateNewId(),
+                                address,
+                                city,
+                                department)));
     }
 }

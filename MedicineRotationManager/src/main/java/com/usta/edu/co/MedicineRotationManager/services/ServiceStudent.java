@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.EcxelCreateStudentDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.StudentCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
@@ -125,6 +126,73 @@ public class ServiceStudent {
             student
         );
         userService.createUser(student, dto.password());
+    }
+
+    @Transactional
+    public void save(EcxelCreateStudentDTO dto){
+
+        Location placeBirth =
+            serviceLocation.findOrCreate(dto.getPlaceBirthCity(),dto.getPlaceBirthDepartment(),dto.getPlaceBirthAddress());
+
+        Location residenceAddress =
+            serviceLocation.findOrCreate(dto.getResidenceCity(),dto.getResidenceDepartment(),dto.getResidenceAddress());
+
+        University university =
+            serviceUniversity.findById(dto.getUniversityId());
+        Student student =             Student.builder()
+                .id(UUIDGenerator.generateNewId())
+
+                .name(dto.getName())
+                .lastName(dto.getLastName())
+                .dni(dto.getDni())
+
+                .maritalStatus(dto.getMaritalStatus())
+
+                .placeBirth(placeBirth)
+                .residenceAddress(residenceAddress)
+
+                .phoneNumber(dto.getPhoneNumber())
+                .email(dto.getEmail())
+
+                .typeBlood(dto.getTypeBlood())
+
+                .weight(dto.getWeight())
+                .imc(dto.getImc())
+
+
+                .secondLanguage(dto.getSecondLanguage())
+
+                .academicPrograms(dto.getAcademicPrograms())
+
+                .studentStatus(dto.getStudentStatus())
+
+                .courseApproved(dto.isCourseApproved())
+
+                .entryDateAcademicProgram(
+                    dto.getEntryDateAcademicProgram()
+                )
+
+                .startInductionDate(
+                    dto.getStartInductionDate()
+                )
+
+                .endInductionDate(
+                    dto.getEndInductionDate()
+                )
+
+                .arlStartDate(dto.getArlStartDate())
+
+                .arlEndDate(dto.getArlEndDate())
+
+                .hobbies(dto.getHobbies())
+
+                .university(university)
+
+                .build();
+        student= repository.save(
+            student
+        );
+        userService.createUser(student, dto.getPassword());
     }
 
     @Transactional
