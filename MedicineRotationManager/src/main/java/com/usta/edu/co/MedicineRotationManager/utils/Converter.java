@@ -18,6 +18,7 @@ public class Converter {
         }
         return file;
     }
+
     public static String convertHTMLToString(@NonNull String html){
         return Jsoup.parse(html).text();
     }

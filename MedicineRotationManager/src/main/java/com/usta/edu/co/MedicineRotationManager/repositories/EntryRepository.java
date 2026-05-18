@@ -1,11 +1,14 @@
 package com.usta.edu.co.MedicineRotationManager.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.usta.edu.co.MedicineRotationManager.models.Porter;
+import com.usta.edu.co.MedicineRotationManager.models.*;
 
-public interface PorterRepository extends JpaRepository<Porter, String> {
-    Page<Porter> findAll(Pageable pageable);
+public interface EntryRepository extends JpaRepository<Entry, String> {
+    Page<Entry> findAll(Pageable pageable);
+
 }

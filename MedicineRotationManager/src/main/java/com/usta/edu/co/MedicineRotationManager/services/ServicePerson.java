@@ -2,6 +2,8 @@ package com.usta.edu.co.MedicineRotationManager.services;
 
 import java.util.List;
 
+import com.usta.edu.co.MedicineRotationManager.models.Person;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
@@ -17,4 +19,10 @@ public ServicePerson(PersonRepository personRepository) {
 public List<String> findEmailsByRole(AppRole role){
     return personRepository.findEmailsByRole(role);
 }
+
+public Person findById(String id){
+    return this.personRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Persona no encontrada"));
+}
+
+
 }

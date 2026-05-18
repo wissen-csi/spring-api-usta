@@ -2,7 +2,6 @@ package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
@@ -73,7 +72,7 @@ public class Student extends Person {
 
     @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
-    private List<MedicationTreatment> medicationTreatments = new ArrayList<>();
+    private List<MedicalTreatment> medicalTreatments = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)

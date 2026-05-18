@@ -1,5 +1,8 @@
 package com.usta.edu.co.MedicineRotationManager.dto.createDTOS;
 
-public record InvestigationCreateDTO() {
+import java.time.LocalDate;
+
+public record InvestigationCreateDTO(String repositoryUrl, String description, LocalDate publicationDate,
+        String studentId) {
 
 }

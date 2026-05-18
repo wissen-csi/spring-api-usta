@@ -49,7 +49,7 @@ public class CieService {
     
     public DiseaseCreateDTO searchSpecificDiaseasse(DiseaseCieDTO diseaseCieDTO){
                 JsonNode response=  restClient.get()
-                .uri(Converter.convertURI(diseaseCieDTO.getFundationURI()))
+                .uri(Converter.convertURI(diseaseCieDTO.fundationURI()))
                 .header("Authorization", "Bearer " + cieTokenService.getToken())
                 .header("API-Version", "v2")
                 .header("Accept", "application/json")
