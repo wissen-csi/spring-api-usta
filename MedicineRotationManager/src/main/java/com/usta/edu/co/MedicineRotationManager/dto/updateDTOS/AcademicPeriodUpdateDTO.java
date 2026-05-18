@@ -1,8 +1,8 @@
-package com.usta.edu.co.MedicineRotationManager.dto.createDTOS;
+package com.usta.edu.co.MedicineRotationManager.dto.updateDTOS;
 
 import java.time.LocalDate;
 
-public record AcademicPeriodCreateDTO(
+public record AcademicPeriodUpdateDTO(
         String name,
         LocalDate startDate,
         LocalDate endDate

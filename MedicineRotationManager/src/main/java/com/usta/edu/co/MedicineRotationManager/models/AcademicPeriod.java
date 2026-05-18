@@ -31,8 +31,6 @@ public class AcademicPeriod {
     private LocalDate startDate;
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
-    @Column(name = "is_Active", nullable = false)
-    private boolean isActive;
     @OneToMany(mappedBy = "academicPeriod", fetch = FetchType.LAZY)
     private List<StudentAcademicPeriod> studentAcademicPeriod;
 }
