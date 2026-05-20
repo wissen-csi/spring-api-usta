@@ -1,12 +1,15 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
+<<<<<<< HEAD
 
 
+=======
+import java.util.List;
+>>>>>>> origin/features-roles-jwt
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.AdminCreateDTO;
@@ -26,7 +29,13 @@ public class ServiceAdmin {
     private AdminRepository adminRepository;
     private ServiceLocation serviceLocation;
     private ObjectMapper objectMapper;
+<<<<<<< HEAD
     private AuthUserService userService;
+=======
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+>>>>>>> origin/features-roles-jwt
 
 
 

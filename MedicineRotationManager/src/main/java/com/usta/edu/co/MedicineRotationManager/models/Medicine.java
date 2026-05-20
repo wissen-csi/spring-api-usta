@@ -9,12 +9,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -34,5 +36,5 @@ public class Medicine {
     private String descriptionAtc;
 
     @OneToMany(mappedBy = "medicine", fetch = FetchType.LAZY)
-    private List<MedicationTreatment> medicationTreatments;
+    private List<MedicalTreatment> medicalTreatments;
 }

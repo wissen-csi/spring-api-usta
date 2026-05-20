@@ -5,20 +5,19 @@ import com.usta.edu.co.MedicineRotationManager.enumerations.Specialty;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
 public record DoctorCreateDTO(
-    String name,
-    String lastName,
-    String dni,
-    MaritalStatus maritalStatus,
-    LocationCreateDTO placeBirth,
-    LocationCreateDTO residenceAddress,
-    String phoneNumber,
-    String email,
-    TypeBlood typeBlood,
-    double weight,
-    double imc,
-    String password,
-    Specialty specialty,
-    String universityId
-) {
+        String name,
+        String lastName,
+        String dni,
+        MaritalStatus maritalStatus,
+        LocationCreateDTO placeBirth,
+        LocationCreateDTO residenceAddress,
+        String phoneNumber,
+        String email,
+        TypeBlood typeBlood,
+        double weight,
+        double imc,
+        String password,
+        Specialty specialty,
+        String universityId) {
 
 }

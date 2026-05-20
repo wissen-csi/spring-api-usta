@@ -33,8 +33,12 @@ public class ServiceStudent {
 
     private ServiceUniversity serviceUniversity;
 
+<<<<<<< HEAD
     public ServiceStudent(StudentRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation,
             AuthUserService userService, ServiceUniversity serviceUniversity) {
+=======
+    public ServiceStudent(StudentRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation, PasswordEncoder passwordEncoder, ServiceUniversity serviceUniversity) {
+>>>>>>> origin/features-roles-jwt
         this.repository = repository;
         this.objectMapper = objectMapper;
         this.serviceLocation = serviceLocation;

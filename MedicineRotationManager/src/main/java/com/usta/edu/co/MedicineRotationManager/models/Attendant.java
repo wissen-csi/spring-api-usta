@@ -47,4 +47,5 @@ public class Attendant {
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
+
 }
