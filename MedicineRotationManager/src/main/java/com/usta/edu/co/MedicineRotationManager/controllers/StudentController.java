@@ -141,6 +141,7 @@ public class StudentController {
     @PutMapping("/update/self")
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<Void> update(@RequestBody StudentUpdateDTO dto, @AuthenticationPrincipal AuthUser user){
+        serviceStudent.update(user.getId(), dto);
         return ResponseEntity.noContent().build();
     }
     

@@ -116,8 +116,8 @@ public class AdminController {
                 .build();
     }
     
-    @PutMapping("/update")
-        @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
 
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody AdminUpdateDTO dto){
         serviceAdmin.update(id, dto);
