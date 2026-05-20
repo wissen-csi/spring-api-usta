@@ -59,6 +59,7 @@
         <artifactId>javase</artifactId>
         <version>3.5.4</version>
     </dependency>
+    
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-jackson</artifactId>
@@ -138,7 +139,11 @@
     <artifactId>openpdf</artifactId>
     <version>3.0.4</version>
 </dependency>
-
+<dependency>
+    <groupId>com.openhtmltopdf</groupId>
+    <artifactId>openhtmltopdf-pdfbox</artifactId>
+    <version>1.0.10</version>
+</dependency>
 <dependency>
     <groupId>org.apache.poi</groupId>
     <artifactId>poi</artifactId>
