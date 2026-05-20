@@ -9,5 +9,5 @@ import java.awt.print.Pageable;
 
 public interface MedicalTreatmentRepository extends JpaRepository<MedicalTreatment,String> {
 
-    Page<MedicalTreatment> findAll(Pageable pageable);
+
 }

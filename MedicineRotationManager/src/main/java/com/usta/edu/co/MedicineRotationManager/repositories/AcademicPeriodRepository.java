@@ -9,11 +9,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.usta.edu.co.MedicineRotationManager.models.AcademicPeriod;
 
 public interface AcademicPeriodRepository extends JpaRepository<AcademicPeriod, String> {
-    boolean existsByName(String name);
 
-    List<AcademicPeriod> findByIsActiveTrue();
+    public boolean existsByName(String name);
 
-    boolean existsByNameAndIdNot(String name, String id);
+    public boolean existsByNameAndIdNot(String name, String id);
 
-    Page<AcademicPeriod> findAll(Pageable pageable);
+    public Page<AcademicPeriod> findAll(Pageable pageable);
 }

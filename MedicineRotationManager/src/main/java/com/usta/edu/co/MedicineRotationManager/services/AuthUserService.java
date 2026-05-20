@@ -1,6 +1,5 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
-<<<<<<< HEAD
 import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,10 +13,8 @@ import com.usta.edu.co.MedicineRotationManager.models.Doctor;
 import com.usta.edu.co.MedicineRotationManager.models.Person;
 import com.usta.edu.co.MedicineRotationManager.models.Porter;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
-=======
 import org.springframework.stereotype.Service;
 
->>>>>>> origin/features-roles-jwt
 import com.usta.edu.co.MedicineRotationManager.repositories.AuthUserRepository;
 
 import jakarta.persistence.EntityNotFoundException;

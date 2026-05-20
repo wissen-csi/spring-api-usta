@@ -2,10 +2,6 @@ package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/features-roles-jwt
 import java.util.List;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
