@@ -17,7 +17,6 @@ import com.usta.edu.co.MedicineRotationManager.models.AuthUser;
 import com.usta.edu.co.MedicineRotationManager.models.Doctor;
 import com.usta.edu.co.MedicineRotationManager.services.ServiceDoctor;
 
-import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
