@@ -33,4 +33,5 @@ public class AcademicPeriod {
     private LocalDate endDate;
     @OneToMany(mappedBy = "academicPeriod", fetch = FetchType.LAZY)
     private List<StudentAcademicPeriod> studentAcademicPeriod;
+
 }

@@ -14,4 +14,6 @@ public interface AcademicPeriodRepository extends JpaRepository<AcademicPeriod, 
     public boolean existsByNameAndIdNot(String name, String id);
 
     public Page<AcademicPeriod> findAll(Pageable pageable);
+
+
 }
