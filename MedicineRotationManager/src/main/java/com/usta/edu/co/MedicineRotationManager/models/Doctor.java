@@ -1,6 +1,6 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.Specialty;
@@ -39,7 +39,8 @@ public class Doctor extends Person {
     private University university;
     @Builder.Default
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
-    private List<Rotation> rotations = new LinkedList<>();
+    private List<Rotation> rotations = new ArrayList
+    <>();
     
 
 }

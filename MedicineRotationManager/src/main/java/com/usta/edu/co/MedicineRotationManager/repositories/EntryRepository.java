@@ -1,5 +1,6 @@
 package com.usta.edu.co.MedicineRotationManager.repositories;
 
+<<<<<<< HEAD
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -10,5 +11,12 @@ import com.usta.edu.co.MedicineRotationManager.models.*;
 
 public interface EntryRepository extends JpaRepository<Entry, String> {
     Page<Entry> findAll(Pageable pageable);
+=======
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.usta.edu.co.MedicineRotationManager.models.Entry;
+
+public interface EntryRepository extends JpaRepository<Entry,String> {
+>>>>>>> origin/features-crud
 
 }

@@ -1,6 +1,11 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
+<<<<<<< HEAD
 import java.util.List;
+=======
+
+
+>>>>>>> origin/features-crud
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,7 +14,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.AdminCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.AdminUpdateDTO;
-import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
 import com.usta.edu.co.MedicineRotationManager.models.Admin;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.repositories.AdminRepository;
@@ -25,14 +29,22 @@ public class ServiceAdmin {
     private AdminRepository adminRepository;
     private ServiceLocation serviceLocation;
     private ObjectMapper objectMapper;
+<<<<<<< HEAD
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+=======
+    private AuthUserService userService;
 
-    public ServiceAdmin(AdminRepository adminRepository, ServiceLocation serviceLocation, ObjectMapper objectMapper) {
+>>>>>>> origin/features-crud
+
+
+    public ServiceAdmin(AdminRepository adminRepository, ServiceLocation serviceLocation, ObjectMapper objectMapper,
+            AuthUserService userService) {
         this.adminRepository = adminRepository;
         this.serviceLocation = serviceLocation;
         this.objectMapper = objectMapper;
+        this.userService = userService;
     }
 
     public Page<Admin> findAll(Pageable pageable) {
@@ -63,7 +75,8 @@ public class ServiceAdmin {
         admin.setTypeBlood(dto.typeBlood());
         admin.setWeight(dto.weight());
         admin.setImc(dto.imc());
-        adminRepository.save(admin);
+        admin= adminRepository.save(admin);
+        userService.updateUsername(admin);
     }
 
     @Transactional
@@ -75,7 +88,8 @@ public class ServiceAdmin {
         } catch (Exception e) {
             throw new RuntimeException();
         }
-        adminRepository.save(admin);
+        admin = adminRepository.save(admin);
+        userService.updateUsername(admin);
     }
 
     @Transactional
@@ -90,18 +104,17 @@ public class ServiceAdmin {
                 .maritalStatus(dto.maritalStatus())
                 .residenceAddress(residenceAddress)
                 .placeBirth(placeBirth)
-                .password(passwordEncoder.encode(dto.password()))
                 .phoneNumber(dto.phoneNumber())
                 .email(dto.email())
                 .typeBlood(dto.typeBlood())
                 .weight(dto.weight())
                 .imc(dto.imc())
-                .role(AppRole.ADMIN)
                 .hiringDate(dto.hiringDate())
                 .endDate(dto.endDate())
                 .build();
-        adminRepository.save(admin);
-
+        admin = adminRepository.save(admin);
+        userService.createUser(admin, dto.password());
+        
     }
 
 }

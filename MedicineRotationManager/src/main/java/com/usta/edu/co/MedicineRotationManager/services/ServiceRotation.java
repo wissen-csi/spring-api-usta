@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.usta.edu.co.MedicineRotationManager.dto.RotationCreationDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.RotationCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Doctor;
 import com.usta.edu.co.MedicineRotationManager.models.Rotation;
 import com.usta.edu.co.MedicineRotationManager.repositories.RotationRepository;
@@ -31,7 +31,7 @@ public class ServiceRotation {
     }
 
     @Transactional
-    public void save(RotationCreationDTO dto) {
+    public void save(RotationCreateDTO dto) {
 
         Doctor doctor = serviceDoctor.findById(dto.doctorId());
 
@@ -46,7 +46,6 @@ public class ServiceRotation {
                 .typeRotation(dto.typeRotation())
                 .startDate(dto.startDate())
                 .completionDate(dto.completionDate())
-                .capacity(dto.capacity())
                 .build();
 
         repository.save(rotation);
@@ -70,7 +69,7 @@ public class ServiceRotation {
     }
 
     @Transactional
-    public void patch(String id, RotationCreationDTO dto) {
+    public void patch(String id, RotationCreateDTO dto) {
 
         Rotation rotation = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Rotation not found with id: " + id));
@@ -82,7 +81,6 @@ public class ServiceRotation {
         rotation.setTypeRotation(dto.typeRotation());
         rotation.setStartDate(dto.startDate());
         rotation.setCompletionDate(dto.completionDate());
-        rotation.setCapacity(dto.capacity());
 
         repository.save(rotation);
     }

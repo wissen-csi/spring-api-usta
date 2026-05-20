@@ -1,48 +1,48 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.stereotype.Service;
+
 import com.usta.edu.co.MedicineRotationManager.dto.LoginRequestDTO;
-
 import com.usta.edu.co.MedicineRotationManager.dto.LoginResponseDTO;
-
 import com.usta.edu.co.MedicineRotationManager.models.AuthUser;
-
 import com.usta.edu.co.MedicineRotationManager.repositories.AuthUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.authentication.AuthenticationManager;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
-import org.springframework.stereotype.Service;
-
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-        private final AuthenticationManager authenticationManager;
-        private final JwtService jwtService;
-        private final AuthUserRepository authUserRepository;
 
-        public LoginResponseDTO authenticate(LoginRequestDTO request) {
+    private final AuthenticationManager authenticationManager;
 
-                authenticationManager.authenticate(
+    private final JwtService jwtService;
 
-                                new UsernamePasswordAuthenticationToken(
+    private final AuthUserRepository authUserRepository;
 
-                                                request.getDni(),
+    public LoginResponseDTO authenticate(
+            LoginRequestDTO request) {
 
-                                                request.getPassword()));
+        authenticationManager.authenticate(
 
-                AuthUser user = authUserRepository
+                new UsernamePasswordAuthenticationToken(
 
-                                .findByDni(request.getDni())
+                        request.getDni(),
 
-                                .orElseThrow(() -> new RuntimeException(
+                        request.getPassword()));
 
-                                                "User not found"));
+        AuthUser user = authUserRepository
 
-                String token = jwtService.generateToken(user);
+                .findByUserName(request.getDni())
 
-                return new LoginResponseDTO(token);
-        }
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "User not found"));
+
+        String token =
+                jwtService.generateToken(user);
+
+        return new LoginResponseDTO(token);
+    }
 }

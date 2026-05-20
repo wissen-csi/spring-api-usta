@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.EcxelCreateStudentDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.StudentCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
@@ -28,17 +29,24 @@ public class ServiceStudent {
 
     private ServiceLocation serviceLocation;
 
-    private PasswordEncoder passwordEncoder;
+    private AuthUserService userService;
 
     private ServiceUniversity serviceUniversity;
 
+<<<<<<< HEAD
     public ServiceStudent(StudentRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation, PasswordEncoder passwordEncoder, ServiceUniversity serviceUniversity) {
+=======
+    public ServiceStudent(StudentRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation,
+            AuthUserService userService, ServiceUniversity serviceUniversity) {
+>>>>>>> origin/features-crud
         this.repository = repository;
         this.objectMapper = objectMapper;
         this.serviceLocation = serviceLocation;
-        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
         this.serviceUniversity = serviceUniversity;
     }
+
+
 
     public Student findById(String id){
         return repository.findById(id)
@@ -68,9 +76,7 @@ public class ServiceStudent {
 
         University university =
             serviceUniversity.findById(dto.universityId());
-
-        repository.save(
-            Student.builder()
+        Student student =             Student.builder()
                 .id(UUIDGenerator.generateNewId())
 
                 .name(dto.name())
@@ -90,9 +96,6 @@ public class ServiceStudent {
                 .weight(dto.weight())
                 .imc(dto.imc())
 
-                .password(
-                    passwordEncoder.encode(dto.password())
-                )
 
                 .secondLanguage(dto.secondLanguage())
 
@@ -122,8 +125,78 @@ public class ServiceStudent {
 
                 .university(university)
 
-                .build()
+                .build();
+        student= repository.save(
+            student
         );
+        userService.createUser(student, dto.password());
+    }
+
+    @Transactional
+    public void save(EcxelCreateStudentDTO dto){
+
+        Location placeBirth =
+            serviceLocation.findOrCreate(dto.getPlaceBirthCity(),dto.getPlaceBirthDepartment(),dto.getPlaceBirthAddress());
+
+        Location residenceAddress =
+            serviceLocation.findOrCreate(dto.getResidenceCity(),dto.getResidenceDepartment(),dto.getResidenceAddress());
+
+        University university =
+            serviceUniversity.findById(dto.getUniversityId());
+        Student student =             Student.builder()
+                .id(UUIDGenerator.generateNewId())
+
+                .name(dto.getName())
+                .lastName(dto.getLastName())
+                .dni(dto.getDni())
+
+                .maritalStatus(dto.getMaritalStatus())
+
+                .placeBirth(placeBirth)
+                .residenceAddress(residenceAddress)
+
+                .phoneNumber(dto.getPhoneNumber())
+                .email(dto.getEmail())
+
+                .typeBlood(dto.getTypeBlood())
+
+                .weight(dto.getWeight())
+                .imc(dto.getImc())
+
+
+                .secondLanguage(dto.getSecondLanguage())
+
+                .academicPrograms(dto.getAcademicPrograms())
+
+                .studentStatus(dto.getStudentStatus())
+
+                .courseApproved(dto.isCourseApproved())
+
+                .entryDateAcademicProgram(
+                    dto.getEntryDateAcademicProgram()
+                )
+
+                .startInductionDate(
+                    dto.getStartInductionDate()
+                )
+
+                .endInductionDate(
+                    dto.getEndInductionDate()
+                )
+
+                .arlStartDate(dto.getArlStartDate())
+
+                .arlEndDate(dto.getArlEndDate())
+
+                .hobbies(dto.getHobbies())
+
+                .university(university)
+
+                .build();
+        student= repository.save(
+            student
+        );
+        userService.createUser(student, dto.getPassword());
     }
 
     @Transactional

@@ -7,19 +7,24 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
-import com.usta.edu.co.MedicineRotationManager.models.*;
+import com.usta.edu.co.MedicineRotationManager.models.AuthUser;
+import com.usta.edu.co.MedicineRotationManager.models.Person;
 
 @Repository
-public interface AuthUserRepository extends JpaRepository<AuthUser, String> {
+public interface AuthUserRepository
+        extends JpaRepository<AuthUser, String> {
 
-     Optional<AuthUser> findByDni(String dni);
+    Optional<AuthUser> findByUserName(
+            String userName);
 
-     boolean existsByDni(String dni);
+    boolean existsByUserName(
+            String userName);
 
-     List<AuthUser> findByEnabledTrue();
+    List<AuthUser> findByEnabledTrue();
 
-     List<AuthUser> findByRole(AppRole role);
+    List<AuthUser> findByRole(
+            AppRole role);
 
-     AuthUser save(AuthUser repository);
-
+    Optional<AuthUser> findByPerson(
+            Person person);
 }

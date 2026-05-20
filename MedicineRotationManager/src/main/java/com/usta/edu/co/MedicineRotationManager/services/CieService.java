@@ -24,7 +24,6 @@ public class CieService {
         this.cieTokenService = cieTokenService;
     }
 
-    @SuppressWarnings("unchecked")
     public List<DiseaseCieDTO> searchDiaseases(String word) {
                 Map<String,Object> response = restClient.get()
                 .uri("/release/11/2024-01/mms/search?q={q}", word)

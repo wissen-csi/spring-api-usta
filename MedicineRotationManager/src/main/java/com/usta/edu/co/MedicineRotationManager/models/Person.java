@@ -2,18 +2,14 @@ package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
-import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
 import jakarta.persistence.Column;
@@ -31,7 +27,6 @@ import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
@@ -42,7 +37,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Table(name = "people")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Person implements UserDetails {
+public abstract class Person  {
 
     @Id
     private String id;
@@ -93,31 +88,12 @@ public abstract class Person implements UserDetails {
     @Column(name = "imc", nullable = false)
     private double imc;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private AppRole role;
-
     @Builder.Default
     @OneToMany(mappedBy = "person")
-    private List<File> file = new LinkedList<>();
+    private List<File> file = new ArrayList<>();
 
-    @Column(name = "password", nullable = false, length = 100)
-    private String password;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(getRole().name()));
-    }
 
-    @Override
-    public @NonNull String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return dni;
-    }
     public Person(){}
 
 }

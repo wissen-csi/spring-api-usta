@@ -32,7 +32,7 @@ public record StudentCreateDTO(
 
         double imc,
 
-        String password,
+        String password,//
 
         Language secondLanguage,
 

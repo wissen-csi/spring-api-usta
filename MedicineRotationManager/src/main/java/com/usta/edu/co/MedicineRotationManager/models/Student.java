@@ -2,6 +2,10 @@ package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/features-crud
 import java.util.List;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
@@ -70,6 +74,7 @@ public class Student extends Person {
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private List<Attendant> relatives = new ArrayList<>();
 
+
     @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private List<MedicalTreatment> medicalTreatments = new ArrayList<>();
@@ -78,19 +83,21 @@ public class Student extends Person {
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private List<StudentDisease> studentDiseases = new ArrayList<>();
 
+
     @Builder.Default
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student" ,fetch = FetchType.LAZY)
     private List<GroupAssignment> groupAssignments = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+
     private List<StudentAcademicPeriod> studentAcademicPeriods = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "university_id", nullable = false)
     private University university;
     @Builder.Default
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student",fetch = FetchType.LAZY)
     private List<Entry> entries = new ArrayList<>();
 
     // Un estudiante puede tener muchas investigaciones :)

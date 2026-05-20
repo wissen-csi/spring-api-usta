@@ -1,7 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.HospitalLocation;
@@ -53,10 +53,9 @@ public class Rotation {
     @Column(name = "completion_date", nullable = false)
     private LocalDate completionDate;
 
-    @Column(name = "capacity", nullable = false)
-    private int capacity;
+
 
     @Builder.Default
     @OneToMany(mappedBy = "rotation", fetch = FetchType.LAZY)
-    private List<Group> groups= new LinkedList<>();
+    private List<Group> groups= new ArrayList<>();
 }

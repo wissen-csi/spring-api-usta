@@ -1,7 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -29,7 +29,7 @@ public class Admin extends Person {
     private LocalDate endDate;
     @Builder.Default
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
-    private List<Task> tasks= new LinkedList<>() ;
+    private List<Task> tasks= new ArrayList<>() ;
     public Admin(){}
 
 }
