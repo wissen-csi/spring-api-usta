@@ -1,12 +1,8 @@
 package com.usta.edu.co.MedicineRotationManager.dto.createDTOS;
 
-import java.time.LocalDate;
 
 import com.poiji.annotation.ExcelCellName;
-import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
-import com.usta.edu.co.MedicineRotationManager.enumerations.Language;
 import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
-import com.usta.edu.co.MedicineRotationManager.enumerations.StudentStatus;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
 import lombok.AllArgsConstructor;

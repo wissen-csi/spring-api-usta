@@ -13,7 +13,6 @@ import com.usta.edu.co.MedicineRotationManager.models.Doctor;
 import com.usta.edu.co.MedicineRotationManager.models.Person;
 import com.usta.edu.co.MedicineRotationManager.models.Porter;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
-import org.springframework.stereotype.Service;
 
 import com.usta.edu.co.MedicineRotationManager.repositories.AuthUserRepository;
 

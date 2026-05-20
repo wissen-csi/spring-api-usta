@@ -6,8 +6,6 @@ import com.usta.edu.co.MedicineRotationManager.models.MedicalTreatment;
 import com.usta.edu.co.MedicineRotationManager.models.Medicine;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 import com.usta.edu.co.MedicineRotationManager.repositories.MedicalTreatmentRepository;
-import com.usta.edu.co.MedicineRotationManager.repositories.MedicineRepository;
-import com.usta.edu.co.MedicineRotationManager.repositories.StudentRepository;
 import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +33,7 @@ public class MedicalTreatmentService {
                  .medicine(medicine)
                  .student(student)
                  .build();
+          medicalTreatmentRepository.save(medicalTreatment);
      }
 
      @Transactional

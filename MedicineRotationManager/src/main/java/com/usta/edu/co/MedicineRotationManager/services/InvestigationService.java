@@ -11,7 +11,6 @@ import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.InvestigationUpdat
 import com.usta.edu.co.MedicineRotationManager.models.Investigation;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 import com.usta.edu.co.MedicineRotationManager.repositories.InvestigationRepository;
-import com.usta.edu.co.MedicineRotationManager.repositories.StudentRepository;
 import com.usta.edu.co.MedicineRotationManager.utils.DateValidator;
 import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
 import jakarta.persistence.EntityNotFoundException;
