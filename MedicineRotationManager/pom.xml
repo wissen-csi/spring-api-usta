@@ -47,6 +47,18 @@
       <version>0.13.0</version>
       <scope>runtime</scope>
     </dependency>
+    <!-- Source: https://mvnrepository.com/artifact/com.google.zxing/core -->
+    <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>core</artifactId>
+        <version>3.5.4</version>
+    </dependency>
+    <!-- Source: https://mvnrepository.com/artifact/com.google.zxing/javase -->
+    <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>javase</artifactId>
+        <version>3.5.4</version>
+    </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-jackson</artifactId>

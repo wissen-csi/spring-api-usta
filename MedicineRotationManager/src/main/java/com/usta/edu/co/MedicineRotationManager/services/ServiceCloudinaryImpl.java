@@ -25,6 +25,7 @@ public class ServiceCloudinaryImpl implements ICloudinaryService {
         File file =
                 Converter.convertMultipartFileToFile(multipartFile);
 
+        @SuppressWarnings("unchecked")
         Map<String, String> result =
                 cloudinary.uploader().upload(
                         file,
@@ -63,7 +64,8 @@ public class ServiceCloudinaryImpl implements ICloudinaryService {
     }
 
 
-    @Override
+    @SuppressWarnings("unchecked")
+@Override
     public Map<?, ?> upload(File file) throws IOException {
         Map<String,String> resut = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
         Files.deleteIfExists(file.toPath());

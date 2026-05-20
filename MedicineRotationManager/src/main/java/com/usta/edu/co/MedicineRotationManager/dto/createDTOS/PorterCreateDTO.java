@@ -2,12 +2,25 @@ package com.usta.edu.co.MedicineRotationManager.dto.createDTOS;
 
 import java.time.LocalDate;
 
-import org.springframework.stereotype.Service;
+import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
+import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
-import com.usta.edu.co.MedicineRotationManager.repositories.PorterRepository;
+public record PorterCreateDTO(
+        String name,
+        String lastName,
+        String dni,
+        MaritalStatus maritalStatus,
+        String placeBirthId,
+        String residenceAddressId,
+        String phoneNumber,
+        String email,
+        TypeBlood typeBlood,
+        double weight,
+        double imc,
+        LocalDate hireDate,
+        String employeeCode,
+        boolean isActive
 
-import lombok.RequiredArgsConstructor;
-
-public record PorterCreateDTO(LocalDate hireDate, String employeeCode, boolean isActive) {
+) {
 
 }

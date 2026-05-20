@@ -1,7 +1,12 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.List;
+=======
+
+
+>>>>>>> origin/features-crud
 =======
 
 
@@ -30,11 +35,20 @@ public class ServiceAdmin {
     private ServiceLocation serviceLocation;
     private ObjectMapper objectMapper;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 =======
     private AuthUserService userService;
+
+>>>>>>> origin/features-crud
+=======
+    private AuthUserService userService;
+
+    @SuppressWarnings("unused")
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 >>>>>>> origin/features-crud
 

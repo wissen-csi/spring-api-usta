@@ -1,9 +1,12 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import org.springframework.stereotype.Service;
 
 =======
+=======
+>>>>>>> origin/features-crud
 import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +20,10 @@ import com.usta.edu.co.MedicineRotationManager.models.Doctor;
 import com.usta.edu.co.MedicineRotationManager.models.Person;
 import com.usta.edu.co.MedicineRotationManager.models.Porter;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
+<<<<<<< HEAD
+>>>>>>> origin/features-crud
+=======
+
 >>>>>>> origin/features-crud
 import com.usta.edu.co.MedicineRotationManager.repositories.AuthUserRepository;
 
