@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.EcxelCreateStudentDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.StudentCreateDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.StudentUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 import com.usta.edu.co.MedicineRotationManager.models.University;
@@ -42,37 +43,29 @@ public class ServiceStudent {
         this.serviceUniversity = serviceUniversity;
     }
 
-
-
-    public Student findById(String id){
+    public Student findById(String id) {
         return repository.findById(id)
-            .orElseThrow(() ->
-                new EntityNotFoundException(
-                    "Student not found with id: " + id
-                )
-            );
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Student not found with id: " + id));
     }
 
-    public Page<Student> findAll(Pageable pageable){
+    public Page<Student> findAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
 
-    public List<Student> findCloseToExpireARL(){
+    public List<Student> findCloseToExpireARL() {
         return repository.findByCloseToExpireArl();
     }
 
     @Transactional
-    public void save(StudentCreateDTO dto){
+    public void save(StudentCreateDTO dto) {
 
-        Location placeBirth =
-            serviceLocation.findOrCreate(dto.placeBirth());
+        Location placeBirth = serviceLocation.findOrCreate(dto.placeBirth());
 
-        Location residenceAddress =
-            serviceLocation.findOrCreate(dto.residenceAddress());
+        Location residenceAddress = serviceLocation.findOrCreate(dto.residenceAddress());
 
-        University university =
-            serviceUniversity.findById(dto.universityId());
-        Student student =             Student.builder()
+        University university = serviceUniversity.findById(dto.universityId());
+        Student student = Student.builder()
                 .id(UUIDGenerator.generateNewId())
 
                 .name(dto.name())
@@ -92,7 +85,6 @@ public class ServiceStudent {
                 .weight(dto.weight())
                 .imc(dto.imc())
 
-
                 .secondLanguage(dto.secondLanguage())
 
                 .academicPrograms(dto.academicPrograms())
@@ -102,16 +94,13 @@ public class ServiceStudent {
                 .courseApproved(dto.courseApproved())
 
                 .entryDateAcademicProgram(
-                    dto.entryDateAcademicProgram()
-                )
+                        dto.entryDateAcademicProgram())
 
                 .startInductionDate(
-                    dto.startInductionDate()
-                )
+                        dto.startInductionDate())
 
                 .endInductionDate(
-                    dto.endInductionDate()
-                )
+                        dto.endInductionDate())
 
                 .arlStartDate(dto.arlStartDate())
 
@@ -122,24 +111,22 @@ public class ServiceStudent {
                 .university(university)
 
                 .build();
-        student= repository.save(
-            student
-        );
+        student = repository.save(
+                student);
         userService.createUser(student, dto.password());
     }
 
     @Transactional
-    public void save(EcxelCreateStudentDTO dto){
+    public void save(EcxelCreateStudentDTO dto) {
 
-        Location placeBirth =
-            serviceLocation.findOrCreate(dto.getPlaceBirthCity(),dto.getPlaceBirthDepartment(),dto.getPlaceBirthAddress());
+        Location placeBirth = serviceLocation.findOrCreate(dto.getPlaceBirthCity(), dto.getPlaceBirthDepartment(),
+                dto.getPlaceBirthAddress());
 
-        Location residenceAddress =
-            serviceLocation.findOrCreate(dto.getResidenceCity(),dto.getResidenceDepartment(),dto.getResidenceAddress());
+        Location residenceAddress = serviceLocation.findOrCreate(dto.getResidenceCity(), dto.getResidenceDepartment(),
+                dto.getResidenceAddress());
 
-        University university =
-            serviceUniversity.findById(dto.getUniversityId());
-        Student student =             Student.builder()
+        University university = serviceUniversity.findById(dto.getUniversityId());
+        Student student = Student.builder()
                 .id(UUIDGenerator.generateNewId())
 
                 .name(dto.getName())
@@ -159,7 +146,6 @@ public class ServiceStudent {
                 .weight(dto.getWeight())
                 .imc(dto.getImc())
 
-
                 .secondLanguage(dto.getSecondLanguage())
 
                 .academicPrograms(dto.getAcademicPrograms())
@@ -169,16 +155,13 @@ public class ServiceStudent {
                 .courseApproved(dto.isCourseApproved())
 
                 .entryDateAcademicProgram(
-                    dto.getEntryDateAcademicProgram()
-                )
+                        dto.getEntryDateAcademicProgram())
 
                 .startInductionDate(
-                    dto.getStartInductionDate()
-                )
+                        dto.getStartInductionDate())
 
                 .endInductionDate(
-                    dto.getEndInductionDate()
-                )
+                        dto.getEndInductionDate())
 
                 .arlStartDate(dto.getArlStartDate())
 
@@ -189,45 +172,81 @@ public class ServiceStudent {
                 .university(university)
 
                 .build();
-        student= repository.save(
-            student
-        );
+        student = repository.save(
+                student);
         userService.createUser(student, dto.getPassword());
     }
 
     @Transactional
-    public void delete(String id){
+    public void delete(String id) {
 
         Student student = repository.findById(id)
-            .orElseThrow(() ->
-                new EntityNotFoundException(
-                    "Student not found with id: " + id
-                )
-            );
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Student not found with id: " + id));
 
         repository.delete(student);
     }
 
     @Transactional
-    public void patch(String id, JsonNode node){
+    public void patch(String id, JsonNode node) {
 
         Student student = repository.findById(id)
-            .orElseThrow(() ->
-                new EntityNotFoundException(
-                    "Student not found with id: " + id
-                )
-            );
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Student not found with id: " + id));
 
         try {
 
             objectMapper
-                .readerForUpdating(student)
-                .readValue(node);
+                    .readerForUpdating(student)
+                    .readValue(node);
 
         } catch (Exception e) {
 
             throw new RuntimeException(e);
         }
+
+        repository.save(student);
+    }
+
+    @Transactional
+    public void update(String id, StudentUpdateDTO dto) {
+
+        Student student = findById(id);
+
+        University university = serviceUniversity.findById(dto.universityId());
+
+        student.setName(dto.name());
+        student.setLastName(dto.lastName());
+        student.setDni(dto.dni());
+        student.setMaritalStatus(dto.maritalStatus());
+        student.setPhoneNumber(dto.phoneNumber());
+        student.setEmail(dto.email());
+        student.setTypeBlood(dto.typeBlood());
+        student.setWeight(dto.weight());
+        student.setImc(dto.imc());
+
+        student.setSecondLanguage(dto.secondLanguage());
+        student.setAcademicPrograms(dto.academicPrograms());
+        student.setStudentStatus(dto.studentStatus());
+
+        student.setCourseApproved(dto.courseApproved());
+
+        student.setEntryDateAcademicProgram(
+                dto.entryDateAcademicProgram());
+
+        student.setStartInductionDate(
+                dto.startInductionDate());
+
+        student.setEndInductionDate(
+                dto.endInductionDate());
+
+        student.setArlStartDate(dto.arlStartDate());
+
+        student.setArlEndDate(dto.arlEndDate());
+
+        student.setHobbies(dto.hobbies());
+
+        student.setUniversity(university);
 
         repository.save(student);
     }

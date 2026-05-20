@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DoctorCreateDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.DoctorUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Doctor;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.models.University;
@@ -86,5 +87,34 @@ public class ServiceDoctor {
                 .build();
         doctor = repository.save(doctor);
         userService.createUser(doctor, dto.password());
+    }
+    @Transactional
+    public void update(String id, DoctorUpdateDTO dto) {
+
+        Doctor doctor = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
+
+
+
+        University university = serviceUniversity.findById(dto.universityId());
+
+        doctor.setName(dto.name());
+        doctor.setLastName(dto.lastName());
+        doctor.setDni(dto.dni());
+        
+        doctor.setMaritalStatus(dto.maritalStatus());
+
+        doctor.setPhoneNumber(dto.phoneNumber());
+        doctor.setEmail(dto.email());
+
+        doctor.setTypeBlood(dto.typeBlood());
+        doctor.setWeight(dto.weight());
+        doctor.setImc(dto.imc());
+
+        doctor.setSpecialty(dto.specialty());
+        doctor.setUniversity(university);
+        repository.save(doctor);
+
+        userService.updateUsername(doctor);
     }
 }
