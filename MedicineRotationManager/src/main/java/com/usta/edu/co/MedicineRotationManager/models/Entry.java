@@ -40,4 +40,7 @@ public class Entry {
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
+
+    @JoinColumn(name = "entryPractice_id",nullable = false)
+    private EntryPractice entryPractice;
 }

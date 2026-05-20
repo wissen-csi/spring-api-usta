@@ -32,18 +32,8 @@ public class ServiceStudent {
 
     private ServiceUniversity serviceUniversity;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    public ServiceStudent(StudentRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation, PasswordEncoder passwordEncoder, ServiceUniversity serviceUniversity) {
-=======
     public ServiceStudent(StudentRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation,
             AuthUserService userService, ServiceUniversity serviceUniversity) {
->>>>>>> origin/features-crud
-=======
-    public ServiceStudent(StudentRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation,
-            AuthUserService userService, ServiceUniversity serviceUniversity) {
-
->>>>>>> origin/features-crud
         this.repository = repository;
         this.objectMapper = objectMapper;
         this.serviceLocation = serviceLocation;

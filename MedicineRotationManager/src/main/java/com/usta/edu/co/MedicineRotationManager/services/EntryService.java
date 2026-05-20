@@ -1,5 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
+import com.usta.edu.co.MedicineRotationManager.models.EntryPractice;
+import com.usta.edu.co.MedicineRotationManager.repositories.EntryPracticeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,14 +21,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EntryService {
     private final EntryRepository entryRepository;
+    private final ServiceEntryPractice entryPracticeService;
     private final ServiceStudent serviceStudent;
 
     @Transactional
     public void save(EntryCreateDTO entryCreateDTO) {
         Student student = findStudentById(entryCreateDTO.studentId());
+        EntryPractice entryPractice = findEntryPracticeById(entryCreateDTO.entryPracticeId());
+
         Entry entry = Entry.builder()
                 .id(UUIDGenerator.generateNewId())
+                .entryPractice(entryPractice)
                 .student(student)
+
                 .build();
         entryRepository.save(entry);
     }
@@ -59,6 +66,11 @@ public class EntryService {
     @Transactional(readOnly = true)
     public Page<Entry> findAll(Pageable pageable) {
         return this.entryRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public EntryPractice findEntryPracticeById(String id){
+        return this.entryPracticeService.findById(id);
     }
 
 }
