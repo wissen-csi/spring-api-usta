@@ -3,12 +3,15 @@ package com.usta.edu.co.MedicineRotationManager.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.AdminCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.AdminResponseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.AdminUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Admin;
+import com.usta.edu.co.MedicineRotationManager.models.AuthUser;
 import com.usta.edu.co.MedicineRotationManager.services.ServiceAdmin;
 
 
@@ -55,6 +58,7 @@ public class AdminController {
 
     @GetMapping("/find/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    
     public ResponseEntity<AdminResponseDTO> findById(@PathVariable String id) {
         Admin admin = serviceAdmin.findById(id);
 
@@ -75,14 +79,61 @@ public class AdminController {
 
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/find/self")
+    @PreAuthorize("hasRole('ADMIN')")
+    
+    public ResponseEntity<AdminResponseDTO> findById( @AuthenticationPrincipal AuthUser user) {
+        Admin admin = serviceAdmin.findById(user.getId());
 
-    @GetMapping("/delete/{id}")
+        AdminResponseDTO response = AdminResponseDTO.builder()
+                .id(admin.getId())
+                .name(admin.getName())
+                .lastName(admin.getLastName())
+                .dni(admin.getDni())
+                .email(admin.getEmail())
+                .phoneNumber(admin.getPhoneNumber())
+                .maritalStatus(admin.getMaritalStatus())
+                .typeBlood(admin.getTypeBlood())
+                .weight(admin.getWeight())
+                .imc(admin.getImc())
+                .hiringDate(admin.getHiringDate())
+                .endDate(admin.getEndDate())
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+
     public ResponseEntity<Void> adminDelete(@PathVariable String id){
         serviceAdmin.delete(id);
         return ResponseEntity
-                .status(HttpStatus.CREATED)
+                .noContent()
                 .build();
     }
+    
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody AdminUpdateDTO dto){
+        serviceAdmin.update(id, dto);
+                return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @PutMapping("/update/self")
+        @PreAuthorize("hasRole('ADMIN')")
+
+    public ResponseEntity<Void> update(@RequestBody AdminUpdateDTO dto,  @AuthenticationPrincipal AuthUser user){
+        serviceAdmin.update(user.getId(), dto);
+                        return ResponseEntity
+                .noContent()
+                .build();
+
+    }
+    
     
 
 }

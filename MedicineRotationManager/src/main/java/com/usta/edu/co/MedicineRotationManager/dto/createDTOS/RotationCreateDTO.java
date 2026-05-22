@@ -6,7 +6,6 @@ import com.usta.edu.co.MedicineRotationManager.enumerations.HospitalLocation;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeRotation;
 
 public record RotationCreateDTO(
-    String doctorId,
     HospitalLocation hospitalLocation,
     TypeRotation typeRotation,
     LocalDate startDate,

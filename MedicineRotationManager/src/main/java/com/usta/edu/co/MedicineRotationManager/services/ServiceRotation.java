@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.RotationCreateDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.RotationUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Doctor;
 import com.usta.edu.co.MedicineRotationManager.models.Rotation;
 import com.usta.edu.co.MedicineRotationManager.repositories.RotationRepository;
@@ -31,9 +32,27 @@ public class ServiceRotation {
     }
 
     @Transactional
-    public void save(RotationCreateDTO dto) {
+    public void update(String id, RotationUpdateDTO dto) {
 
-        Doctor doctor = serviceDoctor.findById(dto.doctorId());
+        Rotation rotation = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Rotation not found with id: " + id));
+
+        if (dto.startDate().isAfter(dto.completionDate())) {
+            throw new IllegalArgumentException("Start date cannot be after completion date");
+        }
+
+        rotation.setHospitalLocation(dto.hospitalLocation());
+        rotation.setTypeRotation(dto.typeRotation());
+        rotation.setStartDate(dto.startDate());
+        rotation.setCompletionDate(dto.completionDate());
+
+        repository.save(rotation);
+    }
+
+    @Transactional
+    public void save(RotationCreateDTO dto, String id) {
+
+        Doctor doctor = serviceDoctor.findById(id);
 
         if (dto.startDate().isAfter(dto.completionDate())) {
             throw new IllegalArgumentException("Start date cannot be after completion date");
@@ -69,23 +88,6 @@ public class ServiceRotation {
     }
 
     @Transactional
-    public void patch(String id, RotationCreateDTO dto) {
-
-        Rotation rotation = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Rotation not found with id: " + id));
-
-        Doctor doctor = serviceDoctor.findById(dto.doctorId());
-
-        rotation.setDoctor(doctor);
-        rotation.setHospitalLocation(dto.hospitalLocation());
-        rotation.setTypeRotation(dto.typeRotation());
-        rotation.setStartDate(dto.startDate());
-        rotation.setCompletionDate(dto.completionDate());
-
-        repository.save(rotation);
-    }
-
-    @Transactional
     public void patch(String id, JsonNode node) {
         Rotation rotation = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
         try {
@@ -95,6 +97,9 @@ public class ServiceRotation {
         }
         repository.save(rotation);
 
+    }
+    public Page<Rotation> findByDoctor(String id, Pageable pageable){
+        return repository.findByDoctorId(id, pageable);
     }
 
 }

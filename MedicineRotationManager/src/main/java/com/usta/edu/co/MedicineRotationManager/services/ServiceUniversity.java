@@ -1,17 +1,17 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.UniversityCreateDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.UniversityUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.models.University;
 import com.usta.edu.co.MedicineRotationManager.repositories.UniversityRepository;
 import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -33,6 +33,7 @@ public class ServiceUniversity {
                 .id(UUIDGenerator.generateNewId())
                 .address(location)
                 .name(dto.name())
+                .email(dto.email())
                 .phoneNumber(dto.phoneNumberm())
                 .isActive(true)
                 .build());
@@ -63,11 +64,37 @@ public class ServiceUniversity {
         repository.save(university);
     }
 
-    public List<University> findAll() {
-        return repository.findAll();
+    public Page<University> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public University findById(String id) {
         return repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+    }
+
+    public void update(
+            String id,
+            UniversityUpdateDTO dto) {
+
+        University university = repository.findById(id)
+                .orElseThrow(
+                        EntityNotFoundException::new);
+
+        university.setName(dto.name());
+
+        university.setEmail(dto.email());
+
+        university.setPhoneNumber(
+                dto.phoneNumber());
+
+        university.setActive(
+                dto.isActive());
+
+        Location location = serviceLocation.findOrCreate(
+                dto.address());
+
+        university.setAddress(location);
+
+        repository.save(university);
     }
 }
