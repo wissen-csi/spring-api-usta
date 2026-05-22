@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -52,9 +53,9 @@ public class University {
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDate creationDate;
     @Builder.Default
-    @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "university", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE}, orphanRemoval = true)
     private List<Doctor> teachers = new ArrayList<>();
     @Builder.Default
-    @OneToMany(mappedBy = "university", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "university", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
     private List<Student> students = new ArrayList<>();
 }

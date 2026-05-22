@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.Specialty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,7 +39,7 @@ public class Doctor extends Person {
     @JoinColumn(name = "university_id", nullable = false)
     private University university;
     @Builder.Default
-    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
     private List<Rotation> rotations = new ArrayList
     <>();
     

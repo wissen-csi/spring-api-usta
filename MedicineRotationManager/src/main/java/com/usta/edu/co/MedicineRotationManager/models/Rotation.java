@@ -7,6 +7,7 @@ import java.util.List;
 import com.usta.edu.co.MedicineRotationManager.enumerations.HospitalLocation;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeRotation;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -56,6 +57,6 @@ public class Rotation {
 
 
     @Builder.Default
-    @OneToMany(mappedBy = "rotation", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rotation", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
     private List<Group> groups= new ArrayList<>();
 }

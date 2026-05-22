@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,7 +29,7 @@ public class Admin extends Person {
     @Column(name = "end_Date", nullable = false)
     private LocalDate endDate;
     @Builder.Default
-    @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,CascadeType.REMOVE }, orphanRemoval = true)
     private List<Task> tasks= new ArrayList<>() ;
     public Admin(){}
 

@@ -3,6 +3,7 @@ package com.usta.edu.co.MedicineRotationManager.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,10 +38,10 @@ public class Group {
     @Column(name = "capacity", nullable = false)
     private int capacity;
     @Builder.Default
-    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
     private List<GroupAssignment> groupAssignments= new ArrayList<>();
     @Builder.Default
-    @OneToMany(mappedBy = "group",fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "group",fetch=FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
     private List<EntryPractice> entryPractices = new ArrayList<>();
     
 

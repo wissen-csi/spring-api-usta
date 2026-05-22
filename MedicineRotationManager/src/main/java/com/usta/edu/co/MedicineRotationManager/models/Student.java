@@ -8,6 +8,7 @@ import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
 import com.usta.edu.co.MedicineRotationManager.enumerations.Language;
 import com.usta.edu.co.MedicineRotationManager.enumerations.StudentStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -67,25 +68,28 @@ public class Student extends Person {
     private String hobbies;
 
     @Builder.Default
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,
+            CascadeType.REMOVE },orphanRemoval = true)
     private List<Attendant> relatives = new ArrayList<>();
 
-
     @Builder.Default
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,
+            CascadeType.REMOVE },orphanRemoval = true)
     private List<MedicalTreatment> medicalTreatments = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,
+            CascadeType.REMOVE }, orphanRemoval = true)
     private List<StudentDisease> studentDiseases = new ArrayList<>();
 
-
     @Builder.Default
-    @OneToMany(mappedBy = "student" ,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,
+            CascadeType.REMOVE },orphanRemoval = true)
     private List<GroupAssignment> groupAssignments = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,
+            CascadeType.REMOVE },orphanRemoval = true)
 
     private List<StudentAcademicPeriod> studentAcademicPeriods = new ArrayList<>();
 
@@ -93,12 +97,12 @@ public class Student extends Person {
     @JoinColumn(name = "university_id", nullable = false)
     private University university;
     @Builder.Default
-    @OneToMany(mappedBy = "student",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
     private List<Entry> entries = new ArrayList<>();
 
     // Un estudiante puede tener muchas investigaciones :)
     @Builder.Default
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
     private List<Investigation> investigations = new ArrayList<>();
 
 }

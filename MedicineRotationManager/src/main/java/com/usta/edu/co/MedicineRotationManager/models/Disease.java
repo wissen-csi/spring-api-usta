@@ -2,6 +2,7 @@ package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,6 +33,6 @@ public class Disease {
     @Column(name = "definition", nullable = false, columnDefinition = "TEXT")
     private String definition;
 
-    @OneToMany(mappedBy = "disease", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "disease", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE}, orphanRemoval = true)
     private List<StudentDisease> studentDiseases;
 }
