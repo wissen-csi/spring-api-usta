@@ -8,12 +8,10 @@ import com.usta.edu.co.MedicineRotationManager.models.Student;
 import com.usta.edu.co.MedicineRotationManager.services.ServiceStudent;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

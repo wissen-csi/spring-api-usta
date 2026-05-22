@@ -98,5 +98,8 @@ public class ServiceRotation {
         repository.save(rotation);
 
     }
+    public Page<Rotation> findByDoctor(String id, Pageable pageable){
+        return repository.findByDoctorId(id, pageable);
+    }
 
 }
