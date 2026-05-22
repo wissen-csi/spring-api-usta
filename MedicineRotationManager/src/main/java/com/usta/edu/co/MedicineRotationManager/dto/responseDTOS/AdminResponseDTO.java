@@ -6,6 +6,7 @@ import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
 import lombok.Builder;
+
 @Builder
 public record AdminResponseDTO(
         String id,

@@ -12,7 +12,6 @@ import com.usta.edu.co.MedicineRotationManager.models.Admin;
 import com.usta.edu.co.MedicineRotationManager.services.ServiceAdmin;
 
 
-
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -20,15 +19,14 @@ public class AdminController {
     private final ServiceAdmin serviceAdmin;
 
     public AdminController(ServiceAdmin serviceAdmin) {
+
         this.serviceAdmin = serviceAdmin;
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> save(@RequestBody AdminCreateDTO dto) {
-
         serviceAdmin.save(dto);
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
