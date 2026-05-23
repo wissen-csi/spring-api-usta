@@ -2,13 +2,7 @@ package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/features-crud
-=======
->>>>>>> origin/features-crud
 import java.util.List;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;

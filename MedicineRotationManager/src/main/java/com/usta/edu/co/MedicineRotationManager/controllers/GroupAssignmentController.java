@@ -20,7 +20,6 @@ import com.usta.edu.co.MedicineRotationManager.models.GroupAssignment;
 import com.usta.edu.co.MedicineRotationManager.services.ServiceGroupAssignment;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController

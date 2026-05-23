@@ -17,7 +17,6 @@ import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
