@@ -27,8 +27,6 @@ import lombok.Setter;
 public class StudentAcademicPeriod {
     @Id
     private String id;
-    @Column(name = "academic_period_id", nullable = false, length = 100)
-    private String academicPeriodId;
     @Column(name = "cumulative_average", nullable = false)
     private double cumulativeAverage;
     @ManyToOne
