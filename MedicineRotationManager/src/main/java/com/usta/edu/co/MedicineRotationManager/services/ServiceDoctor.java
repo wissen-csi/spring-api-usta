@@ -49,6 +49,7 @@ public class ServiceDoctor {
     @Transactional
     public void delete(String id) {
         Doctor doctor = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+        userService.deleteUser(doctor);
         repository.delete(doctor);
     }
 

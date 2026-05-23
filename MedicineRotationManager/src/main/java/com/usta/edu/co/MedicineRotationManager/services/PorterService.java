@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PorterService {
     private final PorterRepository porterRepository;
     private final ServiceLocation serviceLocation;
+    private final AuthUserService userService;
 
 @Transactional
 public void save(PorterCreateDTO dto) {
@@ -65,6 +66,7 @@ public void save(PorterCreateDTO dto) {
     @Transactional
     public void delete(String id) {
         Porter porterToDelete = findById(id);
+        userService.deleteUser(porterToDelete);
         this.porterRepository.delete(porterToDelete);
     }
 
