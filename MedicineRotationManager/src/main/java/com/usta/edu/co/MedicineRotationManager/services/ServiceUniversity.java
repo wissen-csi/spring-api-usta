@@ -34,7 +34,7 @@ public class ServiceUniversity {
                 .address(location)
                 .name(dto.name())
                 .email(dto.email())
-                .phoneNumber(dto.phoneNumberm())
+                .phoneNumber(dto.phoneNumber())
                 .isActive(true)
                 .build());
     }
@@ -47,11 +47,13 @@ public class ServiceUniversity {
     public void softDelete(String id) {
         University university = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
         university.setActive(false);
+        repository.save(university);
     }
 
     public void restore(String id) {
         University university = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
         university.setActive(true);
+        repository.save(university);
     }
 
     public void patch(String id, JsonNode node) {
