@@ -1,6 +1,7 @@
 
 package com.usta.edu.co.MedicineRotationManager.services;
 
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.InvestigationResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class InvestigationService {
@@ -25,8 +28,7 @@ public class InvestigationService {
     private final ServiceStudent serviceStudent;
 
     @Transactional
-    public void save(
-            InvestigationCreateDTO dto) {
+    public void save(InvestigationCreateDTO dto) {
 
         Student student = findStudentById(dto.studentId());
 
@@ -82,8 +84,8 @@ public class InvestigationService {
 
                 .orElseThrow(() ->
 
-                new EntityNotFoundException(
-                        "Investigation not found with id: " + id));
+                        new EntityNotFoundException(
+                                "Investigation not found with id: " + id));
     }
 
     @Transactional(readOnly = true)
@@ -92,9 +94,21 @@ public class InvestigationService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Investigation> listAll(
-            Pageable pageable) {
+    public Page<Investigation> listAll(Pageable pageable) {
 
         return investigationRepository.findAll(pageable);
+    }
+
+
+    public InvestigationResponseDTO convertObjectToDTO(Investigation investigation) {
+        String studentId = investigation.getStudent().getId();
+        InvestigationResponseDTO investigationResponseDTO = InvestigationResponseDTO.builder()
+                .id(investigation.getId())
+                .description(investigation.getDescription())
+                .studentId(investigation.getStudent().getId())
+                .repositoryUrl(investigation.getRepositoryUrl())
+                .publicationDate(investigation.getPublicationDate())
+                .build();
+        return investigationResponseDTO;
     }
 }

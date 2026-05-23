@@ -202,12 +202,8 @@ public class AuthUserService {
     @Transactional
     public void deleteUser(Person person) {
 
-        AuthUser authUser = repository
-                .findByPerson(person)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Auth user not found"));
-
-        repository.delete(authUser);
+        repository.findByPerson(person)
+                .ifPresent(repository::delete);
     }
 
     private AppRole getRole(Person person) {

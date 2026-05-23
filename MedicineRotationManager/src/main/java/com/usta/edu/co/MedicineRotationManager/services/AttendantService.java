@@ -2,6 +2,7 @@ package com.usta.edu.co.MedicineRotationManager.services;
 
 import java.util.List;
 
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.AttendantResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -133,5 +134,32 @@ public class AttendantService {
                                 .findByDni(dni)
                                 .orElseThrow(() -> new EntityNotFoundException(
                                                 "Attendant not found with dni: " + dni));
+        }
+
+        public AttendantResponseDTO convertObjectToDTO(
+                Attendant attendant
+        ) {
+
+                return AttendantResponseDTO.builder()
+
+                        .id(attendant.getId())
+
+                        .name(attendant.getName())
+
+                        .lastName(attendant.getLastName())
+
+                        .phoneNumber(attendant.getPhoneNumber())
+
+                        .dni(attendant.getDni())
+
+                        .typeAttendant(
+                                attendant.getTypeRelative()
+                        )
+
+                        .studentId(
+                                attendant.getStudent().getId()
+                        )
+
+                        .build();
         }
 }

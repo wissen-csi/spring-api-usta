@@ -2,6 +2,7 @@ package com.usta.edu.co.MedicineRotationManager.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.usta.edu.co.MedicineRotationManager.dto.EntryPracticeCreationDTO;
@@ -12,7 +13,7 @@ import com.usta.edu.co.MedicineRotationManager.repositories.EntryPracticeReposit
 import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
 
 import jakarta.persistence.EntityNotFoundException;
-
+@Service
 public class ServiceEntryPractice {
     private EntryPracticeRepository repository;
     private ServiceGroup serviceGroup;

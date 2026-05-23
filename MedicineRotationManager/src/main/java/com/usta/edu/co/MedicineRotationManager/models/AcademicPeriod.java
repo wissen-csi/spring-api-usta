@@ -3,6 +3,7 @@ package com.usta.edu.co.MedicineRotationManager.models;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,7 +32,7 @@ public class AcademicPeriod {
     private LocalDate startDate;
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
-    @OneToMany(mappedBy = "academicPeriod", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "academicPeriod", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,CascadeType.REMOVE } ,orphanRemoval = true)
     private List<StudentAcademicPeriod> studentAcademicPeriod;
 
 }

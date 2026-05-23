@@ -1,5 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryPracticeResponseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.models.EntryPractice;
 import com.usta.edu.co.MedicineRotationManager.repositories.EntryPracticeRepository;
 import org.springframework.data.domain.Page;
@@ -70,7 +72,37 @@ public class EntryService {
 
     @Transactional
     public EntryPractice findEntryPracticeById(String id){
+
         return this.entryPracticeService.findById(id);
     }
 
+    public EntryResponseDTO convertObjectToDTO(Entry entry){
+       return EntryResponseDTO.builder()
+                .id(entry.getId())
+
+                .entryPracticeResponseDTO(
+                        EntryPracticeResponseDTO.builder()
+                                .id(entry.getEntryPractice().getId())
+                                .startTime(entry.getEntryPractice().getStartTime())
+                                .endTime(entry.getEntryPractice().getEndTime())
+                                .groupName(entry.getEntryPractice().getGroup().getName())
+                                .groupId(entry.getEntryPractice().getGroup().getId())
+                                .qrCode(entry.getEntryPractice().getQrCode())
+                                .build()
+                )
+
+                .assistance(entry.getAssistance())
+
+                .studentId(entry.getStudent().getId())
+
+                .studentName(
+                        entry.getStudent().getName()
+                                + " "
+                                + entry.getStudent().getLastName()
+                )
+
+                .statusEntry(entry.getStatusEntry())
+
+                .build();
+    }
 }

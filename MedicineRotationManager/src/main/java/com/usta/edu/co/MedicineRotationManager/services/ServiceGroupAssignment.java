@@ -3,6 +3,7 @@ package com.usta.edu.co.MedicineRotationManager.services;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.GroupAssignmentCreateDTO;
@@ -14,7 +15,7 @@ import com.usta.edu.co.MedicineRotationManager.repositories.GroupAssignmentRepos
 import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
 
 import jakarta.persistence.EntityNotFoundException;
-
+@Service
 public class ServiceGroupAssignment {
     private GroupAssignmentRepository repository;
     private ServiceGroup serviceGroup;
@@ -66,5 +67,8 @@ public class ServiceGroupAssignment {
             throw new DataIntegrityViolationException("Violation consistency");
         }
 
+    }
+    public Page<GroupAssignment> findAll(String id, Pageable pageable){
+        return repository.findByStudent(id, pageable);
     }
 }

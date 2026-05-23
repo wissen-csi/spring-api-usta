@@ -2,7 +2,8 @@ package com.usta.edu.co.MedicineRotationManager.services;
 
 import java.io.IOException;
 
-import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.FileResponseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryPracticeResponseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.FileResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.FileUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.File;
 
@@ -34,9 +35,8 @@ public class FileService {
      * Guarda archivo
      */
     @Transactional
-    public FileResponseDTO save(
-            MultipartFile multipartFile,
-            String personId
+    public EntryPracticeResponseDTO.FileResponseDTO save(MultipartFile multipartFile,
+                                                         String personId
     ) throws IOException {
 
         Person person =
@@ -107,7 +107,7 @@ public class FileService {
      * Busca archivo para API
      */
     @Transactional(readOnly = true)
-    public FileResponseDTO findById(String id) {
+    public EntryPracticeResponseDTO.FileResponseDTO findById(String id) {
 
         File file = findEntityById(id);
 
@@ -118,7 +118,7 @@ public class FileService {
      * Lista paginada
      */
     @Transactional(readOnly = true)
-    public Page<FileResponseDTO> findAll(Pageable pageable) {
+    public Page<EntryPracticeResponseDTO.FileResponseDTO> findAll(Pageable pageable) {
 
         return fileRepository.findAll(pageable)
 
@@ -146,7 +146,7 @@ public class FileService {
      * Reemplaza archivo físico
      */
     @Transactional
-    public FileResponseDTO replaceFile(
+    public EntryPracticeResponseDTO.FileResponseDTO replaceFile(
             String id,
             MultipartFile newFile
     ) throws IOException {
@@ -207,7 +207,7 @@ public class FileService {
      * Actualiza metadata
      */
     @Transactional
-    public FileResponseDTO updateMetadata(
+    public EntryPracticeResponseDTO.FileResponseDTO updateMetadata(
             String id,
             FileUpdateDTO dto
     ) {
@@ -227,9 +227,9 @@ public class FileService {
     /**
      * Mapper Entity -> DTO
      */
-    private FileResponseDTO mapToResponseDTO(File file) {
+    private EntryPracticeResponseDTO.FileResponseDTO mapToResponseDTO(File file) {
 
-        return new FileResponseDTO(
+        return new EntryPracticeResponseDTO.FileResponseDTO(
 
                 file.getId(),
 
@@ -237,5 +237,32 @@ public class FileService {
 
                 file.getOriginalName()
         );
+    }
+
+    public FileResponseDTO convertObjectToDTO(
+            File file
+    ) {
+
+        return FileResponseDTO.builder()
+
+                .id(file.getId())
+
+                .publicId(file.getPublicId())
+
+                .secureUrl(file.getSecureUrl())
+
+                .originalName(file.getOriginalName())
+
+                .format(file.getFormat())
+
+                .resourceType(file.getResourceType())
+
+                .size(file.getSize())
+
+                .personId(
+                        file.getPerson().getId()
+                )
+
+                .build();
     }
 }

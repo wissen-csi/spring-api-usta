@@ -73,6 +73,7 @@ public class ServiceAdmin {
     @Transactional
     public void delete(String id) {
         Admin admin = adminRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+        userService.deleteUser(admin);
         adminRepository.delete(admin);
     }
 

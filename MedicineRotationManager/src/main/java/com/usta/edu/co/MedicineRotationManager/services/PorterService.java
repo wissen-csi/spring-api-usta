@@ -1,6 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
 
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.PorterResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PorterService {
     private final PorterRepository porterRepository;
     private final ServiceLocation serviceLocation;
+    private final AuthUserService userService;
 
 @Transactional
 public void save(PorterCreateDTO dto) {
@@ -65,6 +67,7 @@ public void save(PorterCreateDTO dto) {
     @Transactional
     public void delete(String id) {
         Porter porterToDelete = findById(id);
+        userService.deleteUser(porterToDelete);
         this.porterRepository.delete(porterToDelete);
     }
 
@@ -76,7 +79,25 @@ public void save(PorterCreateDTO dto) {
 
     @Transactional(readOnly = true)
     public Page<Porter> findAll(Pageable pageable) {
-        return this.porterRepository.findAll(pageable);
+
+    return this.porterRepository.findAll(pageable);
+    }
+
+    public PorterResponseDTO convertObjectToResponseDTO(Porter porter){
+
+        return PorterResponseDTO.builder()
+                .id(porter.getId())
+                .name(porter.getName())
+                .lastName(porter.getLastName())
+                .dni(porter.getDni())
+                .email(porter.getEmail())
+                .phoneNumber(porter.getPhoneNumber())
+                .creationDate(porter.getCreationDate())
+                .lastUpdate(porter.getLastUpdate())
+                .hireDate(porter.getHireDate())
+                .employeeCode(porter.getEmployeeCode())
+                .isActive(porter.isActive())
+                .build();
     }
 
 }

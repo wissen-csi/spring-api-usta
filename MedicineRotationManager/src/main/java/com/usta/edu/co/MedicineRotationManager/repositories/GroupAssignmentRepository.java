@@ -2,6 +2,8 @@ package com.usta.edu.co.MedicineRotationManager.repositories;
 
 import java.time.LocalDate;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,5 +20,10 @@ public interface GroupAssignmentRepository extends JpaRepository<GroupAssignment
         AND ga.group.rotation.completionDate >= :startDate
     """)
     public boolean existsScheduleConflict(Student student,LocalDate startDate,LocalDate endDate);
-
+    @Query(value = """
+            SELECT ga 
+            FROM GroupAssignment ga
+            WHERE ga.student.id = :id
+            """)
+    public Page<GroupAssignment> findByStudent(String id, Pageable pageable);
 }

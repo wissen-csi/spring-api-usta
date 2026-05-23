@@ -4,30 +4,25 @@ import java.time.LocalDate;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
-import lombok.Builder;
+
+import lombok.*;
+
+@Getter
 @Builder
-public record AdminResponseDTO(String id,
-        String name,
-
-        String lastName,
-
-        String dni,
-
-        String email,
-
-        String phoneNumber,
-
-        MaritalStatus maritalStatus,
-
-        TypeBlood typeBlood,
-
-        double weight,
-
-        double imc,
-
-        LocalDate hiringDate,
-
-        LocalDate endDate
-) {
+@RequiredArgsConstructor
+@AllArgsConstructor
+public class AdminResponseDTO {
+    private final String id;
+    private final String name;
+    private final String lastName;
+    private final String dni;
+    private final String email;
+    private final String phoneNumber;
+    private final MaritalStatus maritalStatus;
+    private final TypeBlood typeBlood;
+    private final double weight;
+    private final double imc;
+    private final LocalDate hiringDate;
+    private final LocalDate endDate;
 
 }

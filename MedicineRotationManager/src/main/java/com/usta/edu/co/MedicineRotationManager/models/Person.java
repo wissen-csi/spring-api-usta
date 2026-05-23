@@ -12,10 +12,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -89,7 +91,7 @@ public abstract class Person  {
     private double imc;
 
     @Builder.Default
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
     private List<File> file = new ArrayList<>();
 
 

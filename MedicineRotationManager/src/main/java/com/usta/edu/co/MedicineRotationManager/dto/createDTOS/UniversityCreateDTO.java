@@ -4,6 +4,6 @@ public record UniversityCreateDTO(
         LocationCreateDTO address,
         String email,
         String name,
-        String phoneNumberm) {
+        String phoneNumber) {
 
 }

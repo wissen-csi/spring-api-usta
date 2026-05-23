@@ -88,7 +88,7 @@ public class UniversityController {
     .build()
     );
     }
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> update(@RequestBody UniversityUpdateDTO dto, @PathVariable String id){
         serviceUniversity.update(id, dto);

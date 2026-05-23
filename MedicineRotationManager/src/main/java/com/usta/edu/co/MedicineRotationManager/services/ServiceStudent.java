@@ -183,6 +183,7 @@ public class ServiceStudent {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Student not found with id: " + id));
 
+        userService.deleteUser(student);
         repository.delete(student);
     }
 

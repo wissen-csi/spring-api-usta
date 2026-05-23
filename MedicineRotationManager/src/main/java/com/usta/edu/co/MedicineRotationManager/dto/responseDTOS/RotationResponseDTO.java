@@ -6,15 +6,21 @@ import com.usta.edu.co.MedicineRotationManager.enumerations.HospitalLocation;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeRotation;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
+
 @Builder
-public record RotationResponseDTO(
-        String id,
-        String doctorId,
-        String doctorName,
-        String doctorLastName,
-        HospitalLocation hospitalLocation,
-        TypeRotation typeRotation,
-        LocalDate startDate,
-        LocalDate completionDate
-) {
+@RequiredArgsConstructor
+@Jacksonized
+@Getter
+public class RotationResponseDTO{
+    private final String id;
+    private final String doctorId;
+    private final String doctorName;
+    private final String doctorLastName;
+    private final HospitalLocation hospitalLocation;
+    private final TypeRotation typeRotation;
+    private final LocalDate startDate;
+    private final LocalDate completionDate;
 }

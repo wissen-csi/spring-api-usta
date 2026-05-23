@@ -1,6 +1,8 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
+import com.usta.edu.co.MedicineRotationManager.controllers.MedicalTreatmentController;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.MedicalTreatmentCreateDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.MedicalTreatmentResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.MedicalTreatmentUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.MedicalTreatment;
 import com.usta.edu.co.MedicineRotationManager.models.Medicine;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -56,8 +60,25 @@ public class MedicalTreatmentService {
      }
 
      @Transactional
-    public Page<MedicalTreatment> findAll(Pageable pageble){
+    public Page<MedicalTreatment> findAll(Pageable pageble) {
+
          return this.medicalTreatmentRepository.findAll(pageble);
+     }
+
+
+     public MedicalTreatmentResponseDTO convertObjectToDTO(MedicalTreatment medicalTreatment){
+         String medicineId = medicalTreatment.getMedicine().getId();
+         String studentId = medicalTreatment.getStudent().getId();
+
+         MedicalTreatmentResponseDTO medicalTreatmentResponseDTO = MedicalTreatmentResponseDTO.builder()
+                 .medicineTreatmentId(medicalTreatment.getId())
+                 .studentId(studentId)
+                 .medicineId(medicineId)
+                 .startMedication(medicalTreatment.getStartMedication())
+                 .endMedication(medicalTreatment.getEndMedication())
+                 .build();
+
+         return medicalTreatmentResponseDTO;
      }
 
 }
