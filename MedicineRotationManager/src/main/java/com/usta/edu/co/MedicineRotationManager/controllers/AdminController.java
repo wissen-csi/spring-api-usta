@@ -15,12 +15,11 @@ import com.usta.edu.co.MedicineRotationManager.models.AuthUser;
 import com.usta.edu.co.MedicineRotationManager.services.ServiceAdmin;
 
 
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-
     private final ServiceAdmin serviceAdmin;
-
     public AdminController(ServiceAdmin serviceAdmin) {
 
         this.serviceAdmin = serviceAdmin;
@@ -66,6 +65,7 @@ public class AdminController {
                 .id(admin.getId())
                 .name(admin.getName())
                 .lastName(admin.getLastName())
+                .dni(admin.getDni())
                 .dni(admin.getDni())
                 .email(admin.getEmail())
                 .phoneNumber(admin.getPhoneNumber())

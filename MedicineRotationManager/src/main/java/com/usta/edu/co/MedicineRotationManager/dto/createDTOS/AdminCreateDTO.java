@@ -3,6 +3,7 @@ import java.time.LocalDate;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
+import lombok.Builder;
 
 public record AdminCreateDTO(
     String name,
@@ -19,4 +20,5 @@ public record AdminCreateDTO(
     String password,
     LocalDate hiringDate,
     LocalDate endDate
-) {}
+) {
+}

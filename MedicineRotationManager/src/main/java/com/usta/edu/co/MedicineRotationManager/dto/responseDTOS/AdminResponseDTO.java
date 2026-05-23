@@ -4,13 +4,9 @@ import java.time.LocalDate;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
-
 import lombok.Builder;
-
 @Builder
-public record AdminResponseDTO(
-        String id,
-
+public record AdminResponseDTO(String id,
         String name,
 
         String lastName,

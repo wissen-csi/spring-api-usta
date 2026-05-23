@@ -14,12 +14,14 @@ import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.GroupResponseDTO
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.GroupUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Group;
 import com.usta.edu.co.MedicineRotationManager.services.ServiceGroup;
+import lombok.Builder;
 @RestController
 @RequestMapping("/Group")
 public class GroupController {
     private ServiceGroup serviceGroup;
 
     public GroupController(ServiceGroup serviceGroup) {
+
         this.serviceGroup = serviceGroup;
     }
 
