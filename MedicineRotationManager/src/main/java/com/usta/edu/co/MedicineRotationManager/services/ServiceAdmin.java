@@ -1,7 +1,6 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,9 @@ public class ServiceAdmin {
     private AdminRepository adminRepository;
     private ServiceLocation serviceLocation;
     private ObjectMapper objectMapper;
+
     private AuthUserService userService;
+
 
     @SuppressWarnings("unused")
     @Autowired

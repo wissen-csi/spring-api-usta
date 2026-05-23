@@ -20,15 +20,19 @@ public class ServiceGroup {
     private ObjectMapper objectMapper;
     private GroupRepository repository;
     private ServiceRotation serviceRotation;
+
     public ServiceGroup(ObjectMapper objectMapper, GroupRepository repository, ServiceRotation serviceRotation) {
         this.objectMapper = objectMapper;
         this.repository = repository;
         this.serviceRotation = serviceRotation;
     }
+
     public Group findById(String id){
+
         return repository.findById(id).orElseThrow(()->new EntityNotFoundException());
     }
     public Page<Group> findAll(Pageable pageable){
+
         return repository.findAll(pageable);
     }
     @Transactional

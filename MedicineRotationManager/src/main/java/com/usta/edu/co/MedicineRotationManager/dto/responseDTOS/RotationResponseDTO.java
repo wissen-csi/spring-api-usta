@@ -8,6 +8,7 @@ import com.usta.edu.co.MedicineRotationManager.enumerations.TypeRotation;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+
 @Builder
 public record RotationResponseDTO(
         @NotBlank
@@ -27,4 +28,5 @@ public record RotationResponseDTO(
         @NotNull
         LocalDate completionDate
 ) {
+
 }

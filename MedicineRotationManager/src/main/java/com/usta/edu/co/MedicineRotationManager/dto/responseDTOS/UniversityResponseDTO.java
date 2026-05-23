@@ -24,4 +24,5 @@ public record UniversityResponseDTO(
         LocalDate creationDate
 
 ) {
+
 }

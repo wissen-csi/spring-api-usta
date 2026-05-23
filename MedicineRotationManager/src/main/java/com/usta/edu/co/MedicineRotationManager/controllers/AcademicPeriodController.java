@@ -32,43 +32,47 @@ public class AcademicPeriodController {
 
     @GetMapping("/find/all")
     @PreAuthorize("hasRole('ADMIN','STUDENT','DOCTOR')")
-    public ResponseEntity<Page<AcademicPeriodResponseDTO>> findAll(Pageable pageable){
+    public ResponseEntity<Page<AcademicPeriodResponseDTO>> findAll(Pageable pageable) {
         Page<AcademicPeriod> page = serviceAcademicPeriod.findAll(pageable);
-        Page<AcademicPeriodResponseDTO> response = page.map(x->AcademicPeriodResponseDTO.builder()
-    .id(x.getId())
-    .name(x.getName())
-    .startDate(x.getStartDate())
-    .endDate(x.getEndDate())
-    .build()
-    );
+        Page<AcademicPeriodResponseDTO> response = page.map(x -> AcademicPeriodResponseDTO.builder()
+                .id(x.getId())
+                .name(x.getName())
+                .startDate(x.getStartDate())
+                .endDate(x.getEndDate())
+                .build()
+        );
         return ResponseEntity.ok(response);
     }
+
     @GetMapping("/find/{id}")
     @PreAuthorize("hasRole('ADMIN','STUDENT','DOCTOR')")
-    public ResponseEntity<AcademicPeriodResponseDTO> findById(@PathVariable String id){
+    public ResponseEntity<AcademicPeriodResponseDTO> findById(@PathVariable String id) {
         AcademicPeriod academicPeriod = serviceAcademicPeriod.findById(id);
         return ResponseEntity.ok(AcademicPeriodResponseDTO.builder()
-    .id(academicPeriod.getId())
-    .name(academicPeriod.getName())
-    .startDate(academicPeriod.getStartDate())
-    .endDate(academicPeriod.getEndDate())
-    .build());
+                .id(academicPeriod.getId())
+                .name(academicPeriod.getName())
+                .startDate(academicPeriod.getStartDate())
+                .endDate(academicPeriod.getEndDate())
+                .build());
     }
+
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> create(@RequestBody AcademicPeriodCreateDTO dto){
+    public ResponseEntity<Void> create(@RequestBody AcademicPeriodCreateDTO dto) {
         serviceAcademicPeriod.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
     @PutMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody AcademicPeriodUpdateDTO dto){
-        serviceAcademicPeriod.update(id, dto);
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody AcademicPeriodUpdateDTO dto) {
+        serviceAcademicPeriod.update(dto,id);
         return ResponseEntity.noContent().build();
     }
+
     @DeleteMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> delete(@PathVariable String id){
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         serviceAcademicPeriod.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -39,7 +39,8 @@ public class AuthController {
 
     @PostMapping("/admins")
     public void save( @RequestBody AdminCreateDTO dto){
-    serviceAdmin.save(dto);
+
+        serviceAdmin.save(dto);
 }
 
 }

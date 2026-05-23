@@ -37,4 +37,5 @@ public record AdminResponseDTO(
         LocalDate endDate
 ) {
 
+
 }

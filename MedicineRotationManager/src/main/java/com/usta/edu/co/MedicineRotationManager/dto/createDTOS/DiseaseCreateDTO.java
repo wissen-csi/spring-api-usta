@@ -12,3 +12,4 @@ public record DiseaseCreateDTO(
     @NotBlank
     String name) {
 }
+

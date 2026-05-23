@@ -1,6 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.MedicineCreateDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.MedicineResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.MedicineUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Medicine;
 import com.usta.edu.co.MedicineRotationManager.repositories.MedicineRepository;
@@ -51,8 +52,18 @@ public class MedicineService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Medicine>findAll(Pageable pageable){
-         return this.medicineRepository.findAll(pageable);
+    public Page<Medicine>findAll(Pageable pageable) {
+        return this.medicineRepository.findAll(pageable);
+
+    }
+
+    public MedicineResponseDTO convertObjectToDTO(Medicine medicine) {
+
+        return MedicineResponseDTO.builder()
+                .id(medicine.getId())
+                .activeIngredient(medicine.getActiveIngredient())
+                .description(medicine.getDescriptionAtc())
+                .build();
     }
 
 

@@ -4,10 +4,11 @@ import com.usta.edu.co.MedicineRotationManager.enumerations.Specialty;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 
+import lombok.Builder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 @Builder
 public record DoctorResponseDTO(
         @NotBlank
@@ -32,3 +33,4 @@ public record DoctorResponseDTO(
         LocalDateTime lastUpdate
 
 ) {}
+

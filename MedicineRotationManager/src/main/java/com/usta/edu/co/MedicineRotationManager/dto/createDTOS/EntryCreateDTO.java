@@ -2,12 +2,7 @@ package com.usta.edu.co.MedicineRotationManager.dto.createDTOS;
 
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.*;
 
-public record EntryCreateDTO(
-    @NotNull
-    LocalDateTime assitance, 
-    @NotBlank
-    String studentId) {
+public record EntryCreateDTO(LocalDateTime assitance, String studentId,String entryPracticeId) {
 
 }

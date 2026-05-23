@@ -1,5 +1,8 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryPracticeResponseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryResponseDTO;
+import com.usta.edu.co.MedicineRotationManager.models.EntryPractice;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,14 +22,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EntryService {
     private final EntryRepository entryRepository;
+    private final ServiceEntryPractice entryPracticeService;
     private final ServiceStudent serviceStudent;
 
     @Transactional
     public void save(EntryCreateDTO entryCreateDTO) {
         Student student = findStudentById(entryCreateDTO.studentId());
+        EntryPractice entryPractice = findEntryPracticeById(entryCreateDTO.entryPracticeId());
+
         Entry entry = Entry.builder()
                 .id(UUIDGenerator.generateNewId())
+                .entryPractice(entryPractice)
                 .student(student)
+
                 .build();
         entryRepository.save(entry);
     }
@@ -61,4 +69,39 @@ public class EntryService {
         return this.entryRepository.findAll(pageable);
     }
 
+    @Transactional
+    public EntryPractice findEntryPracticeById(String id){
+
+        return this.entryPracticeService.findById(id);
+    }
+
+    public EntryResponseDTO convertObjectToDTO(Entry entry){
+       return EntryResponseDTO.builder()
+                .id(entry.getId())
+
+                .entryPracticeResponseDTO(
+                        EntryPracticeResponseDTO.builder()
+                                .id(entry.getEntryPractice().getId())
+                                .startTime(entry.getEntryPractice().getStartTime())
+                                .endTime(entry.getEntryPractice().getEndTime())
+                                .groupName(entry.getEntryPractice().getGroup().getName())
+                                .groupId(entry.getEntryPractice().getGroup().getId())
+                                .qrCode(entry.getEntryPractice().getQrCode())
+                                .build()
+                )
+
+                .assistance(entry.getAssistance())
+
+                .studentId(entry.getStudent().getId())
+
+                .studentName(
+                        entry.getStudent().getName()
+                                + " "
+                                + entry.getStudent().getLastName()
+                )
+
+                .statusEntry(entry.getStatusEntry())
+
+                .build();
+    }
 }

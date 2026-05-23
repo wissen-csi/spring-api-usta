@@ -11,4 +11,5 @@ public record GroupAssignmentResponseDTO(
         String groupId
 
 ) {
+
 }

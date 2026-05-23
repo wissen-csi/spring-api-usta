@@ -16,3 +16,4 @@ public record GroupResponseDTO(
         String rotationId
 ) {
 }
+

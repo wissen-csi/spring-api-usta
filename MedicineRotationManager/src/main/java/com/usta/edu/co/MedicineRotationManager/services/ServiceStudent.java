@@ -35,7 +35,6 @@ public class ServiceStudent {
 
     public ServiceStudent(StudentRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation,
             AuthUserService userService, ServiceUniversity serviceUniversity) {
-
         this.repository = repository;
         this.objectMapper = objectMapper;
         this.serviceLocation = serviceLocation;
