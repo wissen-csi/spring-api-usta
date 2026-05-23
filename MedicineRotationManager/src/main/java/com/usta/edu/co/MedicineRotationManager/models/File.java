@@ -1,22 +1,17 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
-import com.usta.edu.co.MedicineRotationManager.enumerations.Format;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -26,17 +21,25 @@ public class File {
     @Id
     private String id;
 
-    @Column(name = "security_url", nullable = false, columnDefinition = "TEXT")
-    private String securityUrl;
-
-    @Column(name = "url", nullable = false, columnDefinition = "TEXT")
-    private String url;
-
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Format format;
+    private String publicId;
+
+    @Column(nullable = false)
+    private String secureUrl;
+
+    @Column(nullable = false)
+    private String originalName;
+
+    @Column(nullable = false)
+    private String format;
+
+    @Column(nullable = false)
+    private String resourceType;
+
+    @Column(nullable = false)
+    private Long size;
 
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
+    @JoinColumn(name = "person_id")
     private Person person;
 }

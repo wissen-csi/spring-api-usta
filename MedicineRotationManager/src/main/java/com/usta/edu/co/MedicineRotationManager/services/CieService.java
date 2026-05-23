@@ -7,8 +7,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import com.usta.edu.co.MedicineRotationManager.dto.DiseaseCieDTO;
-import com.usta.edu.co.MedicineRotationManager.dto.DiseaseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DiseaseCieDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DiseaseCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.utils.Converter;
 
 import tools.jackson.databind.JsonNode;
@@ -24,6 +24,7 @@ public class CieService {
         this.cieTokenService = cieTokenService;
     }
 
+    @SuppressWarnings("unchecked")
     public List<DiseaseCieDTO> searchDiaseases(String word) {
                 Map<String,Object> response = restClient.get()
                 .uri("/release/11/2024-01/mms/search?q={q}", word)
@@ -46,16 +47,16 @@ public class CieService {
 
     }
     
-    public DiseaseDTO searchSpecificDiaseasse(DiseaseCieDTO diseaseCieDTO){
+    public DiseaseCreateDTO searchSpecificDiaseasse(DiseaseCieDTO diseaseCieDTO){
                 JsonNode response=  restClient.get()
-                .uri(Converter.convertURI(diseaseCieDTO.getFundationURI()))
+                .uri(Converter.convertURI(diseaseCieDTO.fundationURI()))
                 .header("Authorization", "Bearer " + cieTokenService.getToken())
                 .header("API-Version", "v2")
                 .header("Accept", "application/json")
                 .header("Accept-Language", "es")
                 .retrieve()
                 .body(JsonNode.class);
-                return new DiseaseDTO(response.get("@id").asString(),
+                return new DiseaseCreateDTO(response.get("@id").asString(),
                  response.path("code").asString(), response.path("definition").path("@value").asString(), response.path("title").path("@value").asString());
 
     }

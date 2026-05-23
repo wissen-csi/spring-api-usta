@@ -1,33 +1,36 @@
 package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
-
+import java.util.ArrayList;
 import java.util.List;
 
-
-import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicConnection;
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
 import com.usta.edu.co.MedicineRotationManager.enumerations.Language;
 import com.usta.edu.co.MedicineRotationManager.enumerations.StudentStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 @Table(name = "students")
 public class Student extends Person {
 
@@ -40,18 +43,8 @@ public class Student extends Person {
     private AcademicPrograms academicPrograms;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "academic_connection", nullable = false)
-    private AcademicConnection academicConnection;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "student_status", nullable = false)
     private StudentStatus studentStatus;
-
-    @Column(name = "current_semester", nullable = false)
-    private int currentSemester;
-
-    @Column(name = "cumulative_average", nullable = false)
-    private double cumulativeAverage;
 
     @Column(name = "course_approved", nullable = false)
     private boolean courseApproved;
@@ -59,10 +52,10 @@ public class Student extends Person {
     @Column(name = "entry_date_academic_program", nullable = false)
     private LocalDate entryDateAcademicProgram;
 
-    @Column(name = "start_induction_date", nullable = false)
+    @Column(name = "start_induction_date", nullable = true)
     private LocalDate startInductionDate;
 
-    @Column(name = "end_induction_date", nullable = false)
+    @Column(name = "end_induction_date", nullable = true)
     private LocalDate endInductionDate;
 
     @Column(name = "arl_start_date", nullable = false)
@@ -74,31 +67,42 @@ public class Student extends Person {
     @Column(name = "hobbies", nullable = false, columnDefinition = "TEXT")
     private String hobbies;
 
-    @ManyToOne
-    @JoinColumn(name = "admin_id")
-    private Admin admin;
+    @Builder.Default
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,
+            CascadeType.REMOVE },orphanRemoval = true)
+    private List<Attendant> relatives = new ArrayList<>();
 
-    @OneToMany(mappedBy = "student")
-    private List<Attendant> relatives;
+    @Builder.Default
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,
+            CascadeType.REMOVE },orphanRemoval = true)
+    private List<MedicalTreatment> medicalTreatments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "student")
-    private List<MedicationTreatment> medicationTreatments;
+    @Builder.Default
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,
+            CascadeType.REMOVE }, orphanRemoval = true)
+    private List<StudentDisease> studentDiseases = new ArrayList<>();
 
-    @OneToMany(mappedBy = "student")
-    private List<StudentDisease> studentDiseases;
+    @Builder.Default
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,
+            CascadeType.REMOVE },orphanRemoval = true)
+    private List<GroupAssignment> groupAssignments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "student")
-    private List<ResearchParticipant> researchParticipants;
+    @Builder.Default
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH, CascadeType.MERGE,
+            CascadeType.REMOVE },orphanRemoval = true)
 
-    @OneToMany(mappedBy = "student")
-    private List<GroupAssignment> groupAssignments;
-    @OneToMany(mappedBy = "student")
-    private List<StudentAcademicPeriod> studentAcademicPeriods;
+    private List<StudentAcademicPeriod> studentAcademicPeriods = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "university_id", nullable = false)
     private University university;
+    @Builder.Default
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
+    private List<Entry> entries = new ArrayList<>();
 
-
+    // Un estudiante puede tener muchas investigaciones :)
+    @Builder.Default
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
+    private List<Investigation> investigations = new ArrayList<>();
 
 }

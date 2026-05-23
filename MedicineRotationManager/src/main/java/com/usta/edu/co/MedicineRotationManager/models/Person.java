@@ -2,23 +2,22 @@ package com.usta.edu.co.MedicineRotationManager.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
-import com.usta.edu.co.MedicineRotationManager.enumerations.AppRole;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -28,19 +27,19 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 @Table(name = "people")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Person implements UserDetails {
+public abstract class Person  {
 
     @Id
     private String id;
@@ -91,30 +90,12 @@ public abstract class Person implements UserDetails {
     @Column(name = "imc", nullable = false)
     private double imc;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private AppRole role;
+    @Builder.Default
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
+    private List<File> file = new ArrayList<>();
 
-    @OneToMany(mappedBy = "person")
-    private List<File> file;
 
-    @Column(name = "password", nullable = false, length = 100, unique = true)
-    private String password;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(getRole().name()));
-    }
-
-    @Override
-    public @NonNull String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return dni;
-    }
-    
+    public Person(){}
 
 }

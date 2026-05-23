@@ -2,8 +2,8 @@ package com.usta.edu.co.MedicineRotationManager.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.usta.edu.co.MedicineRotationManager.dto.DiseaseCieDTO;
-import com.usta.edu.co.MedicineRotationManager.dto.DiseaseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DiseaseCieDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DiseaseCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.services.CieService;
 
 import lombok.NonNull;
@@ -35,7 +35,7 @@ public class ContrellerCie {
         return cieService.searchDiaseases(term);
     }
     @PostMapping("/search/especific")
-    public DiseaseDTO especific(@RequestBody @NonNull DiseaseCieDTO diseaseCieDTO){
+    public DiseaseCreateDTO especific(@RequestBody @NonNull DiseaseCieDTO diseaseCieDTO){
         return cieService.searchSpecificDiaseasse(diseaseCieDTO);
     }
     @GetMapping("/test/{term}")
