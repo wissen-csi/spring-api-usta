@@ -4,6 +4,12 @@ import java.time.LocalDateTime;
 
 import com.usta.edu.co.MedicineRotationManager.enumerations.StatusEntry;
 
-public record EntryUpdateDTO(LocalDateTime assistance, StatusEntry statusEntry) {
+import jakarta.validation.constraints.NotNull;
+
+public record EntryUpdateDTO(
+    @NotNull
+    LocalDateTime assistance, 
+    @NotNull
+    StatusEntry statusEntry) {
 
 }

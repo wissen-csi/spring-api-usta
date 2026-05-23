@@ -1,5 +1,9 @@
 package com.usta.edu.co.MedicineRotationManager.dto.updateDTOS;
 
-public record FileUpdateDTO(String originalName) {
+import jakarta.validation.constraints.NotBlank;
+
+public record FileUpdateDTO(
+    @NotBlank
+    String originalName) {
 
 }

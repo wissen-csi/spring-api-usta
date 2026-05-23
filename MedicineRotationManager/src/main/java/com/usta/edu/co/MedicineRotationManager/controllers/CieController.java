@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("api/test")
-public class ContrellerCie {
+public class CieController {
 
     private final CieService cieService;
 
-    public ContrellerCie(CieService cieService) {
+    public CieController(CieService cieService) {
         this.cieService = cieService;
     }
 

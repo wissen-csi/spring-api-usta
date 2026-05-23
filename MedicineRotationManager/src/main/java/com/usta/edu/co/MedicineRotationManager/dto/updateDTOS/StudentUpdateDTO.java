@@ -8,25 +8,37 @@ import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
 import com.usta.edu.co.MedicineRotationManager.enumerations.StudentStatus;
 import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 public record StudentUpdateDTO(
 
+        @Size(min = 2, max = 100)
         String name,
 
+        @Size(min = 2, max = 100)
         String lastName,
 
+        @Pattern(regexp = "^\\d+$")
         String dni,
 
         MaritalStatus maritalStatus,
 
+        @Pattern(regexp = "^\\d+$")
         String phoneNumber,
 
+        @Email
         String email,
 
         TypeBlood typeBlood,
 
-        double weight,
+        @Positive
+        Double weight,
 
-        double imc,
+        @Positive
+        Double imc,
 
         Language secondLanguage,
 
@@ -34,7 +46,7 @@ public record StudentUpdateDTO(
 
         StudentStatus studentStatus,
 
-        boolean courseApproved,
+        Boolean courseApproved,
 
         LocalDate entryDateAcademicProgram,
 
@@ -46,8 +58,10 @@ public record StudentUpdateDTO(
 
         LocalDate arlEndDate,
 
+        @Size(max = 500)
         String hobbies,
 
+        @Pattern(regexp = "^\\d+$")
         String universityId
 
 ) {

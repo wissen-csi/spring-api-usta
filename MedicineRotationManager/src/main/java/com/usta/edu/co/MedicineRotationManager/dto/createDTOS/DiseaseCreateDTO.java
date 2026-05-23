@@ -1,6 +1,14 @@
 package com.usta.edu.co.MedicineRotationManager.dto.createDTOS;
 
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank;
 
-public record DiseaseCreateDTO(@Getter String id,@Getter String code,@Getter String definition, @Getter String name) {
+public record DiseaseCreateDTO( 
+    @NotBlank
+    String id, 
+    @NotBlank
+    String code,
+    @NotBlank
+    String definition, 
+    @NotBlank
+    String name) {
 }

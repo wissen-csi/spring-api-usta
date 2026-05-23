@@ -1,6 +1,12 @@
 package com.usta.edu.co.MedicineRotationManager.dto.createDTOS;
 
-public record FileResponseDTO( String id,
-                               String secureUrl,
-                               String originalName) {
+import jakarta.validation.constraints.NotBlank;
+
+public record FileResponseDTO( 
+    @NotBlank
+    String id,
+    @NotBlank
+    String secureUrl,
+    @NotBlank
+    String originalName) {
 }

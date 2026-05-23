@@ -1,5 +1,14 @@
 package com.usta.edu.co.MedicineRotationManager.dto.createDTOS;
 
-public record GroupCreateDTO(String name, String rotationId, int capacity) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
+public record GroupCreateDTO(
+    @NotBlank
+    String name,
+    @NotBlank 
+    String rotationId,
+    @Positive 
+    int capacity) {
     
 }

@@ -1,6 +1,9 @@
 package com.usta.edu.co.MedicineRotationManager.dto.updateDTOS;
 
+import jakarta.validation.constraints.NotNull;
 
-public record PorterUpdateDTO(boolean isActive) {
+public record PorterUpdateDTO(
+    @NotNull
+    Boolean isActive) {
 
 }
