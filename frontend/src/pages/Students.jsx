@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, Filter, ChevronLeft, ChevronRight, Plus, X, Sparkles, CheckCircle, Trash2, AlertTriangle, Pencil, ClipboardList } from 'lucide-react'
-import { studentService, universityService, groupService, groupAssignmentService, rotationService, attendantService, diseaseService, studentDiseaseService, cieService } from '../services/api'
+import { studentService, universityService, groupService, groupAssignmentService, rotationService } from '../services/api'
 
 const getStatusColor = (status) => {
   const colors = {
@@ -57,15 +57,6 @@ const academicProgramOptions = [
   { value: 'MEDICAL_INTERNSHIP', label: 'Internado Médico' }
 ]
 
-const typeAttendantOptions = [
-  { value: 'FATHER', label: 'Padre' },
-  { value: 'MOTHER', label: 'Madre' },
-  { value: 'BROTHER', label: 'Hermano' },
-  { value: 'SISTER', label: 'Hermana' },
-  { value: 'CHILDREN', label: 'Hijo/a' },
-  { value: 'ATTENDANT', label: 'Acudiente' }
-]
-
 const studentStatusOptions = [
   { value: 'ACTIVE', label: 'Activo' },
   { value: 'INACTIVE', label: 'Inactivo' },
@@ -81,22 +72,9 @@ const emptyForm = {
   email: '',
   phoneNumber: '',
   password: '',
-  maritalStatus: 'OTHER',
   placeBirth: { address: '', city: '', department: '' },
   residenceAddress: { address: '', city: '', department: '' },
-  typeBlood: 'O_POSITIVE',
-  weight: '',
-  imc: '',
-  secondLanguage: 'OTHER',
   academicPrograms: 'MEDICINE',
-  studentStatus: 'ACTIVE',
-  courseApproved: false,
-  entryDateAcademicProgram: '',
-  startInductionDate: '',
-  endInductionDate: '',
-  arlStartDate: '',
-  arlEndDate: '',
-  hobbies: '',
   universityId: ''
 }
 
@@ -113,14 +91,6 @@ export default function Students() {
   const [creating, setCreating] = useState(false)
   const [universities, setUniversities] = useState([])
   const [newStudent, setNewStudent] = useState(emptyForm)
-  const [attendants, setAttendants] = useState([])
-  const [newAttendant, setNewAttendant] = useState({ name: '', lastName: '', phoneNumber: '', dni: '', typeAttendant: 'FATHER' })
-  const [selectedDiseases, setSelectedDiseases] = useState([])
-  const [diseaseSearchTerm, setDiseaseSearchTerm] = useState('')
-  const [cieResults, setCieResults] = useState([])
-  const [searchingCie, setSearchingCie] = useState(false)
-  const [showCieDropdown, setShowCieDropdown] = useState(false)
-  const diseaseSearchRef = useRef(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
@@ -162,11 +132,6 @@ export default function Students() {
   const openCreateModal = async () => {
     setShowModal(true)
     setNewStudent(emptyForm)
-    setAttendants([])
-    setNewAttendant({ name: '', lastName: '', phoneNumber: '', dni: '', typeAttendant: 'FATHER' })
-    setSelectedDiseases([])
-    setDiseaseSearchTerm('')
-    setCieResults([])
     try {
       const uniRes = await universityService.findAll()
       setUniversities(uniRes.data.content || uniRes.data)
@@ -174,37 +139,6 @@ export default function Students() {
       console.error('Error loading data:', err)
     }
   }
-
-  useEffect(() => {
-    if (diseaseSearchTerm.length < 2) {
-      setCieResults([])
-      setShowCieDropdown(false)
-      return
-    }
-    const timer = setTimeout(async () => {
-      setSearchingCie(true)
-      try {
-        const res = await cieService.search(diseaseSearchTerm)
-        setCieResults(res.data || [])
-        setShowCieDropdown(true)
-      } catch {
-        setCieResults([])
-      } finally {
-        setSearchingCie(false)
-      }
-    }, 350)
-    return () => clearTimeout(timer)
-  }, [diseaseSearchTerm])
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (diseaseSearchRef.current && !diseaseSearchRef.current.contains(e.target)) {
-        setShowCieDropdown(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
 
   const filteredStudents = students.filter(student =>
     student.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -237,41 +171,7 @@ export default function Students() {
 
     setCreating(true)
     try {
-      const studentId = (await studentService.create({
-        ...newStudent,
-        weight: newStudent.weight ? parseFloat(newStudent.weight) : null,
-        imc: newStudent.imc ? parseFloat(newStudent.imc) : null,
-        courseApproved: newStudent.courseApproved,
-        entryDateAcademicProgram: newStudent.entryDateAcademicProgram || null,
-        startInductionDate: newStudent.startInductionDate || null,
-        endInductionDate: newStudent.endInductionDate || null,
-        arlStartDate: newStudent.arlStartDate || null,
-        arlEndDate: newStudent.arlEndDate || null,
-        hobbies: newStudent.hobbies || null
-      })).data
-
-      for (const att of attendants) {
-        await attendantService.create({
-          name: att.name,
-          lastName: att.lastName,
-          phoneNumber: att.phoneNumber,
-          dni: att.dni,
-          typeAttendant: att.typeAttendant,
-          studentId
-        })
-      }
-
-      for (const disease of selectedDiseases) {
-        await studentDiseaseService.create({
-          studentId,
-          diseaseCieDTO: {
-            fundationURI: disease.id || '',
-            code: disease.code,
-            label: disease.name
-          },
-          isActive: true
-        })
-      }
+      await studentService.create(newStudent)
 
       setShowModal(false)
       setToast({
@@ -480,7 +380,16 @@ export default function Students() {
                             <ClipboardList className="w-4 h-4 text-slate-400 group-hover:text-amber-600" />
                           </button>
                           <button
-                            onClick={() => { setEditTarget(student); setShowEditModal(true) }}
+                            onClick={async () => {
+                              setEditTarget(student);
+                              setShowEditModal(true);
+                              try {
+                                const uniRes = await universityService.findAll();
+                                setUniversities(uniRes.data.content || uniRes.data);
+                              } catch (err) {
+                                console.error('Error loading universities:', err);
+                              }
+                            }}
                             className="p-2 hover:bg-clinical-50 rounded-lg transition-colors group" title="Editar estudiante"
                           >
                             <Pencil className="w-4 h-4 text-slate-400 group-hover:text-clinical-600" />
@@ -605,40 +514,9 @@ export default function Students() {
                   </div>
                 </div>
 
-                {/* Demographic Information */}
+                {/* Location Information */}
                 <div>
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">Información Demográfica</h3>
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Estado Civil *</label>
-                      <select className="input-field py-3"
-                        value={newStudent.maritalStatus}
-                        onChange={(e) => setNewStudent({ ...newStudent, maritalStatus: e.target.value })}>
-                        {maritalStatusOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tipo de Sangre *</label>
-                      <select className="input-field py-3"
-                        value={newStudent.typeBlood}
-                        onChange={(e) => setNewStudent({ ...newStudent, typeBlood: e.target.value })}>
-                        {typeBloodOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Peso (kg) *</label>
-                      <input required type="number" step="0.1" placeholder="70.5" className="input-field py-3"
-                        value={newStudent.weight}
-                        onChange={(e) => setNewStudent({ ...newStudent, weight: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">IMC *</label>
-                      <input required type="number" step="0.1" placeholder="22.5" className="input-field py-3"
-                        value={newStudent.imc}
-                        onChange={(e) => setNewStudent({ ...newStudent, imc: e.target.value })} />
-                    </div>
-                  </div>
-
+                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">Información de Ubicación</h3>
                   <div className="mb-4">
                     <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Lugar de Nacimiento *</label>
                     <div className="grid grid-cols-3 gap-3">
@@ -653,7 +531,6 @@ export default function Students() {
                         onChange={(e) => setNewStudent({ ...newStudent, placeBirth: { ...newStudent.placeBirth, department: e.target.value } })} />
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Dirección de Residencia *</label>
                     <div className="grid grid-cols-3 gap-3">
@@ -691,215 +568,7 @@ export default function Students() {
                         {academicProgramOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Segundo Idioma *</label>
-                      <select className="input-field py-3"
-                        value={newStudent.secondLanguage}
-                        onChange={(e) => setNewStudent({ ...newStudent, secondLanguage: e.target.value })}>
-                        {languageOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Fecha Ingreso Programa *</label>
-                      <input required type="date" className="input-field py-3"
-                        value={newStudent.entryDateAcademicProgram}
-                        onChange={(e) => setNewStudent({ ...newStudent, entryDateAcademicProgram: e.target.value })} />
-                    </div>
-                    <div className="flex items-end">
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input type="checkbox"
-                          checked={newStudent.courseApproved}
-                          onChange={(e) => setNewStudent({ ...newStudent, courseApproved: e.target.checked })}
-                          className="w-4 h-4 rounded border-slate-300 text-clinical-600 focus:ring-clinical-500" />
-                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Curso Aprobado</span>
-                      </label>
-                    </div>
                   </div>
-                </div>
-
-                {/* Induction and ARL Dates */}
-                <div>
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">Inducción y ARL</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Inicio Inducción</label>
-                      <input type="date" className="input-field py-3"
-                        value={newStudent.startInductionDate}
-                        onChange={(e) => setNewStudent({ ...newStudent, startInductionDate: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Fin Inducción</label>
-                      <input type="date" className="input-field py-3"
-                        value={newStudent.endInductionDate}
-                        min={newStudent.startInductionDate || ''}
-                        onChange={(e) => setNewStudent({ ...newStudent, endInductionDate: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Inicio ARL *</label>
-                      <input required type="date" className="input-field py-3"
-                        value={newStudent.arlStartDate}
-                        onChange={(e) => setNewStudent({ ...newStudent, arlStartDate: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Fin ARL *</label>
-                      <input required type="date" className="input-field py-3"
-                        value={newStudent.arlEndDate}
-                        min={newStudent.arlStartDate || ''}
-                        onChange={(e) => setNewStudent({ ...newStudent, arlEndDate: e.target.value })} />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Additional Information */}
-                <div>
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">Información Adicional</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Estado *</label>
-                      <select className="input-field py-3"
-                        value={newStudent.studentStatus}
-                        onChange={(e) => setNewStudent({ ...newStudent, studentStatus: e.target.value })}>
-                        {studentStatusOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                      </select>
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Hobbies</label>
-                    <textarea rows={3} placeholder="Leer, correr, música..." className="input-field py-3"
-                      value={newStudent.hobbies}
-                      onChange={(e) => setNewStudent({ ...newStudent, hobbies: e.target.value })} />
-                  </div>
-                </div>
-
-                {/* Attendants - Multiple */}
-                <div>
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">Familiares / Acudientes</h3>
-                  {attendants.length > 0 && (
-                    <div className="mb-3 flex flex-wrap gap-2">
-                      {attendants.map((att, idx) => (
-                        <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-clinical-50 text-clinical-700 rounded-full text-xs font-semibold border border-clinical-200">
-                          {att.name} {att.lastName} ({att.typeAttendant})
-                          <button type="button" onClick={() => setAttendants(attendants.filter((_, i) => i !== idx))} className="hover:text-red-500 transition-colors">
-                            <X className="w-3 h-3" />
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <div className="grid grid-cols-2 gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nombre</label>
-                      <input type="text" placeholder="Nombre" className="input-field py-3"
-                        value={newAttendant.name}
-                        onChange={(e) => setNewAttendant({ ...newAttendant, name: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Apellido</label>
-                      <input type="text" placeholder="Apellido" className="input-field py-3"
-                        value={newAttendant.lastName}
-                        onChange={(e) => setNewAttendant({ ...newAttendant, lastName: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Teléfono</label>
-                      <input type="text" placeholder="3001234567" className="input-field py-3"
-                        value={newAttendant.phoneNumber}
-                        onChange={(e) => setNewAttendant({ ...newAttendant, phoneNumber: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">DNI</label>
-                      <input type="text" placeholder="DNI" className="input-field py-3"
-                        value={newAttendant.dni}
-                        onChange={(e) => setNewAttendant({ ...newAttendant, dni: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parentesco</label>
-                      <select className="input-field py-3"
-                        value={newAttendant.typeAttendant}
-                        onChange={(e) => setNewAttendant({ ...newAttendant, typeAttendant: e.target.value })}>
-                        {typeAttendantOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                      </select>
-                    </div>
-                    <div className="flex items-end">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!newAttendant.name || !newAttendant.lastName || !newAttendant.dni) {
-                            alert('Complete nombre, apellido y DNI del familiar')
-                            return
-                          }
-                          setAttendants([...attendants, { ...newAttendant }])
-                          setNewAttendant({ name: '', lastName: '', phoneNumber: '', dni: '', typeAttendant: 'FATHER' })
-                        }}
-                        className="btn-primary w-full py-3 text-sm"
-                      >
-                        Agregar Familiar
-                      </button>
-                    </div>
-                  </div>
-                  {attendants.length === 0 && (
-                    <p className="text-xs text-slate-400 mt-2">Agregue al menos un familiar/acudiente (opcional)</p>
-                  )}
-                </div>
-
-                {/* Diseases - CIE-11 Search */}
-                <div>
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">Enfermedades (CIE-11)</h3>
-                  <div className="relative" ref={diseaseSearchRef}>
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="Buscar enfermedades en CIE-11 (mín. 2 caracteres)..."
-                        className="input-field py-3 pl-10"
-                        value={diseaseSearchTerm}
-                        onChange={(e) => setDiseaseSearchTerm(e.target.value)}
-                      />
-                      {searchingCie && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-clinical-600"></div>
-                        </div>
-                      )}
-                    </div>
-                    {showCieDropdown && cieResults.length > 0 && (
-                      <div className="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto">
-                        {cieResults.map((item, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            className="w-full text-left px-4 py-3 hover:bg-clinical-50 transition-colors border-b border-slate-50 last:border-b-0 flex items-center gap-3"
-                            onClick={() => {
-                              if (!selectedDiseases.some(d => d.code === item.code)) {
-                                setSelectedDiseases([...selectedDiseases, { ...item, id: item.fundationURI, name: item.label }])
-                              }
-                              setDiseaseSearchTerm('')
-                              setCieResults([])
-                              setShowCieDropdown(false)
-                            }}
-                          >
-                            <span className="text-xs font-mono font-bold text-clinical-600 bg-clinical-50 px-1.5 py-0.5 rounded shrink-0">{item.code}</span>
-                            <span className="text-sm text-slate-700 line-clamp-2">{item.label}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    {showCieDropdown && diseaseSearchTerm.length >= 2 && cieResults.length === 0 && !searchingCie && (
-                      <div className="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-2xl p-4 text-center text-sm text-slate-400">
-                        No se encontraron enfermedades
-                      </div>
-                    )}
-                  </div>
-                  {selectedDiseases.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {selectedDiseases.map((d, idx) => (
-                        <span key={d.code || idx} className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-50 text-red-700 rounded-full text-xs font-semibold border border-red-200">
-                          {d.code}
-                          <button type="button" onClick={() => setSelectedDiseases(selectedDiseases.filter(sd => sd.code !== d.code))} className="hover:text-red-500">
-                            <X className="w-3 h-3" />
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </div>
 
@@ -938,21 +607,10 @@ export default function Students() {
                   dni: editTarget.dni,
                   email: editTarget.email,
                   phoneNumber: editTarget.phoneNumber,
-                  maritalStatus: editTarget.maritalStatus,
-                  typeBlood: editTarget.typeBlood,
-                  weight: editTarget.weight ? parseFloat(editTarget.weight) : null,
-                  imc: editTarget.imc ? parseFloat(editTarget.imc) : null,
-                  secondLanguage: editTarget.secondLanguage,
                   academicPrograms: editTarget.academicPrograms,
-                  studentStatus: editTarget.studentStatus,
-                  courseApproved: editTarget.courseApproved,
-                  entryDateAcademicProgram: editTarget.entryDateAcademicProgram || null,
-                  startInductionDate: editTarget.startInductionDate || null,
-                  endInductionDate: editTarget.endInductionDate || null,
-                  arlStartDate: editTarget.arlStartDate || null,
-                  arlEndDate: editTarget.arlEndDate || null,
-                  hobbies: editTarget.hobbies || null,
-                  universityId: editTarget.universityId
+                  universityId: editTarget.universityId,
+                  placeBirth: editTarget.placeBirth,
+                  residenceAddress: editTarget.residenceAddress
                 })
                 setShowEditModal(false)
                 setEditTarget(null)
@@ -1003,33 +661,37 @@ export default function Students() {
                         value={editTarget.email || ''}
                         onChange={(e) => setEditTarget({ ...editTarget, email: e.target.value })} />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Estado Civil *</label>
-                      <select className="input-field py-3"
-                        value={editTarget.maritalStatus || 'OTHER'}
-                        onChange={(e) => setEditTarget({ ...editTarget, maritalStatus: e.target.value })}>
-                        {maritalStatusOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                      </select>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">Ubicación</h3>
+                  <div className="mb-4">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Lugar de Nacimiento</label>
+                    <div className="grid grid-cols-3 gap-3">
+                      <input type="text" placeholder="Dirección" className="input-field py-3"
+                        value={editTarget.placeBirth?.address || ''}
+                        onChange={(e) => setEditTarget({ ...editTarget, placeBirth: { ...editTarget.placeBirth, address: e.target.value } })} />
+                      <input type="text" placeholder="Ciudad" className="input-field py-3"
+                        value={editTarget.placeBirth?.city || ''}
+                        onChange={(e) => setEditTarget({ ...editTarget, placeBirth: { ...editTarget.placeBirth, city: e.target.value } })} />
+                      <input type="text" placeholder="Departamento" className="input-field py-3"
+                        value={editTarget.placeBirth?.department || ''}
+                        onChange={(e) => setEditTarget({ ...editTarget, placeBirth: { ...editTarget.placeBirth, department: e.target.value } })} />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tipo de Sangre *</label>
-                      <select className="input-field py-3"
-                        value={editTarget.typeBlood || 'O_POSITIVE'}
-                        onChange={(e) => setEditTarget({ ...editTarget, typeBlood: e.target.value })}>
-                        {typeBloodOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Peso (kg)</label>
-                      <input type="number" step="0.1" className="input-field py-3"
-                        value={editTarget.weight ?? ''}
-                        onChange={(e) => setEditTarget({ ...editTarget, weight: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">IMC</label>
-                      <input type="number" step="0.1" className="input-field py-3"
-                        value={editTarget.imc ?? ''}
-                        onChange={(e) => setEditTarget({ ...editTarget, imc: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Dirección de Residencia</label>
+                    <div className="grid grid-cols-3 gap-3">
+                      <input type="text" placeholder="Dirección" className="input-field py-3"
+                        value={editTarget.residenceAddress?.address || ''}
+                        onChange={(e) => setEditTarget({ ...editTarget, residenceAddress: { ...editTarget.residenceAddress, address: e.target.value } })} />
+                      <input type="text" placeholder="Ciudad" className="input-field py-3"
+                        value={editTarget.residenceAddress?.city || ''}
+                        onChange={(e) => setEditTarget({ ...editTarget, residenceAddress: { ...editTarget.residenceAddress, city: e.target.value } })} />
+                      <input type="text" placeholder="Departamento" className="input-field py-3"
+                        value={editTarget.residenceAddress?.department || ''}
+                        onChange={(e) => setEditTarget({ ...editTarget, residenceAddress: { ...editTarget.residenceAddress, department: e.target.value } })} />
                     </div>
                   </div>
                 </div>
@@ -1038,6 +700,15 @@ export default function Students() {
                   <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">Información Académica</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Universidad</label>
+                      <select className="input-field py-3"
+                        value={editTarget.universityId || ''}
+                        onChange={(e) => setEditTarget({ ...editTarget, universityId: e.target.value })}>
+                        <option value="">Seleccionar universidad...</option>
+                        {universities.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                      </select>
+                    </div>
+                    <div>
                       <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Programa Académico *</label>
                       <select required className="input-field py-3"
                         value={editTarget.academicPrograms || 'MEDICINE'}
@@ -1045,79 +716,6 @@ export default function Students() {
                         {academicProgramOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Segundo Idioma</label>
-                      <select className="input-field py-3"
-                        value={editTarget.secondLanguage || 'OTHER'}
-                        onChange={(e) => setEditTarget({ ...editTarget, secondLanguage: e.target.value })}>
-                        {languageOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Fecha Ingreso Programa</label>
-                      <input type="date" className="input-field py-3"
-                        value={editTarget.entryDateAcademicProgram || ''}
-                        onChange={(e) => setEditTarget({ ...editTarget, entryDateAcademicProgram: e.target.value })} />
-                    </div>
-                    <div className="flex items-end pb-3">
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input type="checkbox"
-                          checked={editTarget.courseApproved || false}
-                          onChange={(e) => setEditTarget({ ...editTarget, courseApproved: e.target.checked })}
-                          className="w-4 h-4 rounded border-slate-300 text-clinical-600 focus:ring-clinical-500" />
-                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Curso Aprobado</span>
-                      </label>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Estado *</label>
-                      <select className="input-field py-3"
-                        value={editTarget.studentStatus || 'ACTIVE'}
-                        onChange={(e) => setEditTarget({ ...editTarget, studentStatus: e.target.value })}>
-                        {studentStatusOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">Inducción y ARL</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Inicio Inducción</label>
-                      <input type="date" className="input-field py-3"
-                        value={editTarget.startInductionDate || ''}
-                        onChange={(e) => setEditTarget({ ...editTarget, startInductionDate: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Fin Inducción</label>
-                      <input type="date" className="input-field py-3"
-                        value={editTarget.endInductionDate || ''}
-                        min={editTarget.startInductionDate || ''}
-                        onChange={(e) => setEditTarget({ ...editTarget, endInductionDate: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Inicio ARL</label>
-                      <input type="date" className="input-field py-3"
-                        value={editTarget.arlStartDate || ''}
-                        onChange={(e) => setEditTarget({ ...editTarget, arlStartDate: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Fin ARL</label>
-                      <input type="date" className="input-field py-3"
-                        value={editTarget.arlEndDate || ''}
-                        min={editTarget.arlStartDate || ''}
-                        onChange={(e) => setEditTarget({ ...editTarget, arlEndDate: e.target.value })} />
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">Información Adicional</h3>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Hobbies</label>
-                    <textarea rows={3} className="input-field py-3"
-                      value={editTarget.hobbies || ''}
-                      onChange={(e) => setEditTarget({ ...editTarget, hobbies: e.target.value })} />
                   </div>
                 </div>
               </div>

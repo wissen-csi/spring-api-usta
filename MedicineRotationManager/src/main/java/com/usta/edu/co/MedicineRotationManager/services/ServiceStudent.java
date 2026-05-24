@@ -1,5 +1,6 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -12,6 +13,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.EcxelCreateStudentDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.StudentCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.StudentUpdateDTO;
+import com.usta.edu.co.MedicineRotationManager.enumerations.Language;
+import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
+import com.usta.edu.co.MedicineRotationManager.enumerations.StudentStatus;
+import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 import com.usta.edu.co.MedicineRotationManager.models.University;
@@ -48,6 +53,12 @@ public class ServiceStudent {
                         "Student not found with id: " + id));
     }
 
+    public Student findByDni(String dni) {
+        return repository.findByDni(dni)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Student not found with dni: " + dni));
+    }
+
     public Page<Student> findAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
@@ -74,6 +85,23 @@ public class ServiceStudent {
 
         University university = serviceUniversity.findById(dto.universityId());
         String id = UUIDGenerator.generateNewId();
+
+        MaritalStatus maritalStatus = dto.maritalStatus() != null ? dto.maritalStatus() : MaritalStatus.OTHER;
+        TypeBlood typeBlood = dto.typeBlood() != null ? dto.typeBlood() : TypeBlood.O_POSITIVE;
+        Language secondLanguage = dto.secondLanguage() != null ? dto.secondLanguage() : Language.OTHER;
+        StudentStatus studentStatus = dto.studentStatus() != null ? dto.studentStatus() : StudentStatus.ACTIVE;
+        boolean courseApproved = dto.courseApproved() != null ? dto.courseApproved() : false;
+        LocalDate entryDateAcademicProgram = dto.entryDateAcademicProgram() != null
+                ? dto.entryDateAcademicProgram()
+                : LocalDate.now();
+        LocalDate arlStartDate = dto.arlStartDate() != null ? dto.arlStartDate()
+                : LocalDate.now();
+        LocalDate arlEndDate = dto.arlEndDate() != null ? dto.arlEndDate()
+                : LocalDate.now().plusYears(1);
+        String hobbies = dto.hobbies() != null ? dto.hobbies() : "";
+        Double weight = dto.weight() != null ? dto.weight() : 0.0;
+        Double imc = dto.imc() != null ? dto.imc() : 0.0;
+
         Student student = Student.builder()
                 .id(id)
 
@@ -81,7 +109,7 @@ public class ServiceStudent {
                 .lastName(dto.lastName())
                 .dni(dto.dni())
 
-                .maritalStatus(dto.maritalStatus())
+                .maritalStatus(maritalStatus)
 
                 .placeBirth(placeBirth)
                 .residenceAddress(residenceAddress)
@@ -89,33 +117,30 @@ public class ServiceStudent {
                 .phoneNumber(dto.phoneNumber())
                 .email(dto.email())
 
-                .typeBlood(dto.typeBlood())
+                .typeBlood(typeBlood)
 
-                .weight(dto.weight())
-                .imc(dto.imc())
+                .weight(weight)
+                .imc(imc)
 
-                .secondLanguage(dto.secondLanguage())
+                .secondLanguage(secondLanguage)
 
                 .academicPrograms(dto.academicPrograms())
 
-                .studentStatus(dto.studentStatus())
+                .studentStatus(studentStatus)
 
-                .courseApproved(dto.courseApproved())
+                .courseApproved(courseApproved)
 
-                .entryDateAcademicProgram(
-                        dto.entryDateAcademicProgram())
+                .entryDateAcademicProgram(entryDateAcademicProgram)
 
-                .startInductionDate(
-                        dto.startInductionDate())
+                .startInductionDate(dto.startInductionDate())
 
-                .endInductionDate(
-                        dto.endInductionDate())
+                .endInductionDate(dto.endInductionDate())
 
-                .arlStartDate(dto.arlStartDate())
+                .arlStartDate(arlStartDate)
 
-                .arlEndDate(dto.arlEndDate())
+                .arlEndDate(arlEndDate)
 
-                .hobbies(dto.hobbies())
+                .hobbies(hobbies)
 
                 .university(university)
 

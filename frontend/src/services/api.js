@@ -6,6 +6,7 @@ export const studentService = {
   findSelf: () => api.get('/student/find/self'),
   create: (dto) => api.post('/student/create', dto),
   update: (id, dto) => api.put(`/student/update/${id}`, dto),
+  updateSelf: (dto) => api.put('/student/update/self', dto),
   delete: (id) => api.delete(`/student/delete/${id}`)
 }
 

@@ -12,6 +12,8 @@ import com.usta.edu.co.MedicineRotationManager.models.StudentDisease;
 import com.usta.edu.co.MedicineRotationManager.repositories.DiseaseRepository;
 import com.usta.edu.co.MedicineRotationManager.repositories.StudentDiseaseRepository;
 
+import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
+
 import jakarta.persistence.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -45,25 +47,23 @@ public class StudentDiseaseService {
         /*
          * FIND STUDENT
          */
+        /*
+         * FIND STUDENT BY DNI (frontend sends DNI)
+         */
         Student student =
-                studentService.findById(
+                studentService.findByDni(
                         dto.studentId()
                 );
 
         /*
-         * GET DISEASE FROM WHO ICD API
+         * FIND OR CREATE DISEASE FROM CIE DATA
          */
-        DiseaseCreateDTO diseaseData =
-                cieService.searchSpecificDiaseasse(
-                        dto.diseaseCieDTO());
+        DiseaseCieDTO cieData = dto.diseaseCieDTO();
 
-        /*
-         * FIND IF DISEASE ALREADY EXISTS
-         */
         Disease disease =
                 diseaseRepository
                         .findByCode(
-                                diseaseData.code()
+                                cieData.code()
                         )
                         .orElseGet(() -> {
 
@@ -71,19 +71,19 @@ public class StudentDiseaseService {
                                     new Disease();
 
                             newDisease.setId(
-                                    diseaseData.id()
+                                    cieData.fundationURI()
                             );
 
                             newDisease.setCode(
-                                    diseaseData.code()
+                                    cieData.code()
                             );
 
                             newDisease.setName(
-                                    diseaseData.name()
+                                    cieData.label()
                             );
 
                             newDisease.setDefinition(
-                                    diseaseData.definition()
+                                    cieData.label()
                             );
 
                             return diseaseRepository.save(
@@ -96,6 +96,10 @@ public class StudentDiseaseService {
          */
         StudentDisease studentDisease =
                 new StudentDisease();
+
+        studentDisease.setId(
+                UUIDGenerator.generateNewId()
+        );
 
         studentDisease.setStudent(student);
 
@@ -168,7 +172,7 @@ public class StudentDiseaseService {
         if (dto.studentId() != null) {
 
             Student student =
-                    studentService.findById(
+                    studentService.findByDni(
                             dto.studentId()
                     );
 

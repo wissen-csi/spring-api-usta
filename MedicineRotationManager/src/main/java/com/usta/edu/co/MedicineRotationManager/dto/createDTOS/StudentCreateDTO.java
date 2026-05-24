@@ -14,18 +14,15 @@ import jakarta.validation.constraints.*;
 public record StudentCreateDTO(
 
         @NotBlank
- 
         String name,
 
         @NotBlank
-
         String lastName,
 
         @NotBlank
         @Pattern(regexp = "^\\d+$")
         String dni,
 
-        @NotNull
         MaritalStatus maritalStatus,
 
         @NotNull
@@ -44,7 +41,6 @@ public record StudentCreateDTO(
         @Email
         String email,
 
-        @NotNull
         TypeBlood typeBlood,
 
         Double weight,
@@ -52,19 +48,15 @@ public record StudentCreateDTO(
         Double imc,
 
         @NotBlank
-
         String password,
 
-        @NotNull
         Language secondLanguage,
 
         @NotNull
         AcademicPrograms academicPrograms,
 
-        @NotNull
         StudentStatus studentStatus,
 
-        @NotNull
         Boolean courseApproved,
 
         LocalDate entryDateAcademicProgram,

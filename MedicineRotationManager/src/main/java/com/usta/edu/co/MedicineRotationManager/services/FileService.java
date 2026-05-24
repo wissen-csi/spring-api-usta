@@ -136,7 +136,8 @@ public class FileService {
                 findEntityById(id);
 
         cloudinaryService.delete(
-                file.getPublicId()
+                file.getPublicId(),
+                file.getResourceType()
         );
 
         fileRepository.delete(file);
@@ -158,7 +159,8 @@ public class FileService {
          * Elimina archivo viejo
          */
         cloudinaryService.delete(
-                existingFile.getPublicId()
+                existingFile.getPublicId(),
+                existingFile.getResourceType()
         );
 
         /*

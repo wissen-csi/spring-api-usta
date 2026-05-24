@@ -158,7 +158,7 @@ public class FileController {
      * DELETE FILE
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR') or hasRole('STUDENT')")
     public ResponseEntity<Void> delete(
             @PathVariable String id
     ) throws IOException {

@@ -15,10 +15,10 @@ import jakarta.validation.constraints.Size;
 
 public record StudentUpdateDTO(
 
-        @Size(min = 2, max = 100)
+        @Size(min = 1, max = 100)
         String name,
 
-        @Size(min = 2, max = 100)
+        @Size(min = 1, max = 100)
         String lastName,
 
         @Pattern(regexp = "^\\d+$")
