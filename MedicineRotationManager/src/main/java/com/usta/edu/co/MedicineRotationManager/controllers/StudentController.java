@@ -1,5 +1,6 @@
 package com.usta.edu.co.MedicineRotationManager.controllers;
 
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.LocationCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.StudentCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.StudentResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.StudentUpdateDTO;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -35,16 +38,30 @@ public class StudentController {
         Page<Student> responseModels = serviceStudent.findAll(pageable);
         Page<StudentResponseDTO> response = responseModels.map(x -> StudentResponseDTO.builder()
                 .id(x.getId())
+                .name(x.getName())
+                .lastName(x.getLastName())
                 .fullName(x.getName() + " " + x.getLastName())
                 .dni(x.getDni())
                 .email(x.getEmail())
                 .phoneNumber(x.getPhoneNumber())
+                .maritalStatus(x.getMaritalStatus())
+                .typeBlood(x.getTypeBlood())
+                .weight(x.getWeight())
+                .imc(x.getImc())
                 .academicProgram(x.getAcademicPrograms())
                 .studentStatus(x.getStudentStatus())
                 .secondLanguage(x.getSecondLanguage())
                 .courseApproved(x.isCourseApproved())
+                .entryDateAcademicProgram(x.getEntryDateAcademicProgram())
+                .startInductionDate(x.getStartInductionDate())
+                .endInductionDate(x.getEndInductionDate())
+                .arlStartDate(x.getArlStartDate())
                 .arlEndDate(x.getArlEndDate())
+                .hobbies(x.getHobbies())
                 .universityName(x.getUniversity().getName())
+                .universityId(x.getUniversity().getId())
+                .placeBirth(new LocationCreateDTO(x.getPlaceBirth().getAddress(), x.getPlaceBirth().getCity(), x.getPlaceBirth().getDepartment()))
+                .residenceAddress(new LocationCreateDTO(x.getResidenceAddress().getAddress(), x.getResidenceAddress().getCity(), x.getResidenceAddress().getDepartment()))
                 .build()
         );
         return ResponseEntity.ok(response);
@@ -58,16 +75,30 @@ public class StudentController {
         Student student = serviceStudent.findById(id);
         return ResponseEntity.ok(StudentResponseDTO.builder()
                 .id(student.getId())
+                .name(student.getName())
+                .lastName(student.getLastName())
                 .fullName(student.getName() + " " + student.getLastName())
                 .dni(student.getDni())
                 .email(student.getEmail())
                 .phoneNumber(student.getPhoneNumber())
+                .maritalStatus(student.getMaritalStatus())
+                .typeBlood(student.getTypeBlood())
+                .weight(student.getWeight())
+                .imc(student.getImc())
                 .academicProgram(student.getAcademicPrograms())
                 .studentStatus(student.getStudentStatus())
                 .secondLanguage(student.getSecondLanguage())
                 .courseApproved(student.isCourseApproved())
+                .entryDateAcademicProgram(student.getEntryDateAcademicProgram())
+                .startInductionDate(student.getStartInductionDate())
+                .endInductionDate(student.getEndInductionDate())
+                .arlStartDate(student.getArlStartDate())
                 .arlEndDate(student.getArlEndDate())
+                .hobbies(student.getHobbies())
                 .universityName(student.getUniversity().getName())
+                .universityId(student.getUniversity().getId())
+                .placeBirth(new LocationCreateDTO(student.getPlaceBirth().getAddress(), student.getPlaceBirth().getCity(), student.getPlaceBirth().getDepartment()))
+                .residenceAddress(new LocationCreateDTO(student.getResidenceAddress().getAddress(), student.getResidenceAddress().getCity(), student.getResidenceAddress().getDepartment()))
                 .build()
         );
     }
@@ -79,16 +110,30 @@ public class StudentController {
         Student student = serviceStudent.findById(user.getId());
         return ResponseEntity.ok(StudentResponseDTO.builder()
                 .id(student.getId())
+                .name(student.getName())
+                .lastName(student.getLastName())
                 .fullName(student.getName() + " " + student.getLastName())
                 .dni(student.getDni())
                 .email(student.getEmail())
                 .phoneNumber(student.getPhoneNumber())
+                .maritalStatus(student.getMaritalStatus())
+                .typeBlood(student.getTypeBlood())
+                .weight(student.getWeight())
+                .imc(student.getImc())
                 .academicProgram(student.getAcademicPrograms())
                 .studentStatus(student.getStudentStatus())
                 .secondLanguage(student.getSecondLanguage())
                 .courseApproved(student.isCourseApproved())
+                .entryDateAcademicProgram(student.getEntryDateAcademicProgram())
+                .startInductionDate(student.getStartInductionDate())
+                .endInductionDate(student.getEndInductionDate())
+                .arlStartDate(student.getArlStartDate())
                 .arlEndDate(student.getArlEndDate())
+                .hobbies(student.getHobbies())
                 .universityName(student.getUniversity().getName())
+                .universityId(student.getUniversity().getId())
+                .placeBirth(new LocationCreateDTO(student.getPlaceBirth().getAddress(), student.getPlaceBirth().getCity(), student.getPlaceBirth().getDepartment()))
+                .residenceAddress(new LocationCreateDTO(student.getResidenceAddress().getAddress(), student.getResidenceAddress().getCity(), student.getResidenceAddress().getDepartment()))
                 .build()
         );
     }
@@ -100,16 +145,30 @@ public class StudentController {
     public ResponseEntity<List<StudentResponseDTO>> findCloseToExpireARL() {
         List<StudentResponseDTO> response = serviceStudent.findCloseToExpireARL().stream().map(x -> StudentResponseDTO.builder()
                 .id(x.getId())
+                .name(x.getName())
+                .lastName(x.getLastName())
                 .fullName(x.getName() + " " + x.getLastName())
                 .dni(x.getDni())
                 .email(x.getEmail())
                 .phoneNumber(x.getPhoneNumber())
+                .maritalStatus(x.getMaritalStatus())
+                .typeBlood(x.getTypeBlood())
+                .weight(x.getWeight())
+                .imc(x.getImc())
                 .academicProgram(x.getAcademicPrograms())
                 .studentStatus(x.getStudentStatus())
                 .secondLanguage(x.getSecondLanguage())
                 .courseApproved(x.isCourseApproved())
+                .entryDateAcademicProgram(x.getEntryDateAcademicProgram())
+                .startInductionDate(x.getStartInductionDate())
+                .endInductionDate(x.getEndInductionDate())
+                .arlStartDate(x.getArlStartDate())
                 .arlEndDate(x.getArlEndDate())
+                .hobbies(x.getHobbies())
                 .universityName(x.getUniversity().getName())
+                .universityId(x.getUniversity().getId())
+                .placeBirth(new LocationCreateDTO(x.getPlaceBirth().getAddress(), x.getPlaceBirth().getCity(), x.getPlaceBirth().getDepartment()))
+                .residenceAddress(new LocationCreateDTO(x.getResidenceAddress().getAddress(), x.getResidenceAddress().getCity(), x.getResidenceAddress().getDepartment()))
                 .build()
         ).toList();
         return ResponseEntity.ok(response);
@@ -118,9 +177,9 @@ public class StudentController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> create(@RequestBody StudentCreateDTO dto) {
-        serviceStudent.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<String> create(@Valid @RequestBody StudentCreateDTO dto) {
+        String studentId = serviceStudent.save(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentId);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -131,15 +190,15 @@ public class StudentController {
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<Void> update(@RequestBody StudentUpdateDTO dto, @PathVariable String id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> update(@Valid @RequestBody StudentUpdateDTO dto, @PathVariable String id) {
         serviceStudent.update(id, dto);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/self")
-    @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<Void> update(@RequestBody StudentUpdateDTO dto, @AuthenticationPrincipal AuthUser user) {
+    @PreAuthorize("hasAnyRole('ADMIN','STUDENT')")
+    public ResponseEntity<Void> update(@Valid @RequestBody StudentUpdateDTO dto, @AuthenticationPrincipal AuthUser user) {
         serviceStudent.update(user.getId(), dto);
         return ResponseEntity.noContent().build();
     }

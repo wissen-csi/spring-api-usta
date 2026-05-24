@@ -54,7 +54,7 @@ public class StudentDiseaseController {
      */
     @GetMapping
     @PreAuthorize(
-            "hasRole('DOCTOR') or hasRole('ADMIN')"
+            "hasRole('DOCTOR') or hasRole('ADMIN') or hasRole('STUDENT')"
     )
     public ResponseEntity<Page<StudentDiseaseResponseDTO>> findAll(
             Pageable pageable

@@ -31,7 +31,7 @@ public class AcademicPeriodController {
     }
 
     @GetMapping("/find/all")
-    @PreAuthorize("hasRole('ADMIN','STUDENT','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','STUDENT','DOCTOR')")
     public ResponseEntity<Page<AcademicPeriodResponseDTO>> findAll(Pageable pageable) {
         Page<AcademicPeriod> page = serviceAcademicPeriod.findAll(pageable);
         Page<AcademicPeriodResponseDTO> response = page.map(x -> AcademicPeriodResponseDTO.builder()
@@ -45,7 +45,7 @@ public class AcademicPeriodController {
     }
 
     @GetMapping("/find/{id}")
-    @PreAuthorize("hasRole('ADMIN','STUDENT','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','STUDENT','DOCTOR')")
     public ResponseEntity<AcademicPeriodResponseDTO> findById(@PathVariable String id) {
         AcademicPeriod academicPeriod = serviceAcademicPeriod.findById(id);
         return ResponseEntity.ok(AcademicPeriodResponseDTO.builder()
@@ -63,14 +63,14 @@ public class AcademicPeriodController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody AcademicPeriodUpdateDTO dto) {
         serviceAcademicPeriod.update(dto,id);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         serviceAcademicPeriod.delete(id);

@@ -3,6 +3,7 @@ package com.usta.edu.co.MedicineRotationManager.controllers;
 
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.PorterCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.PorterResponseDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.PorterUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Porter;
 import com.usta.edu.co.MedicineRotationManager.services.PorterService;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,13 @@ public class PorterController {
         Porter porter = porterService.findById(id);
 
         return ResponseEntity.ok(porterService.convertObjectToResponseDTO(porter));
+    }
+
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody PorterUpdateDTO dto) {
+        porterService.update(dto, id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/delete/{id}")

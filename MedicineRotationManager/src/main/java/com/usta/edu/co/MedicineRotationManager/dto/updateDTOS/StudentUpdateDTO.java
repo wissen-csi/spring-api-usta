@@ -2,6 +2,7 @@ package com.usta.edu.co.MedicineRotationManager.dto.updateDTOS;
 
 import java.time.LocalDate;
 
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.LocationCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
 import com.usta.edu.co.MedicineRotationManager.enumerations.Language;
 import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
@@ -10,7 +11,6 @@ import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record StudentUpdateDTO(
@@ -34,10 +34,8 @@ public record StudentUpdateDTO(
 
         TypeBlood typeBlood,
 
-        @Positive
         Double weight,
 
-        @Positive
         Double imc,
 
         Language secondLanguage,
@@ -61,8 +59,11 @@ public record StudentUpdateDTO(
         @Size(max = 500)
         String hobbies,
 
-        @Pattern(regexp = "^\\d+$")
-        String universityId
+        String universityId,
+
+        LocationCreateDTO placeBirth,
+
+        LocationCreateDTO residenceAddress
 
 ) {
 }

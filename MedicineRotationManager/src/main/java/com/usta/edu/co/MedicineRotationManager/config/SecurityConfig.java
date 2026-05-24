@@ -80,22 +80,10 @@ public class SecurityConfig {
 
                         // SOLO PORTERIA
                         .requestMatchers("/access/**")
-                        .hasRole("PORTERIA")
+                        .hasRole("PORTER")
 
                         // SOLO ADMIN
                         .requestMatchers("/admin/**")
-                        .hasRole("ADMIN")
-
-                        // GET SOLO DOCTOR
-                        .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/v1/test/**")
-                        .hasRole("DOCTOR")
-
-                        // POST SOLO ADMIN
-                        .requestMatchers(
-                                HttpMethod.POST,
-                                "/api/v1/test/**")
                         .hasRole("ADMIN")
 
                         // CUALQUIER OTRA REQUEST

@@ -41,6 +41,11 @@ public class ServiceRotation {
             throw new IllegalArgumentException("Start date cannot be after completion date");
         }
 
+        if (dto.doctorId() != null && !dto.doctorId().equals(rotation.getDoctor().getId())) {
+            Doctor newDoctor = serviceDoctor.findById(dto.doctorId());
+            rotation.setDoctor(newDoctor);
+        }
+
         rotation.setHospitalLocation(dto.hospitalLocation());
         rotation.setTypeRotation(dto.typeRotation());
         rotation.setStartDate(dto.startDate());

@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record RotationUpdateDTO(
         @NotNull
+        String doctorId,
+        @NotNull
         HospitalLocation hospitalLocation,
         @NotNull
         TypeRotation typeRotation,

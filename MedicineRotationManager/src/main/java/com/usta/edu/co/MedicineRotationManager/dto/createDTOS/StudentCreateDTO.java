@@ -47,12 +47,8 @@ public record StudentCreateDTO(
         @NotNull
         TypeBlood typeBlood,
 
-        @NotNull
-        @Positive
         Double weight,
 
-        @NotNull
-        @Positive
         Double imc,
 
         @NotBlank
@@ -71,27 +67,20 @@ public record StudentCreateDTO(
         @NotNull
         Boolean courseApproved,
 
-        @NotNull
         LocalDate entryDateAcademicProgram,
 
-        @NotNull
         LocalDate startInductionDate,
 
-        @NotNull
         LocalDate endInductionDate,
 
-        @NotNull
         LocalDate arlStartDate,
 
-        @NotNull
         LocalDate arlEndDate,
 
-        @NotBlank
         @Size(max = 500)
         String hobbies,
 
         @NotBlank
-        @Pattern(regexp = "^\\d+$")
         String universityId
 
 ) {

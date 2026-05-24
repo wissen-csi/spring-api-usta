@@ -84,11 +84,11 @@ public abstract class Person  {
     @Column(name = "type_blood", nullable = false)
     private TypeBlood typeBlood;
 
-    @Column(name = "weight", nullable = false)
-    private double weight;
+    @Column(name = "weight")
+    private Double weight;
 
-    @Column(name = "imc", nullable = false)
-    private double imc;
+    @Column(name = "imc")
+    private Double imc;
 
     @Builder.Default
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)

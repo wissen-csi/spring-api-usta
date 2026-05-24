@@ -26,10 +26,8 @@ public record DoctorCreateDTO(
         String email,
         @NotNull
         TypeBlood typeBlood,
-        @Positive
-        double weight,
-        @Positive
-        double imc,
+        Double weight,
+        Double imc,
         @NotBlank
         String password,
         @NotNull

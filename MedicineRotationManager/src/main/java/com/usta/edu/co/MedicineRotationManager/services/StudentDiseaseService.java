@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class StudentDiseaseService {
     /*
      * SAVE
      */
+    @Transactional
     public void save(
             StudentDiseaseCreateDTO dto
     ) {
@@ -139,6 +141,7 @@ public class StudentDiseaseService {
     /*
      * UPDATE
      */
+    @Transactional
     public void update(
 
             StudentDiseaseUpdateDTO dto,
@@ -218,8 +221,7 @@ public class StudentDiseaseService {
             );
         }
 
-        studentDiseaseRepository.save(
-                studentDiseaseRepository.save(studentDisease));
+        studentDiseaseRepository.save(studentDisease);
     }
 
     /*

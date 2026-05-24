@@ -70,7 +70,7 @@ public class FileController {
      */
     @GetMapping
     @PreAuthorize(
-            "hasRole('ADMIN') or hasRole('DOCTOR')"
+            "hasRole('ADMIN') or hasRole('DOCTOR') or hasRole('STUDENT')"
     )
     public ResponseEntity<Page<EntryPracticeResponseDTO.FileResponseDTO>> findAll(
             Pageable pageable

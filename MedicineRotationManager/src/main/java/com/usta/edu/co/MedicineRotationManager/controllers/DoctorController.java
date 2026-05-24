@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DoctorCreateDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.LocationCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.DoctorResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.DoctorUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.AuthUser;
@@ -40,12 +41,19 @@ public class DoctorController {
                 .name(doctor.getName())
                 .lastName(doctor.getLastName())
                 .dni(doctor.getDni())
-                .email(doctor.getDni())
+                .email(doctor.getEmail())
                 .phoneNumber(doctor.getPhoneNumber())
+                .maritalStatus(doctor.getMaritalStatus())
+                .typeBlood(doctor.getTypeBlood())
+                .weight(doctor.getWeight())
+                .imc(doctor.getImc())
                 .specialty(doctor.getSpecialty())
-                .universityName(doctor.getUniversity().getName())
+                .universityName(doctor.getUniversity() != null ? doctor.getUniversity().getName() : null)
+                .universityId(doctor.getUniversity() != null ? doctor.getUniversity().getId() : null)
                 .creationDate(doctor.getCreationDate())
                 .lastUpdate(doctor.getLastUpdate())
+                .placeBirth(new LocationCreateDTO(doctor.getPlaceBirth().getAddress(), doctor.getPlaceBirth().getCity(), doctor.getPlaceBirth().getDepartment()))
+                .residenceAddress(new LocationCreateDTO(doctor.getResidenceAddress().getAddress(), doctor.getResidenceAddress().getCity(), doctor.getResidenceAddress().getDepartment()))
                 .build());
 
     }
@@ -61,10 +69,17 @@ public class DoctorController {
                 .dni(doctor.getDni())
                 .email(doctor.getEmail())
                 .phoneNumber(doctor.getPhoneNumber())
+                .maritalStatus(doctor.getMaritalStatus())
+                .typeBlood(doctor.getTypeBlood())
+                .weight(doctor.getWeight())
+                .imc(doctor.getImc())
                 .specialty(doctor.getSpecialty())
-                .universityName(doctor.getUniversity().getName())
+                .universityName(doctor.getUniversity() != null ? doctor.getUniversity().getName() : null)
+                .universityId(doctor.getUniversity() != null ? doctor.getUniversity().getId() : null)
                 .creationDate(doctor.getCreationDate())
                 .lastUpdate(doctor.getLastUpdate())
+                .placeBirth(new LocationCreateDTO(doctor.getPlaceBirth().getAddress(), doctor.getPlaceBirth().getCity(), doctor.getPlaceBirth().getDepartment()))
+                .residenceAddress(new LocationCreateDTO(doctor.getResidenceAddress().getAddress(), doctor.getResidenceAddress().getCity(), doctor.getResidenceAddress().getDepartment()))
                 .build()
 
         );
@@ -104,10 +119,17 @@ public class DoctorController {
                 .dni(x.getDni())
                 .email(x.getEmail())
                 .phoneNumber(x.getPhoneNumber())
+                .maritalStatus(x.getMaritalStatus())
+                .typeBlood(x.getTypeBlood())
+                .weight(x.getWeight())
+                .imc(x.getImc())
                 .specialty(x.getSpecialty())
-                .universityName(x.getUniversity().getName())
+                .universityName(x.getUniversity() != null ? x.getUniversity().getName() : null)
+                .universityId(x.getUniversity() != null ? x.getUniversity().getId() : null)
                 .creationDate(x.getCreationDate())
                 .lastUpdate(x.getLastUpdate())
+                .placeBirth(new LocationCreateDTO(x.getPlaceBirth().getAddress(), x.getPlaceBirth().getCity(), x.getPlaceBirth().getDepartment()))
+                .residenceAddress(new LocationCreateDTO(x.getResidenceAddress().getAddress(), x.getResidenceAddress().getCity(), x.getResidenceAddress().getDepartment()))
                 .build());
         return ResponseEntity.ok(response);
     }

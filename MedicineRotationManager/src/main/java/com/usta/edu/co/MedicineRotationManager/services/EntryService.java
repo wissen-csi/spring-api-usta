@@ -40,6 +40,20 @@ public class EntryService {
     }
 
     @Transactional
+    public void saveByQrCode(String qrCode, String studentId, java.time.LocalDateTime assistance) {
+        EntryPractice entryPractice = entryPracticeService.findByQrCode(qrCode);
+        Student student = findStudentById(studentId);
+
+        Entry entry = Entry.builder()
+                .id(UUIDGenerator.generateNewId())
+                .entryPractice(entryPractice)
+                .student(student)
+                .assistance(assistance)
+                .build();
+        entryRepository.save(entry);
+    }
+
+    @Transactional
     public void update(EntryUpdateDTO entryUpdateDTO, String id) {
         Entry entry = findEntryById(id);
         entry.setAssistance(entryUpdateDTO.assistance());

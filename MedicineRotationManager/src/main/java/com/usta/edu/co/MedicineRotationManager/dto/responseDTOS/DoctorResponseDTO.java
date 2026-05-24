@@ -1,9 +1,11 @@
 package com.usta.edu.co.MedicineRotationManager.dto.responseDTOS;
 
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.LocationCreateDTO;
+import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
 import com.usta.edu.co.MedicineRotationManager.enumerations.Specialty;
+import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 import lombok.Builder;
 import java.time.LocalDate;
@@ -23,14 +25,17 @@ public record DoctorResponseDTO(
         String email,
         @NotBlank
         String phoneNumber,
-        @NotNull
+        MaritalStatus maritalStatus,
+        TypeBlood typeBlood,
+        Double weight,
+        Double imc,
         Specialty specialty,
-        @NotBlank
         String universityName,
-        @NotNull
+        String universityId,
         LocalDate creationDate,
-        @NotNull
-        LocalDateTime lastUpdate
+        LocalDateTime lastUpdate,
+        LocationCreateDTO placeBirth,
+        LocationCreateDTO residenceAddress
 
 ) {}
 

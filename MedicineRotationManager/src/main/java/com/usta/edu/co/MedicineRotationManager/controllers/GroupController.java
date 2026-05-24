@@ -32,7 +32,7 @@ public class GroupController {
     }
 
     @GetMapping("/find/all")
-    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Page<GroupResponseDTO>> findAll(Pageable pageable) {
         Page<Group> page = serviceGroup.findAll(pageable);
         Page<GroupResponseDTO> response = page.map(x -> GroupResponseDTO.builder()
@@ -46,7 +46,7 @@ public class GroupController {
     }
 
     @GetMapping("/find/{id}")
-    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<GroupResponseDTO> findById(@PathVariable String id) {
         Group group = serviceGroup.findById(id);
         return ResponseEntity.ok(GroupResponseDTO.builder()
@@ -58,21 +58,21 @@ public class GroupController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Void> create(@RequestBody GroupCreateDTO dto) {
         serviceGroup.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/delete")
-    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         serviceGroup.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("update/{id}")
-    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody GroupUpdateDTO dto) {
         serviceGroup.update(id, dto);
         return ResponseEntity.noContent().build();

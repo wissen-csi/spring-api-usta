@@ -37,6 +37,7 @@ public ResponseEntity<Page<RotationResponseDTO>> findAll(Pageable pageable){
     .id(x.getId())
     .doctorId(x.getDoctor().getId())
     .doctorName(x.getDoctor().getName())
+    .doctorLastName(x.getDoctor().getLastName())
     .hospitalLocation(x.getHospitalLocation())
     .typeRotation(x.getTypeRotation())
     .startDate(x.getStartDate())
@@ -53,6 +54,7 @@ public ResponseEntity<RotationResponseDTO> finById(@PathVariable String id){
     .id(rotation.getId())
     .doctorId(rotation.getDoctor().getId())
     .doctorName(rotation.getDoctor().getName())
+    .doctorLastName(rotation.getDoctor().getLastName())
     .hospitalLocation(rotation.getHospitalLocation())
     .typeRotation(rotation.getTypeRotation())
     .startDate(rotation.getStartDate())
@@ -79,8 +81,8 @@ public ResponseEntity<Void> update(@PathVariable String id, @RequestBody Rotatio
     serviceRotation.update(id, dto);
     return ResponseEntity.noContent().build();
 }
-@DeleteMapping("/update/{id}")
-@PreAuthorize("hasRole('ADMIN','DOCTOR')")
+@DeleteMapping("/delete/{id}")
+@PreAuthorize("hasRole('ADMIN')")
 public ResponseEntity<Void> delete(@PathVariable String id){
     serviceRotation.delete(id);
     return ResponseEntity.noContent().build();

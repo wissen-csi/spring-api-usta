@@ -57,15 +57,25 @@ public class ServiceStudent {
     }
 
     @Transactional
-    public void save(StudentCreateDTO dto) {
+    public String save(StudentCreateDTO dto) {
+
+        if (dto.startInductionDate() != null && dto.endInductionDate() != null
+                && dto.startInductionDate().isAfter(dto.endInductionDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de inducción no puede ser posterior a la fecha de fin");
+        }
+        if (dto.arlStartDate() != null && dto.arlEndDate() != null
+                && dto.arlStartDate().isAfter(dto.arlEndDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de ARL no puede ser posterior a la fecha de fin");
+        }
 
         Location placeBirth = serviceLocation.findOrCreate(dto.placeBirth());
 
         Location residenceAddress = serviceLocation.findOrCreate(dto.residenceAddress());
 
         University university = serviceUniversity.findById(dto.universityId());
+        String id = UUIDGenerator.generateNewId();
         Student student = Student.builder()
-                .id(UUIDGenerator.generateNewId())
+                .id(id)
 
                 .name(dto.name())
                 .lastName(dto.lastName())
@@ -113,10 +123,20 @@ public class ServiceStudent {
         student = repository.save(
                 student);
         userService.createUser(student, dto.password());
+        return id;
     }
 
     @Transactional
     public void save(EcxelCreateStudentDTO dto) {
+
+        if (dto.getStartInductionDate() != null && dto.getEndInductionDate() != null
+                && dto.getStartInductionDate().isAfter(dto.getEndInductionDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de inducción no puede ser posterior a la fecha de fin");
+        }
+        if (dto.getArlStartDate() != null && dto.getArlEndDate() != null
+                && dto.getArlStartDate().isAfter(dto.getArlEndDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de ARL no puede ser posterior a la fecha de fin");
+        }
 
         Location placeBirth = serviceLocation.findOrCreate(dto.getPlaceBirthCity(), dto.getPlaceBirthDepartment(),
                 dto.getPlaceBirthAddress());
@@ -213,40 +233,46 @@ public class ServiceStudent {
 
         Student student = findById(id);
 
-        University university = serviceUniversity.findById(dto.universityId());
+        if (dto.startInductionDate() != null && dto.endInductionDate() != null
+                && dto.startInductionDate().isAfter(dto.endInductionDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de inducción no puede ser posterior a la fecha de fin");
+        }
+        if (dto.arlStartDate() != null && dto.arlEndDate() != null
+                && dto.arlStartDate().isAfter(dto.arlEndDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de ARL no puede ser posterior a la fecha de fin");
+        }
 
-        student.setName(dto.name());
-        student.setLastName(dto.lastName());
-        student.setDni(dto.dni());
-        student.setMaritalStatus(dto.maritalStatus());
-        student.setPhoneNumber(dto.phoneNumber());
-        student.setEmail(dto.email());
-        student.setTypeBlood(dto.typeBlood());
-        student.setWeight(dto.weight());
-        student.setImc(dto.imc());
-
-        student.setSecondLanguage(dto.secondLanguage());
-        student.setAcademicPrograms(dto.academicPrograms());
-        student.setStudentStatus(dto.studentStatus());
-
-        student.setCourseApproved(dto.courseApproved());
-
-        student.setEntryDateAcademicProgram(
-                dto.entryDateAcademicProgram());
-
-        student.setStartInductionDate(
-                dto.startInductionDate());
-
-        student.setEndInductionDate(
-                dto.endInductionDate());
-
-        student.setArlStartDate(dto.arlStartDate());
-
-        student.setArlEndDate(dto.arlEndDate());
-
-        student.setHobbies(dto.hobbies());
-
-        student.setUniversity(university);
+        if (dto.name() != null) student.setName(dto.name());
+        if (dto.lastName() != null) student.setLastName(dto.lastName());
+        if (dto.dni() != null) student.setDni(dto.dni());
+        if (dto.maritalStatus() != null) student.setMaritalStatus(dto.maritalStatus());
+        if (dto.phoneNumber() != null) student.setPhoneNumber(dto.phoneNumber());
+        if (dto.email() != null) student.setEmail(dto.email());
+        if (dto.typeBlood() != null) student.setTypeBlood(dto.typeBlood());
+        if (dto.weight() != null) student.setWeight(dto.weight());
+        if (dto.imc() != null) student.setImc(dto.imc());
+        if (dto.secondLanguage() != null) student.setSecondLanguage(dto.secondLanguage());
+        if (dto.academicPrograms() != null) student.setAcademicPrograms(dto.academicPrograms());
+        if (dto.studentStatus() != null) student.setStudentStatus(dto.studentStatus());
+        if (dto.courseApproved() != null) student.setCourseApproved(dto.courseApproved());
+        if (dto.entryDateAcademicProgram() != null) student.setEntryDateAcademicProgram(dto.entryDateAcademicProgram());
+        if (dto.startInductionDate() != null) student.setStartInductionDate(dto.startInductionDate());
+        if (dto.endInductionDate() != null) student.setEndInductionDate(dto.endInductionDate());
+        if (dto.arlStartDate() != null) student.setArlStartDate(dto.arlStartDate());
+        if (dto.arlEndDate() != null) student.setArlEndDate(dto.arlEndDate());
+        if (dto.hobbies() != null) student.setHobbies(dto.hobbies());
+        if (dto.universityId() != null) {
+            University university = serviceUniversity.findById(dto.universityId());
+            student.setUniversity(university);
+        }
+        if (dto.placeBirth() != null) {
+            Location placeBirth = serviceLocation.findOrCreate(dto.placeBirth());
+            student.setPlaceBirth(placeBirth);
+        }
+        if (dto.residenceAddress() != null) {
+            Location residenceAddress = serviceLocation.findOrCreate(dto.residenceAddress());
+            student.setResidenceAddress(residenceAddress);
+        }
 
         repository.save(student);
     }
