@@ -230,10 +230,18 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(studentId);
     }
 
-    @PostMapping("/excel/import")
+    @PostMapping(
+        value = "/excel/import",
+        consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> createByExcel(
-            @RequestParam("file") MultipartFile file) throws IOException {
+            @RequestParam("file") MultipartFile file)
+            throws IOException {
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
 
         serviceEcxel.createStudents(file);
 

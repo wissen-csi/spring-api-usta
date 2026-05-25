@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { Stethoscope, Lock, UserCircle } from 'lucide-react'
+import { Lock, UserCircle } from 'lucide-react'
 
 export default function Login() {
   const [dni, setDni] = useState('')
@@ -35,11 +35,9 @@ export default function Login() {
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-clinical-500 to-indigo-600" />
         
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-clinical-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-clinical-500/20 group">
-            <Stethoscope className="w-8 h-8 text-white group-hover:rotate-12 transition-transform duration-300" />
-          </div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Medicine Rotation</h1>
-          <p className="text-xs font-bold text-clinical-600 uppercase tracking-widest mt-1">Manager &middot; USTA</p>
+          <img src="/api/logo" alt="Logo" className="h-20 mx-auto mb-4" />
+          <h1 className="text-lg font-bold text-slate-800 tracking-tight leading-tight">Hospital Universitario<br />San Rafael de Tunja</h1>
+          <p className="text-xs font-bold text-clinical-600 uppercase tracking-widest mt-1">Rotación</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">

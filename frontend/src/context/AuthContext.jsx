@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
   const login = async (dni, password) => {
     const { data } = await api.post('/auth/login', { dni, password })
     localStorage.setItem('token', data.token)
-    const userData = { dni, role: parseRole(data.token) }
+    const userData = { dni, name: data.name, role: data.role }
     localStorage.setItem('user', JSON.stringify(userData))
     setUser(userData)
     return userData
@@ -29,15 +29,6 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     setUser(null)
-  }
-
-  const parseRole = (token) => {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]))
-      return payload.role || payload.authorities?.[0]?.authority || ''
-    } catch {
-      return ''
-    }
   }
 
   return (

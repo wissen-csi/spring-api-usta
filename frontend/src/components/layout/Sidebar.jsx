@@ -66,13 +66,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                         transition-all duration-300 flex flex-col
                         ${isOpen ? 'w-64' : 'w-20'}`}>
         <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200">
-          {isOpen && (
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-clinical-600 rounded-xl flex items-center justify-center">
-                <Stethoscope className="w-6 h-6 text-white" />
-              </div>
-              <span className="font-semibold text-slate-800 text-lg">MRM</span>
-            </div>
+          {isOpen ? (
+            <img src="/api/logo" alt="Logo" className="h-10" />
+          ) : (
+            <img src="/api/logo" alt="Logo" className="h-8 mx-auto" />
           )}
           <button 
             onClick={() => setIsOpen(false)}

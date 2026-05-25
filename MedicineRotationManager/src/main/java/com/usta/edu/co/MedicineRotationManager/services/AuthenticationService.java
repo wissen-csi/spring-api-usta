@@ -43,6 +43,9 @@ public class AuthenticationService {
         String token =
                 jwtService.generateToken(user);
 
-        return new LoginResponseDTO(token);
+        String fullName = user.getPerson().getName() + " " + user.getPerson().getLastName();
+        String role = user.getRole().name();
+
+        return new LoginResponseDTO(token, fullName, role);
     }
 }

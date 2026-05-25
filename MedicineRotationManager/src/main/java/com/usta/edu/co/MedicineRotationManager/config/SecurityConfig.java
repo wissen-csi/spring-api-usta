@@ -86,8 +86,12 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**")
                 .hasRole("ADMIN")
 
-                // QR PUBLICO (cargado por <img> sin token)
+                        // QR PUBLICO (cargado por <img> sin token)
                 .requestMatchers("/qr/generate/**")
+                .permitAll()
+
+                        // LOGO PUBLICO (cargado por <img> sin token)
+                .requestMatchers("/api/logo")
                 .permitAll()
 
                 // CUALQUIER OTRA REQUEST
