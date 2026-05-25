@@ -6,6 +6,9 @@ export const studentService = {
   findByDni: (dni) => api.get(`/student/find/dni/${dni}`),
   findSelf: () => api.get('/student/find/self'),
   create: (dto) => api.post('/student/create', dto),
+  createExcel: (formData) => api.post('/student/excel/import', formData, {
+    headers: { 'Content-Type': undefined }
+  }),
   update: (id, dto) => api.put(`/student/update/${id}`, dto),
   updateSelf: (dto) => api.put('/student/update/self', dto),
   delete: (id) => api.delete(`/student/delete/${id}`)
@@ -139,6 +142,16 @@ export const medicalTreatmentService = {
   findAll: (pageable) => api.get('/api/v1/medical-treatments', { params: pageable }),
   create: (dto) => api.post('/api/v1/medical-treatments', dto),
   delete: (id) => api.delete(`/api/v1/medical-treatments/${id}`)
+}
+
+export const academicPeriodService = {
+  findAll: (pageable = { page: 0, size: 100 }) => api.get('/academic/period/find/all', { params: pageable }),
+  findById: (id) => api.get(`/academic/period/find/${id}`)
+}
+
+export const studentAcademicPeriodService = {
+  create: (dto) => api.post('/StudentAcademicPeriod/create', dto),
+  findAll: (pageable) => api.get('/StudentAcademicPeriod/find/all', { params: pageable })
 }
 
 export const cieService = {

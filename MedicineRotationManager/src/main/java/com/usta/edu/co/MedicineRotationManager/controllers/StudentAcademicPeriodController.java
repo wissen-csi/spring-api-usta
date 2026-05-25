@@ -30,7 +30,7 @@ public class StudentAcademicPeriodController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','STUDENT')")
     public ResponseEntity<Void> create(@RequestBody StudentAcademicPeriodCreateDTO dto){
         serviceStudentAcademicPeriod.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();

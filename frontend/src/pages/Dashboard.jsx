@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Users, Stethoscope, ClipboardList, TrendingUp, Calendar, BookOpen, MapPin, User, X, Pencil, CheckCircle, Search, Activity, Plus, Trash2 } from 'lucide-react'
-import { studentService, doctorService, rotationService, groupAssignmentService, studentDiseaseService, cieService, universityService } from '../services/api'
+import { studentService, doctorService, rotationService, groupAssignmentService, studentDiseaseService, cieService, universityService, academicPeriodService, studentAcademicPeriodService } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 
 const maritalStatusOptions = [
@@ -118,17 +118,20 @@ function StudentDashboard() {
   const [showCieDropdown, setShowCieDropdown] = useState(false)
   const [addingDisease, setAddingDisease] = useState(false)
   const [deletingDisease, setDeletingDisease] = useState(null)
+  const [academicPeriods, setAcademicPeriods] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const [profileRes, groupRes] = await Promise.all([
+        const [profileRes, groupRes, acadRes] = await Promise.all([
           studentService.findSelf(),
-          groupAssignmentService.findSelfDetailed({ page: 0, size: 10 })
+          groupAssignmentService.findSelfDetailed({ page: 0, size: 10 }),
+          academicPeriodService.findAll()
         ])
         setProfile(profileRes.data)
         setGroupAssignments(groupRes.data?.content || [])
+        setAcademicPeriods(acadRes.data?.content || [])
       } catch (err) {
         console.error('Error loading student dashboard:', err)
       } finally {
@@ -143,6 +146,8 @@ function StudentDashboard() {
     setSelectedCie(null)
     setDiseaseSearchTerm('')
     setCieResults([])
+    const studentAcad = Array.isArray(profile.studentAcademicPeriods) ? profile.studentAcademicPeriods : []
+    const latestPeriod = studentAcad.length > 0 ? studentAcad[studentAcad.length - 1] : null
     setEditForm({
       name: profile.name || '',
       lastName: profile.lastName || '',
@@ -165,7 +170,10 @@ function StudentDashboard() {
       hobbies: profile.hobbies || '',
       universityId: profile.universityId || '',
       placeBirth: profile.placeBirth || { address: '', city: '', department: '' },
-      residenceAddress: profile.residenceAddress || { address: '', city: '', department: '' }
+      residenceAddress: profile.residenceAddress || { address: '', city: '', department: '' },
+      academicPeriodId: latestPeriod?.academicPeriodId || '',
+      semester: latestPeriod?.semester || '',
+      periodYear: latestPeriod?.periodYear || ''
     })
     setShowEditModal(true)
   }
@@ -198,6 +206,17 @@ function StudentDashboard() {
         placeBirth: editForm.placeBirth,
         residenceAddress: editForm.residenceAddress
       })
+      if (editForm.academicPeriodId && editForm.semester) {
+        try {
+          await studentAcademicPeriodService.create({
+            academicPeriodId: editForm.academicPeriodId,
+            semester: editForm.semester,
+            periodYear: editForm.periodYear || null
+          })
+        } catch (e) {
+          console.error('Error saving semester:', e)
+        }
+      }
       setShowEditModal(false)
       setToast({ show: true, message: 'Perfil actualizado exitosamente' })
       setTimeout(() => setToast({ show: false, message: '' }), 4000)
@@ -354,6 +373,16 @@ function StudentDashboard() {
               <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Programa</p>
               <p className="text-sm font-semibold text-slate-800 mt-1">{profile.academicProgram || 'N/A'}</p>
             </div>
+            {(() => {
+              const per = Array.isArray(profile.studentAcademicPeriods) && profile.studentAcademicPeriods.length > 0
+                ? profile.studentAcademicPeriods[profile.studentAcademicPeriods.length - 1] : null
+              return per ? (
+                <div className="p-4 bg-slate-50 rounded-2xl">
+                  <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Semestre</p>
+                  <p className="text-sm font-semibold text-slate-800 mt-1">{per.semester}°</p>
+                </div>
+              ) : null
+            })()}
             <div className="p-4 bg-slate-50 rounded-2xl">
               <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Estado</p>
               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${getStatusColor(profile.studentStatus)}`}>
@@ -533,6 +562,27 @@ function StudentDashboard() {
                           className="w-4 h-4 rounded border-slate-300 text-clinical-600 focus:ring-clinical-500" />
                         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Curso Aprobado</span>
                       </label>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Semestre</label>
+                      <select className="input-field py-3" value={editForm.semester}
+                        onChange={(e) => setEditForm({ ...editForm, semester: e.target.value })}>
+                        <option value="">Seleccionar</option>
+                        {[1,2,3,4,5,6,7,8,9,10,11,12].map(n => <option key={n} value={n}>{n}° Semestre</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Periodo Académico</label>
+                      <select className="input-field py-3" value={editForm.academicPeriodId}
+                        onChange={(e) => setEditForm({ ...editForm, academicPeriodId: e.target.value })}>
+                        <option value="">Seleccionar</option>
+                        {academicPeriods.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Año</label>
+                      <input type="number" className="input-field py-3" value={editForm.periodYear}
+                        onChange={(e) => setEditForm({ ...editForm, periodYear: e.target.value })} />
                     </div>
                   </div>
                 </div>
@@ -757,14 +807,14 @@ function DoctorDashboard() {
     }
   }
 
-  const activeRotations = rotations.filter(r => !r.completionDate || new Date(r.completionDate) >= new Date())
-  const completedRotations = rotations.filter(r => r.completionDate && new Date(r.completionDate) < new Date())
+  const now = new Date()
+  const activeRotations = rotations.filter(r => !r.completionDate || new Date(r.completionDate + 'T23:59:59') >= now)
+  const completedRotations = rotations.filter(r => r.completionDate && new Date(r.completionDate + 'T23:59:59') < now)
   const rotationIds = rotations.map(r => r.id)
-  const activeStudentsInRotations = new Set(
-    assignments
-      .filter(a => rotationIds.includes(a.rotationId))
-      .map(a => a.studentId)
-  ).size
+  const myAssignments = assignments.filter(a => rotationIds.includes(a.rotationId))
+  const assignedStudentIds = new Set(myAssignments.map(a => a.studentId))
+  const activeStudentsInRotations = assignedStudentIds.size
+  const assignedStudents = students.filter(s => assignedStudentIds.has(s.id))
 
   if (loading) {
     return (
@@ -903,30 +953,30 @@ function DoctorDashboard() {
         </div>
       )}
 
-      {students.length > 0 && (
+      {assignedStudents.length > 0 && (
         <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-slate-800">Estudiantes</h2>
+            <h2 className="text-lg font-semibold text-slate-800">Estudiantes Asignados</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-200">
                   <th className="text-left py-3 px-4 text-sm font-medium text-slate-600">Estudiante</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-slate-600">DNI</th>
                   <th className="text-left py-3 px-4 text-sm font-medium text-slate-600">Universidad</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-slate-600">Programa</th>
                   <th className="text-left py-3 px-4 text-sm font-medium text-slate-600">Estado</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {students.map(s => (
+                {assignedStudents.map(s => (
                   <tr key={s.id} className="hover:bg-slate-50 transition-colors">
                     <td className="py-3 px-4">
                       <span className="text-slate-700 font-medium">{s.fullName}</span>
                       <p className="text-xs text-slate-500">{s.email}</p>
                     </td>
+                    <td className="py-3 px-4 text-slate-600">{s.dni}</td>
                     <td className="py-3 px-4 text-slate-600">{s.universityName}</td>
-                    <td className="py-3 px-4 text-slate-600">{s.academicProgram}</td>
                     <td className="py-3 px-4">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(s.studentStatus)}`}>
                         {getStatusLabel(s.studentStatus)}

@@ -1,36 +1,51 @@
 package com.usta.edu.co.MedicineRotationManager.controllers;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.LocationCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.StudentCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.StudentResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.StudentUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.AuthUser;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
+import com.usta.edu.co.MedicineRotationManager.services.ServiceEcxel;
 import com.usta.edu.co.MedicineRotationManager.services.ServiceStudent;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
 import jakarta.validation.Valid;
-
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 
 @RestController
 @RequestMapping("/student")
 public class StudentController {
+
     private ServiceStudent serviceStudent;
+    private ServiceEcxel serviceEcxel;
 
-    public StudentController(ServiceStudent serviceStudent) {
+    public StudentController(ServiceStudent serviceStudent, ServiceEcxel serviceEcxel) {
         this.serviceStudent = serviceStudent;
+        this.serviceEcxel=serviceEcxel;
     }
-
+    
+    
+    
     @GetMapping("/find/all")
     @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
 
@@ -172,7 +187,6 @@ public class StudentController {
         );
     }
 
-
     @GetMapping("/find/close/arl")
     @PreAuthorize("hasRole('ADMIN')")
 
@@ -216,6 +230,16 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(studentId);
     }
 
+    @PostMapping("/excel/import")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> createByExcel(
+            @RequestParam("file") MultipartFile file) throws IOException {
+
+        serviceEcxel.createStudents(file);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
@@ -236,6 +260,5 @@ public class StudentController {
         serviceStudent.update(user.getId(), dto);
         return ResponseEntity.noContent().build();
     }
-
 
 }

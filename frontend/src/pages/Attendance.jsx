@@ -102,7 +102,7 @@ export default function Attendance() {
           scannerRef.current = scanner
           await scanner.start(
             cameras[0].id,
-            { fps: 10, qrbox: { width: 250, height: 250 } },
+            { fps: 10, qrbox: { width: 400, height: 300 } },
             onScanSuccess,
             () => {}
           )
@@ -183,7 +183,7 @@ export default function Attendance() {
               <h2 className="text-lg font-bold text-slate-800">Escanear QR</h2>
             </div>
 
-            <div id="qr-reader" className={`w-full ${scanning ? '' : 'hidden'}`} />
+            <div id="qr-reader" className={`w-full aspect-[4/3] max-h-[400px] overflow-hidden rounded-xl bg-black ${scanning ? '' : 'hidden'}`} />
 
             {!scanning && (
               <div>

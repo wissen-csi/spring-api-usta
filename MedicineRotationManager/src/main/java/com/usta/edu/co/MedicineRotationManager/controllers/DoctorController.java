@@ -92,7 +92,7 @@ public class DoctorController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN')")
 
     public ResponseEntity<Void> update(@RequestBody DoctorUpdateDTO dto, @PathVariable String id) {
@@ -100,7 +100,7 @@ public class DoctorController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("update/self")
+    @PutMapping("/update/self")
     @PreAuthorize("hasRole('DOCTOR')")
 
     public ResponseEntity<Void> update(@RequestBody DoctorUpdateDTO dto, @AuthenticationPrincipal AuthUser user) {

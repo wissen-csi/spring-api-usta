@@ -83,11 +83,15 @@ public class SecurityConfig {
                         .hasRole("PORTER")
 
                         // SOLO ADMIN
-                        .requestMatchers("/admin/**")
-                        .hasRole("ADMIN")
+                .requestMatchers("/admin/**")
+                .hasRole("ADMIN")
 
-                        // CUALQUIER OTRA REQUEST
-                        .anyRequest()
+                // QR PUBLICO (cargado por <img> sin token)
+                .requestMatchers("/qr/generate/**")
+                .permitAll()
+
+                // CUALQUIER OTRA REQUEST
+                .anyRequest()
 
                         .authenticated())
 

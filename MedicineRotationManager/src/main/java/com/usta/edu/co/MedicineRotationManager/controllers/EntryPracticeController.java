@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("entry/practice")
+@RequestMapping("/entry/practice")
 public class EntryPracticeController {
     private ServiceEntryPractice serviceEntryPractice;
 
@@ -98,7 +98,7 @@ public class EntryPracticeController {
                 .build());
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody EntryPracticeCreationDTO dto) {
         serviceEntryPractice.update(id, dto);

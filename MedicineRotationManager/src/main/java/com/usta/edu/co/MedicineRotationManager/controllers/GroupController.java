@@ -71,7 +71,7 @@ public class GroupController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody GroupUpdateDTO dto) {
         serviceGroup.update(id, dto);

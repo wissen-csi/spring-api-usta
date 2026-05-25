@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Search, Filter, ChevronLeft, ChevronRight, Plus, X, Sparkles, CheckCircle, Trash2, AlertTriangle, Pencil, ClipboardList } from 'lucide-react'
+import { Search, Filter, ChevronLeft, ChevronRight, Plus, X, Sparkles, CheckCircle, Trash2, AlertTriangle, Pencil, ClipboardList, Upload } from 'lucide-react'
 import { studentService, universityService, groupService, groupAssignmentService, rotationService } from '../services/api'
 
 const getStatusColor = (status) => {
@@ -105,6 +105,9 @@ export default function Students() {
   const [selectedGroupId, setSelectedGroupId] = useState('')
   const [assigning, setAssigning] = useState(false)
   const [assignments, setAssignments] = useState([])
+  const [showExcelModal, setShowExcelModal] = useState(false)
+  const [excelFile, setExcelFile] = useState(null)
+  const [uploading, setUploading] = useState(false)
   const itemsPerPage = 5
 
   useEffect(() => {
@@ -192,6 +195,29 @@ export default function Students() {
     }
   }
 
+  const handleExcelUpload = async () => {
+    if (!excelFile) return
+    setUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', excelFile)
+      await studentService.createExcel(formData)
+      setShowExcelModal(false)
+      setExcelFile(null)
+      setToast({ show: true, message: 'Estudiantes importados exitosamente' })
+      setTimeout(() => setToast({ show: false, message: '' }), 4000)
+      const { data } = await studentService.findAll({ page: currentPage, size: itemsPerPage })
+      setStudents(data.content)
+      setTotalPages(data.totalPages)
+      setTotalElements(data.totalElements)
+    } catch (err) {
+      const msg = err.response?.data?.message || err.response?.data || 'Error al importar Excel'
+      alert(typeof msg === 'string' ? msg : JSON.stringify(msg))
+    } finally {
+      setUploading(false)
+    }
+  }
+
   const openAssignModal = async (student) => {
     setAssignTarget(student)
     setSelectedRotationId('')
@@ -272,13 +298,22 @@ export default function Students() {
           <h1 className="text-2xl font-bold text-slate-800">Estudiantes</h1>
           <p className="text-slate-500 mt-1">Gestión de estudiantes en rotación</p>
         </div>
-        <button
-          onClick={openCreateModal}
-          className="btn-primary flex items-center gap-2 shadow-lg shadow-clinical-600/15 hover:shadow-clinical-600/25 transition-all duration-300"
-        >
-          <Plus className="w-4 h-4" />
-          Crear Estudiante
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowExcelModal(true)}
+            className="btn-secondary flex items-center gap-2 hover:border-clinical-500 hover:text-clinical-700 transition-all duration-300"
+          >
+            <Upload className="w-4 h-4" />
+            Importar Excel
+          </button>
+          <button
+            onClick={openCreateModal}
+            className="btn-primary flex items-center gap-2 shadow-lg shadow-clinical-600/15 hover:shadow-clinical-600/25 transition-all duration-300"
+          >
+            <Plus className="w-4 h-4" />
+            Crear Estudiante
+          </button>
+        </div>
       </div>
 
       <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300">
@@ -800,6 +835,52 @@ export default function Students() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showExcelModal && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-clinical-50 text-clinical-600 rounded-xl flex items-center justify-center">
+                  <Upload className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-slate-800">Importar Estudiantes</h2>
+                  <p className="text-sm text-slate-500">Sube un archivo Excel con los datos</p>
+                </div>
+              </div>
+              <button onClick={() => { setShowExcelModal(false); setExcelFile(null) }} className="p-2 hover:bg-slate-100 rounded-xl transition-colors">
+                <X className="w-5 h-5 text-slate-500" />
+              </button>
+            </div>
+            <div className="p-6">
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-300 rounded-2xl cursor-pointer hover:border-clinical-400 hover:bg-clinical-50/30 transition-all duration-200">
+                <Upload className="w-8 h-8 text-slate-400 mb-2" />
+                <span className="text-sm font-medium text-slate-500">
+                  {excelFile ? excelFile.name : 'Seleccionar archivo Excel'}
+                </span>
+                <input
+                  type="file"
+                  accept=".xlsx,.xls"
+                  className="hidden"
+                  onChange={(e) => setExcelFile(e.target.files[0])}
+                />
+              </label>
+              <p className="text-xs text-slate-400 mt-3">Formatos aceptados: .xlsx, .xls</p>
+            </div>
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+              <button onClick={() => { setShowExcelModal(false); setExcelFile(null) }} className="btn-secondary">Cancelar</button>
+              <button
+                onClick={handleExcelUpload}
+                disabled={!excelFile || uploading}
+                className="btn-primary disabled:opacity-50"
+              >
+                {uploading ? 'Subiendo...' : 'Importar'}
+              </button>
+            </div>
           </div>
         </div>
       )}

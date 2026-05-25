@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("group/assignment")
+@RequestMapping("/group/assignment")
 public class GroupAssignmentController {
     private ServiceGroupAssignment serviceGroupAssignment;
 
