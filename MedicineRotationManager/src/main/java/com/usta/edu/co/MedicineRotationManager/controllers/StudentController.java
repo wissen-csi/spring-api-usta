@@ -32,7 +32,7 @@ public class StudentController {
     }
 
     @GetMapping("/find/all")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
 
     public ResponseEntity<Page<StudentResponseDTO>> findAll(Pageable pageable) {
         Page<Student> responseModels = serviceStudent.findAll(pageable);
@@ -73,6 +73,40 @@ public class StudentController {
 
     public ResponseEntity<StudentResponseDTO> findById(@PathVariable String id) {
         Student student = serviceStudent.findById(id);
+        return ResponseEntity.ok(StudentResponseDTO.builder()
+                .id(student.getId())
+                .name(student.getName())
+                .lastName(student.getLastName())
+                .fullName(student.getName() + " " + student.getLastName())
+                .dni(student.getDni())
+                .email(student.getEmail())
+                .phoneNumber(student.getPhoneNumber())
+                .maritalStatus(student.getMaritalStatus())
+                .typeBlood(student.getTypeBlood())
+                .weight(student.getWeight())
+                .imc(student.getImc())
+                .academicProgram(student.getAcademicPrograms())
+                .studentStatus(student.getStudentStatus())
+                .secondLanguage(student.getSecondLanguage())
+                .courseApproved(student.isCourseApproved())
+                .entryDateAcademicProgram(student.getEntryDateAcademicProgram())
+                .startInductionDate(student.getStartInductionDate())
+                .endInductionDate(student.getEndInductionDate())
+                .arlStartDate(student.getArlStartDate())
+                .arlEndDate(student.getArlEndDate())
+                .hobbies(student.getHobbies())
+                .universityName(student.getUniversity().getName())
+                .universityId(student.getUniversity().getId())
+                .placeBirth(new LocationCreateDTO(student.getPlaceBirth().getAddress(), student.getPlaceBirth().getCity(), student.getPlaceBirth().getDepartment()))
+                .residenceAddress(new LocationCreateDTO(student.getResidenceAddress().getAddress(), student.getResidenceAddress().getCity(), student.getResidenceAddress().getDepartment()))
+                .build()
+        );
+    }
+
+    @GetMapping("/find/dni/{dni}")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+    public ResponseEntity<StudentResponseDTO> findByDni(@PathVariable String dni) {
+        Student student = serviceStudent.findByDni(dni);
         return ResponseEntity.ok(StudentResponseDTO.builder()
                 .id(student.getId())
                 .name(student.getName())

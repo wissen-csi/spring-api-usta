@@ -18,6 +18,7 @@ public class EntryResponseDTO {
     private final EntryPracticeResponseDTO entryPracticeResponseDTO;
     private final LocalDateTime assistance;
     private final String studentId;
+    private final String studentDni;
     private final String studentName;
     private final StatusEntry statusEntry;
 

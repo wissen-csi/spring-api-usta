@@ -17,6 +17,7 @@ public class InvestigationResponseDTO {
     private final String description;
     private final LocalDate publicationDate;
     private final String studentId;
+    private final String studentDni;
 
 
 }

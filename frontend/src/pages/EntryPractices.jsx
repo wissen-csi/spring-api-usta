@@ -1,14 +1,13 @@
-import { useState, useEffect } from 'react'
-import { Plus, Search, X, Sparkles, CheckCircle, Trash2, AlertTriangle, QrCode, Clock } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Plus, Search, X, Sparkles, CheckCircle, Trash2, AlertTriangle, QrCode, Clock, Copy, Download } from 'lucide-react'
 import { entryPracticeService, groupService } from '../services/api'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
-const QR_BASE_URL = `${API_URL}/qr/generate`
+const QR_BASE_URL = '/qr/generate'
 
 export default function EntryPractices() {
   const [showModal, setShowModal] = useState(false)
   const [showQrModal, setShowQrModal] = useState(false)
-  const [qrId, setQrId] = useState(null)
+  const [qrTarget, setQrTarget] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [practices, setPractices] = useState([])
   const [groups, setGroups] = useState([])
@@ -18,6 +17,7 @@ export default function EntryPractices() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
+  const qrImageRef = useRef(null)
 
   const [newPractice, setNewPractice] = useState({
     title: '',
@@ -58,12 +58,8 @@ export default function EntryPractices() {
       return
     }
     try {
-      const res = await entryPracticeService.create(newPractice)
-      const created = res.data
-      const id = created.id || created
+      await entryPracticeService.create(newPractice)
       setShowModal(false)
-      setQrId(id)
-      setShowQrModal(true)
       setToast({ show: true, message: 'Práctica creada exitosamente' })
       setTimeout(() => setToast({ show: false, message: '' }), 4000)
       setNewPractice({ title: '', startTime: '', endTime: '', idGroup: '' })
@@ -90,6 +86,28 @@ export default function EntryPractices() {
     } finally {
       setDeleting(false)
     }
+  }
+
+  const copyQrCode = () => {
+    if (!qrTarget?.qrCode) return
+    navigator.clipboard.writeText(qrTarget.qrCode)
+    setToast({ show: true, message: 'Código copiado al portapapeles' })
+    setTimeout(() => setToast({ show: false, message: '' }), 3000)
+  }
+
+  const downloadQr = () => {
+    if (!qrTarget) return
+    const link = document.createElement('a')
+    link.href = `${QR_BASE_URL}/${qrTarget.id}`
+    link.download = `qr-${qrTarget.title || 'practica'}.png`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  const openQrModal = (practice) => {
+    setQrTarget(practice)
+    setShowQrModal(true)
   }
 
   const formatDateTime = (dateStr) => {
@@ -193,28 +211,25 @@ export default function EntryPractices() {
                       <span className="text-slate-700 font-medium">{getGroupName(practice.groupId)}</span>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <img
-                        src={`${QR_BASE_URL}/${practice.id}`}
-                        alt={`QR ${practice.id}`}
-                        className="w-10 h-10 inline-block rounded border border-slate-200"
-                        onError={(e) => {
-                          e.target.onerror = null
-                          e.target.style.display = 'none'
-                          e.target.nextSibling.style.display = 'flex'
-                        }}
-                      />
-                      <div className="w-10 h-10 bg-slate-100 rounded items-center justify-center hidden">
-                        <QrCode className="w-5 h-5 text-slate-400" />
-                      </div>
+                      <button
+                        onClick={() => openQrModal(practice)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-clinical-50 text-clinical-700 rounded-lg hover:bg-clinical-100 transition-colors text-xs font-medium"
+                        title="Ver QR"
+                      >
+                        <QrCode className="w-4 h-4" />
+                        QR
+                      </button>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button
-                        onClick={() => { setDeleteTarget(practice); setShowDeleteConfirm(true) }}
-                        className="p-2 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-                        title="Eliminar práctica"
-                      >
-                        <Trash2 className="w-4 h-4 text-slate-400 hover:text-red-500" />
-                      </button>
+                      <div className="flex items-center justify-end gap-1">
+                        <button
+                          onClick={() => { setDeleteTarget(practice); setShowDeleteConfirm(true) }}
+                          className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Eliminar práctica"
+                        >
+                          <Trash2 className="w-4 h-4 text-slate-400 hover:text-red-500" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -320,25 +335,30 @@ export default function EntryPractices() {
         </div>
       )}
 
-      {showQrModal && qrId && (
+      {showQrModal && qrTarget && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200">
             <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
               <div className="flex items-center gap-2">
                 <QrCode className="w-5 h-5 text-clinical-600" />
-                <h2 className="text-xl font-bold text-slate-800">Código QR de la Práctica</h2>
+                <h2 className="text-xl font-bold text-slate-800">Código QR</h2>
               </div>
               <button
-                onClick={() => { setShowQrModal(false); setQrId(null) }}
+                onClick={() => { setShowQrModal(false); setQrTarget(null) }}
                 className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
               >
                 <X className="w-5 h-5 text-slate-500" />
               </button>
             </div>
             <div className="p-8 flex flex-col items-center gap-4">
+              <div className="text-center">
+                <p className="text-lg font-semibold text-slate-800">{qrTarget.title || 'Práctica'}</p>
+                <p className="text-xs text-slate-400 mt-1">{getGroupName(qrTarget.groupId)}</p>
+              </div>
               <img
-                src={`${QR_BASE_URL}/${qrId}`}
-                alt={`Código QR práctica #${qrId}`}
+                ref={qrImageRef}
+                src={`${QR_BASE_URL}/${qrTarget.id}`}
+                alt={`Código QR práctica`}
                 className="w-48 h-48 rounded-xl border border-slate-200 shadow-sm"
                 onError={(e) => {
                   e.target.onerror = null
@@ -349,13 +369,34 @@ export default function EntryPractices() {
               <div className="w-48 h-48 bg-slate-100 rounded-xl items-center justify-center hidden">
                 <QrCode className="w-12 h-12 text-slate-400" />
               </div>
+              <div className="w-full bg-slate-50 rounded-xl p-3 border border-slate-200">
+                <div className="flex items-center justify-between gap-2">
+                  <code className="text-xs text-slate-700 font-mono break-all flex-1 select-all">
+                    {qrTarget.qrCode}
+                  </code>
+                  <button
+                    onClick={copyQrCode}
+                    className="p-2 bg-white rounded-lg border border-slate-200 hover:bg-slate-50 shrink-0"
+                    title="Copiar código"
+                  >
+                    <Copy className="w-4 h-4 text-slate-500" />
+                  </button>
+                </div>
+              </div>
               <p className="text-sm text-slate-500 text-center">
-                Escanee este código QR para registrar su asistencia a la práctica
+                Comparte este código QR o el texto con los estudiantes para que registren su asistencia
               </p>
             </div>
-            <div className="flex items-center justify-end p-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
               <button
-                onClick={() => { setShowQrModal(false); setQrId(null) }}
+                onClick={downloadQr}
+                className="btn-secondary flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Descargar QR
+              </button>
+              <button
+                onClick={() => { setShowQrModal(false); setQrTarget(null) }}
                 className="btn-primary shadow-lg shadow-clinical-600/10"
               >
                 Cerrar

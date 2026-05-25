@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
-import { QrCode, Camera, CheckCircle, Clock, X } from 'lucide-react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { QrCode, Camera, CheckCircle, Clock, X, Scan } from 'lucide-react'
 import { entryService } from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import { Html5Qrcode } from 'html5-qrcode'
 
 const statusLabels = {
   FALLIDO: 'Fallido',
@@ -17,12 +18,15 @@ const statusColors = {
 
 export default function Attendance() {
   const { user } = useAuth()
-  const [entryPracticeId, setEntryPracticeId] = useState('')
+  const [scanning, setScanning] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [toast, setToast] = useState({ show: false, message: '', type: '' })
+  const [manualId, setManualId] = useState('')
+  const scannerRef = useRef(null)
+  const submittingRef = useRef(false)
 
   const loadEntries = async () => {
     setLoading(true)
@@ -30,7 +34,7 @@ export default function Attendance() {
     try {
       const res = await entryService.findAll({ page: 0, size: 50 })
       const all = res.data.content || []
-      setEntries(all.filter(e => e.studentId === user.dni))
+      setEntries(all.filter(e => e.studentDni === user.dni))
     } catch (err) {
       console.error('Error loading entries:', err)
       setError('Error al conectar con el servidor.')
@@ -41,19 +45,91 @@ export default function Attendance() {
 
   useEffect(() => { loadEntries() }, [])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!entryPracticeId.trim()) return
+  const stopScanner = useCallback(async () => {
+    if (scannerRef.current) {
+      try {
+        await scannerRef.current.stop()
+        await scannerRef.current.clear()
+      } catch {}
+      scannerRef.current = null
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => { stopScanner() }
+  }, [stopScanner])
+
+  const onScanSuccess = useCallback(async (decodedText) => {
+    if (submittingRef.current) return
+    submittingRef.current = true
     setSubmitting(true)
+    await stopScanner()
+    setScanning(false)
     try {
-      await entryService.create({
+      await entryService.saveByQr(decodedText, {
         studentId: user.dni,
-        entryPracticeId: entryPracticeId.trim(),
-        assistance: new Date().toISOString()
+        assitance: new Date().toISOString()
       })
       setToast({ show: true, message: 'Asistencia registrada exitosamente', type: 'success' })
       setTimeout(() => setToast({ show: false, message: '', type: '' }), 4000)
-      setEntryPracticeId('')
+      await loadEntries()
+    } catch (err) {
+      const msg = err.response?.data?.message || err.response?.data || 'Error al registrar asistencia'
+      setToast({ show: true, message: typeof msg === 'string' ? msg : JSON.stringify(msg), type: 'error' })
+      setTimeout(() => setToast({ show: false, message: '', type: '' }), 4000)
+    } finally {
+      submittingRef.current = false
+      setSubmitting(false)
+    }
+  }, [user, stopScanner])
+
+  const startScanner = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+      stream.getTracks().forEach(t => t.stop())
+
+      const cameras = await Html5Qrcode.getCameras()
+      if (!cameras || cameras.length === 0) {
+        setToast({ show: true, message: 'No se encontró ninguna cámara.', type: 'error' })
+        setTimeout(() => setToast({ show: false, message: '', type: '' }), 5000)
+        return
+      }
+      setScanning(true)
+
+      setTimeout(async () => {
+        try {
+          const scanner = new Html5Qrcode('qr-reader')
+          scannerRef.current = scanner
+          await scanner.start(
+            cameras[0].id,
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            onScanSuccess,
+            () => {}
+          )
+        } catch (err) {
+          setToast({ show: true, message: 'Error al iniciar la cámara: ' + (err.message || err), type: 'error' })
+          setTimeout(() => setToast({ show: false, message: '', type: '' }), 5000)
+          setScanning(false)
+        }
+      }, 100)
+    } catch (err) {
+      setToast({ show: true, message: 'Error al acceder a la cámara: ' + (err.message || err) + '. Asegúrate de permitir el acceso a la cámara en tu navegador.', type: 'error' })
+      setTimeout(() => setToast({ show: false, message: '', type: '' }), 6000)
+    }
+  }
+
+  const handleManualSubmit = async (e) => {
+    e.preventDefault()
+    if (!manualId.trim()) return
+    setSubmitting(true)
+    try {
+      await entryService.saveByQr(manualId.trim(), {
+        studentId: user.dni,
+        assitance: new Date().toISOString()
+      })
+      setToast({ show: true, message: 'Asistencia registrada exitosamente', type: 'success' })
+      setTimeout(() => setToast({ show: false, message: '', type: '' }), 4000)
+      setManualId('')
       await loadEntries()
     } catch (err) {
       const msg = err.response?.data?.message || err.response?.data || 'Error al registrar asistencia'
@@ -70,6 +146,10 @@ export default function Attendance() {
       day: '2-digit', month: '2-digit', year: 'numeric',
       hour: '2-digit', minute: '2-digit'
     })
+  }
+
+  const getPracticeTitle = (entry) => {
+    return entry.entryPracticeResponseDTO?.title || entry.entryPracticeId || '—'
   }
 
   return (
@@ -89,7 +169,7 @@ export default function Attendance() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800">Registro de Asistencia</h1>
-          <p className="text-slate-500 mt-1">Registra tu asistencia escaneando un código QR o ingresando el ID de la práctica</p>
+          <p className="text-slate-500 mt-1">Registra tu asistencia escaneando un código QR</p>
         </div>
       </div>
 
@@ -100,40 +180,59 @@ export default function Attendance() {
               <div className="w-10 h-10 bg-clinical-50 text-clinical-600 rounded-xl flex items-center justify-center">
                 <QrCode className="w-5 h-5" />
               </div>
-              <h2 className="text-lg font-bold text-slate-800">Registrar Asistencia</h2>
+              <h2 className="text-lg font-bold text-slate-800">Escanear QR</h2>
             </div>
 
-            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-4 text-center">
-              <Camera className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-              <p className="text-sm text-slate-500 font-medium">Escanea el código QR de la práctica</p>
-              <p className="text-xs text-slate-400 mt-1">O ingresa manualmente el ID de la práctica a continuación</p>
-            </div>
+            <div id="qr-reader" className={`w-full ${scanning ? '' : 'hidden'}`} />
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {!scanning && (
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ID de Práctica</label>
+                <div className="bg-slate-50 rounded-xl p-8 border border-slate-100 mb-4 text-center">
+                  <Scan className="w-16 h-16 text-slate-300 mx-auto mb-3" />
+                  <p className="text-sm text-slate-500 font-medium">Presiona el botón para escanear</p>
+                  <p className="text-xs text-slate-400 mt-1">Usa la cámara para escanear el código QR de la práctica</p>
+                </div>
+                <button
+                  onClick={startScanner}
+                  className="btn-primary w-full flex items-center justify-center gap-2 shadow-lg shadow-clinical-600/20"
+                >
+                  <Camera className="w-4 h-4" />
+                  Iniciar Escáner
+                </button>
+              </div>
+            )}
+
+            {scanning && (
+              <button
+                onClick={async () => {
+                  await stopScanner()
+                  setScanning(false)
+                }}
+                className="mt-3 btn-secondary w-full"
+              >
+                Cancelar escaneo
+              </button>
+            )}
+
+            <div className="mt-6 pt-6 border-t border-slate-100">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">O ingresa el código manualmente</p>
+              <form onSubmit={handleManualSubmit} className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="Ingresa el ID de la práctica..."
-                  value={entryPracticeId}
-                  onChange={(e) => setEntryPracticeId(e.target.value)}
-                  className="input-field"
-                  required
+                  placeholder="Código QR..."
+                  value={manualId}
+                  onChange={(e) => setManualId(e.target.value)}
+                  className="input-field flex-1"
                 />
-              </div>
-              <button
-                type="submit"
-                disabled={submitting || !entryPracticeId.trim()}
-                className="btn-primary w-full flex items-center justify-center gap-2 shadow-lg shadow-clinical-600/20"
-              >
-                {submitting ? (
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                ) : (
-                  <CheckCircle className="w-4 h-4" />
-                )}
-                {submitting ? 'Registrando...' : 'Registrar Asistencia'}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  disabled={submitting || !manualId.trim()}
+                  className="btn-primary"
+                >
+                  {submitting ? '...' : 'Registrar'}
+                </button>
+              </form>
+            </div>
           </div>
         </div>
 
@@ -166,19 +265,19 @@ export default function Attendance() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-slate-100">
-                      <th className="text-left py-3 px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">ID Práctica</th>
-                      <th className="text-left py-3 px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Hora de Asistencia</th>
+                      <th className="text-left py-3 px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Práctica</th>
+                      <th className="text-left py-3 px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Hora</th>
                       <th className="text-left py-3 px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Estado</th>
                     </tr>
                   </thead>
                   <tbody>
                     {entries.map((entry) => (
                       <tr key={entry.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                        <td className="py-3 px-2 font-semibold text-slate-800">{entry.entryPracticeId}</td>
+                        <td className="py-3 px-2 font-semibold text-slate-800">{getPracticeTitle(entry)}</td>
                         <td className="py-3 px-2 text-slate-600">{formatDate(entry.assistance)}</td>
                         <td className="py-3 px-2">
-                          <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${statusColors[entry.status] || 'bg-slate-100 text-slate-600 border-slate-200'}`}>
-                            {statusLabels[entry.status] || entry.status}
+                          <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${statusColors[entry.statusEntry] || 'bg-slate-100 text-slate-600 border-slate-200'}`}>
+                            {statusLabels[entry.statusEntry] || entry.statusEntry || 'DENTRO'}
                           </span>
                         </td>
                       </tr>

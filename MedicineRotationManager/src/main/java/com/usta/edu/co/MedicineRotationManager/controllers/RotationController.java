@@ -30,7 +30,7 @@ public RotationController(ServiceRotation serviceRotation) {
     this.serviceRotation = serviceRotation;
 }
 @GetMapping("/find/all")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
 public ResponseEntity<Page<RotationResponseDTO>> findAll(Pageable pageable){
     Page<Rotation> page = serviceRotation.findAll(pageable);
     Page<RotationResponseDTO> response = page.map(x-> RotationResponseDTO.builder()
@@ -47,7 +47,7 @@ public ResponseEntity<Page<RotationResponseDTO>> findAll(Pageable pageable){
     return  ResponseEntity.ok(response);
 }
 @GetMapping("/find/{id}")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
 public ResponseEntity<RotationResponseDTO> finById(@PathVariable String id){
     Rotation rotation = serviceRotation.findById(id);
     return ResponseEntity.ok(RotationResponseDTO.builder()
@@ -63,7 +63,7 @@ public ResponseEntity<RotationResponseDTO> finById(@PathVariable String id){
 
 }
 @PostMapping("/create/{doctorId}")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
 public ResponseEntity<Void> create(@RequestBody RotationCreateDTO dto,@PathVariable String doctorId){
     serviceRotation.save(dto, doctorId);
     return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -82,13 +82,13 @@ public ResponseEntity<Void> update(@PathVariable String id, @RequestBody Rotatio
     return ResponseEntity.noContent().build();
 }
 @DeleteMapping("/delete/{id}")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
 public ResponseEntity<Void> delete(@PathVariable String id){
     serviceRotation.delete(id);
     return ResponseEntity.noContent().build();
 }
 
-@GetMapping("find/self")
+@GetMapping("/find/self")
 @PreAuthorize("hasRole('DOCTOR')")
 public Page<RotationResponseDTO> findByDoctor(@AuthenticationPrincipal AuthUser user, Pageable pageable){
     Page<Rotation> page = serviceRotation.findByDoctor(user.getId(), pageable);

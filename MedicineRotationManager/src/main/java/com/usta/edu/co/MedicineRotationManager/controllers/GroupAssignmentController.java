@@ -60,6 +60,8 @@ public class GroupAssignmentController {
         Page<GroupAssignmentDetailDTO> response = page.map(x -> GroupAssignmentDetailDTO.builder()
             .assignmentId(x.getId())
             .studentId(x.getStudent().getId())
+            .studentName(x.getStudent().getName() + " " + x.getStudent().getLastName())
+            .studentDni(x.getStudent().getDni())
             .groupId(x.getGroup().getId())
             .groupName(x.getGroup().getName())
             .capacity(x.getGroup().getCapacity())
@@ -94,6 +96,8 @@ public class GroupAssignmentController {
         Page<GroupAssignmentDetailDTO> response = page.map(x -> GroupAssignmentDetailDTO.builder()
             .assignmentId(x.getId())
             .studentId(x.getStudent().getId())
+            .studentName(x.getStudent().getName() + " " + x.getStudent().getLastName())
+            .studentDni(x.getStudent().getDni())
             .groupId(x.getGroup().getId())
             .groupName(x.getGroup().getName())
             .capacity(x.getGroup().getCapacity())
@@ -107,7 +111,7 @@ public class GroupAssignmentController {
         );
         return ResponseEntity.ok(response);
     }
-
+    
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody GroupAssignmentCreateDTO dto){

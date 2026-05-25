@@ -40,7 +40,6 @@ public class QRController {
         byte[] qrImage = qrService.generateQR(entryPractice.getQrCode(), 300, 300);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=qr.png")
                 .contentType(MediaType.IMAGE_PNG)
                 .body(qrImage);
     }

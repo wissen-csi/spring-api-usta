@@ -13,6 +13,7 @@ import Attendance from './pages/Attendance'
 import Files from './pages/Files'
 import Health from './pages/Health'
 import MedicalTreatment from './pages/MedicalTreatment'
+import Groups from './pages/Groups'
 
 function ProtectedRoute({ children, allowedRoles }) {
   const { user, loading } = useAuth()
@@ -37,6 +38,7 @@ function App() {
             <Route path="tasks" element={<ProtectedRoute allowedRoles={['ADMIN','DOCTOR']}><Tasks /></ProtectedRoute>} />
             <Route path="admin" element={<ProtectedRoute allowedRoles={['ADMIN']}><Admin /></ProtectedRoute>} />
             <Route path="universities" element={<ProtectedRoute allowedRoles={['ADMIN']}><Universities /></ProtectedRoute>} />
+            <Route path="groups" element={<ProtectedRoute allowedRoles={['DOCTOR']}><Groups /></ProtectedRoute>} />
             <Route path="practices" element={<ProtectedRoute allowedRoles={['ADMIN','DOCTOR']}><EntryPractices /></ProtectedRoute>} />
             <Route path="attendance" element={<ProtectedRoute allowedRoles={['STUDENT']}><Attendance /></ProtectedRoute>} />
             <Route path="files" element={<ProtectedRoute allowedRoles={['STUDENT']}><Files /></ProtectedRoute>} />

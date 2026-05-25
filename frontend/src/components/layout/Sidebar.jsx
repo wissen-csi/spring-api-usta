@@ -23,12 +23,17 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
   const navItems = [
     { path: '/', icon: LayoutDashboard, label: isStudent ? 'Mi Perfil' : 'Dashboard' },
-    ...(!isStudent ? [
+    ...(isAdmin ? [
       { path: '/students', icon: Users, label: 'Estudiantes' },
       { path: '/doctors', icon: Stethoscope, label: 'Médicos' },
+    ] : []),
+    ...(isAdmin || isDoctor ? [
       { path: '/tasks', icon: ClipboardList, label: 'Rotaciones' },
     ] : []),
-    ...(!isStudent ? [
+    ...(isDoctor ? [
+      { path: '/groups', icon: Users, label: 'Grupos' },
+    ] : []),
+    ...(isAdmin ? [
       { path: '/universities', icon: Building2, label: 'Universidades' },
     ] : []),
     ...(!isStudent ? [
@@ -41,9 +46,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       { path: '/files', icon: FileText, label: 'Archivos' },
     ] : []),
     ...(isStudent ? [
-      { path: '/health', icon: Activity, label: 'Salud' },
+      { path: '/health', icon: Activity, label: 'Investigaciones' },
     ] : []),
-    ...(isStudent || isDoctor ? [
+    ...(isStudent ? [
       { path: '/treatments', icon: Pill, label: 'Tratamientos' },
     ] : []),
     ...(isAdmin ? [{ path: '/admin', icon: UserCog, label: 'Administración' }] : []),

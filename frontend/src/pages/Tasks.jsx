@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Plus, Search, Calendar, Clock, Stethoscope, ClipboardList, ArrowRight, X, Sparkles, CheckCircle, Trash2, AlertTriangle, Users } from 'lucide-react'
 import { rotationService, doctorService, groupService } from '../services/api'
+import { useAuth } from '../context/AuthContext'
 
 export default function Tasks() {
+  const { user } = useAuth()
+  const isDoctor = user?.role?.includes('DOCTOR')
+
   const [showModal, setShowModal] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [rotations, setRotations] = useState([])
@@ -30,14 +34,19 @@ export default function Tasks() {
     setLoading(true)
     setError('')
     try {
-      const [rotationsRes, doctorsRes, groupsRes] = await Promise.all([
+      const calls = [
         rotationService.findAll({ page: 0, size: 50 }),
-        doctorService.findAll({ page: 0, size: 50 }),
         groupService.findAll({ page: 0, size: 100 })
-      ])
+      ]
+      if (!isDoctor) {
+        calls.push(doctorService.findAll({ page: 0, size: 50 }))
+      }
+      const [rotationsRes, groupsRes, doctorsRes] = await Promise.all(calls)
       setRotations(rotationsRes.data.content || [])
-      setDoctors(doctorsRes.data.content || [])
       setGroups(groupsRes.data.content || [])
+      if (doctorsRes) {
+        setDoctors(doctorsRes.data.content || [])
+      }
     } catch (err) {
       console.error('Error loading data in Tasks page:', err)
       setError('Error al conectar con el servidor. Por favor, intente de nuevo.')
@@ -78,26 +87,40 @@ export default function Tasks() {
 
   const handleCreateRotation = async (e) => {
     e.preventDefault()
-    if (!newRotation.doctorId || !newRotation.startDate || !newRotation.completionDate) {
+    if (isDoctor) {
+      if (!newRotation.startDate || !newRotation.completionDate) {
+        alert('Por favor complete todos los campos obligatorios.')
+        return
+      }
+    } else if (!newRotation.doctorId || !newRotation.startDate || !newRotation.completionDate) {
       alert('Por favor complete todos los campos obligatorios.')
       return
     }
 
     try {
-      await rotationService.create(
-        {
+      if (isDoctor) {
+        await rotationService.createSelf({
           typeRotation: newRotation.typeRotation,
           hospitalLocation: newRotation.hospitalLocation,
           startDate: newRotation.startDate,
           completionDate: newRotation.completionDate
-        },
-        newRotation.doctorId
-      )
+        })
+      } else {
+        await rotationService.create(
+          {
+            typeRotation: newRotation.typeRotation,
+            hospitalLocation: newRotation.hospitalLocation,
+            startDate: newRotation.startDate,
+            completionDate: newRotation.completionDate
+          },
+          newRotation.doctorId
+        )
+      }
       setShowModal(false)
       setToast({ show: true, message: 'Rotación médica programada exitosamente' })
       setTimeout(() => setToast({ show: false, message: '' }), 4000)
       setNewRotation({
-        doctorId: '',
+        doctorId: isDoctor ? doctors.find(d => d.dni === user?.dni)?.id || '' : '',
         typeRotation: 'OTHER',
         hospitalLocation: 'OTHER',
         startDate: '',
@@ -356,20 +379,27 @@ export default function Tasks() {
 
             <form onSubmit={handleCreateRotation}>
               <div className="p-6 space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Médico Supervisor *</label>
-                  <select 
-                    required
-                    className="input-field py-3"
-                    value={newRotation.doctorId}
-                    onChange={(e) => setNewRotation({ ...newRotation, doctorId: e.target.value })}
-                  >
-                    <option value="">Seleccionar tutor clínico...</option>
-                    {doctors.map(d => (
-                      <option key={d.id} value={d.id}>{d.name} {d.lastName}</option>
-                    ))}
-                  </select>
-                </div>
+                {!isDoctor && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Médico Supervisor *</label>
+                    <select 
+                      required
+                      className="input-field py-3"
+                      value={newRotation.doctorId}
+                      onChange={(e) => setNewRotation({ ...newRotation, doctorId: e.target.value })}
+                    >
+                      <option value="">Seleccionar tutor clínico...</option>
+                      {doctors.map(d => (
+                        <option key={d.id} value={d.id}>{d.name} {d.lastName}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {isDoctor && (
+                  <div className="p-4 bg-clinical-50 rounded-xl border border-clinical-100">
+                    <p className="text-sm font-semibold text-slate-700">Asignado a ti automáticamente</p>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>

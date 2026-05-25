@@ -34,7 +34,7 @@ export default function Health() {
       const res = await investigationService.findAll({ page: 0, size: 50 })
       let data = res.data.content || []
       if (isStudent && user?.dni) {
-        data = data.filter(i => String(i.studentId) === String(user.dni))
+        data = data.filter(i => String(i.studentDni) === String(user.dni))
       }
       setInvestigations(data)
     } catch (err) {

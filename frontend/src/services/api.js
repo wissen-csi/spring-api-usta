@@ -3,6 +3,7 @@ import api from '../utils/api'
 export const studentService = {
   findAll: (pageable) => api.get('/student/find/all', { params: pageable }),
   findById: (id) => api.get(`/student/find/${id}`),
+  findByDni: (dni) => api.get(`/student/find/dni/${dni}`),
   findSelf: () => api.get('/student/find/self'),
   create: (dto) => api.post('/student/create', dto),
   update: (id, dto) => api.put(`/student/update/${id}`, dto),
@@ -16,6 +17,7 @@ export const doctorService = {
   findSelf: () => api.get('/Doctor/find/self'),
   create: (dto) => api.post('/Doctor/create', dto),
   update: (id, dto) => api.put(`/Doctor/update/${id}`, dto),
+  updateSelf: (dto) => api.put('/Doctor/update/self', dto),
   delete: (id) => api.delete(`/Doctor/delete/${id}`)
 }
 
@@ -31,6 +33,7 @@ export const adminService = {
 export const rotationService = {
   findAll: (pageable) => api.get('/rotation/find/all', { params: pageable }),
   findById: (id) => api.get(`/rotation/find/${id}`),
+  findSelf: (pageable) => api.get('/rotation/find/self', { params: pageable }),
   create: (dto, doctorId) => api.post(`/rotation/create/${doctorId}`, dto),
   createSelf: (dto) => api.post('/rotation/create/self', dto),
   update: (id, dto) => api.put(`/rotation/update/${id}`, dto),
@@ -66,6 +69,7 @@ export const universityService = {
 export const entryPracticeService = {
   findAll: (pageable) => api.get('/entry/practice/find/all', { params: pageable }),
   findById: (id) => api.get(`/entry/practice/find/${id}`),
+  findSelf: (pageable) => api.get('/entry/practice/find/self', { params: pageable }),
   create: (dto) => api.post('/entry/practice/create', dto),
   update: (id, dto) => api.put(`/entry/practice/update/${id}`, dto),
   delete: (id) => api.delete(`/entry/practice/delete/${id}`)
@@ -75,6 +79,7 @@ export const entryService = {
   findAll: (pageable) => api.get('/entry/find/all', { params: pageable }),
   findById: (id) => api.get(`/entry/find/${id}`),
   create: (dto) => api.post('/entry/create', dto),
+  saveByQr: (qrCode, dto) => api.post(`/entry/qr/${qrCode}`, dto),
   update: (id, dto) => api.put(`/entry/update/${id}`, dto),
   delete: (id) => api.delete(`/entry/delete/${id}`)
 }
@@ -124,11 +129,15 @@ export const investigationService = {
   delete: (id) => api.delete(`/api/v1/investigations/${id}`)
 }
 
+export const medicineService = {
+  findAll: (pageable) => api.get('/api/v1/medicines', { params: pageable }),
+  create: (dto) => api.post('/api/v1/medicines', dto),
+  delete: (id) => api.delete(`/api/v1/medicines/${id}`)
+}
+
 export const medicalTreatmentService = {
   findAll: (pageable) => api.get('/api/v1/medical-treatments', { params: pageable }),
-  findById: (id) => api.get(`/api/v1/medical-treatments/${id}`),
   create: (dto) => api.post('/api/v1/medical-treatments', dto),
-  update: (id, dto) => api.put(`/api/v1/medical-treatments/${id}`, dto),
   delete: (id) => api.delete(`/api/v1/medical-treatments/${id}`)
 }
 

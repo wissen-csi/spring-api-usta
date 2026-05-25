@@ -4,10 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public record MedicineCreateDTO(
     @NotBlank
-    String activeIngredient, 
+    String name,
     @NotBlank
-    String atc, 
-    @NotBlank
-    String descriptionAtc) {
+    String gramaje) {
 
 }

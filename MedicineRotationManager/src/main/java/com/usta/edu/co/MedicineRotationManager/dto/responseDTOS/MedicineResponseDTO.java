@@ -12,6 +12,8 @@ import lombok.extern.jackson.Jacksonized;
 public class MedicineResponseDTO {
 
     private final String id;
+    private final String name;
+    private final String gramaje;
     private final String activeIngredient;
     private final String description;
 }

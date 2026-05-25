@@ -24,9 +24,11 @@ public class MedicineService {
     public void save(MedicineCreateDTO medicineCreateDTO) {
         Medicine medicine = Medicine.builder()
                 .id(UUIDGenerator.generateNewId())
-                .activeIngredient(medicineCreateDTO.activeIngredient())
-                .atc(medicineCreateDTO.atc())
-                .descriptionAtc(medicineCreateDTO.descriptionAtc())
+                .name(medicineCreateDTO.name())
+                .gramaje(medicineCreateDTO.gramaje())
+                .activeIngredient(medicineCreateDTO.name())
+                .atc("GEN" + UUIDGenerator.generateNewId().substring(0, 7))
+                .descriptionAtc(medicineCreateDTO.gramaje())
                 .build();
         this.medicineRepository.save(medicine);
     }
@@ -61,6 +63,8 @@ public class MedicineService {
 
         return MedicineResponseDTO.builder()
                 .id(medicine.getId())
+                .name(medicine.getName())
+                .gramaje(medicine.getGramaje())
                 .activeIngredient(medicine.getActiveIngredient())
                 .description(medicine.getDescriptionAtc())
                 .build();

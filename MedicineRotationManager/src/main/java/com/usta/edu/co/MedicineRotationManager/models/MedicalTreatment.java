@@ -22,6 +22,9 @@ public class MedicalTreatment {
     @Id
     private String id;
 
+    @Column(name = "title", nullable = false, length = 200)
+    private String title;
+
     @ManyToOne
     @JoinColumn(name = "medicine_id", nullable = false)
     private Medicine medicine;

@@ -7,6 +7,7 @@ import com.usta.edu.co.MedicineRotationManager.models.MedicalTreatment;
 import com.usta.edu.co.MedicineRotationManager.models.Medicine;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 import com.usta.edu.co.MedicineRotationManager.repositories.MedicalTreatmentRepository;
+import com.usta.edu.co.MedicineRotationManager.utils.AuthUtil;
 import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,17 @@ public class MedicalTreatmentService {
 
      @Transactional
     public void save(MedicalTreatmentCreateDTO medicalTreatmentCreateDTO){
-         Student student = serviceStudent.findById(medicalTreatmentCreateDTO.studentId());
+         Student student;
+         if (medicalTreatmentCreateDTO.studentId() != null && !medicalTreatmentCreateDTO.studentId().isBlank()) {
+             student = serviceStudent.findByDni(medicalTreatmentCreateDTO.studentId());
+         } else {
+             student = serviceStudent.findByDni(AuthUtil.getCurrentUserDni());
+         }
          Medicine medicine = medicineService.findById(medicalTreatmentCreateDTO.medicineId());
 
          MedicalTreatment medicalTreatment = MedicalTreatment.builder()
                  .id(UUIDGenerator.generateNewId())
+                 .title(medicalTreatmentCreateDTO.title())
                  .startMedication(medicalTreatmentCreateDTO.startMedication())
                  .endMedication(medicalTreatmentCreateDTO.endMedication())
                  .medicine(medicine)
@@ -65,13 +72,14 @@ public class MedicalTreatmentService {
 
 
      public MedicalTreatmentResponseDTO convertObjectToDTO(MedicalTreatment medicalTreatment){
-         String medicineId = medicalTreatment.getMedicine().getId();
-         String studentId = medicalTreatment.getStudent().getId();
-
          MedicalTreatmentResponseDTO medicalTreatmentResponseDTO = MedicalTreatmentResponseDTO.builder()
                  .medicineTreatmentId(medicalTreatment.getId())
-                 .studentId(studentId)
-                 .medicineId(medicineId)
+                 .title(medicalTreatment.getTitle())
+                 .studentId(medicalTreatment.getStudent().getId())
+                 .studentDni(medicalTreatment.getStudent().getDni())
+                 .medicineId(medicalTreatment.getMedicine().getId())
+                 .medicineName(medicalTreatment.getMedicine().getName())
+                 .medicineGramaje(medicalTreatment.getMedicine().getGramaje())
                  .startMedication(medicalTreatment.getStartMedication())
                  .endMedication(medicalTreatment.getEndMedication())
                  .build();

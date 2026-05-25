@@ -27,6 +27,12 @@ public class Medicine {
     @Id
     private String id;
 
+    @Column(name = "name", nullable = false, length = 150)
+    private String name;
+
+    @Column(name = "gramaje", nullable = false, length = 100)
+    private String gramaje;
+
     @Column(name = "active_ingredient", nullable = false, length = 150)
     private String activeIngredient;
 

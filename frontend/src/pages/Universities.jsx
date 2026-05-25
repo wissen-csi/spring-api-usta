@@ -173,12 +173,20 @@ export default function Universities() {
                       {u.creationDate ? new Date(u.creationDate).toLocaleDateString('es-CO') : 'N/A'}
                     </td>
                     <td className="py-4 px-4">
-                      <button
-                        onClick={() => { setDeleteTarget(u); setShowDeleteConfirm(true) }}
-                        className="p-2 hover:bg-red-50 rounded-lg transition-colors group" title="Eliminar universidad"
-                      >
-                        <Trash2 className="w-4 h-4 text-slate-400 group-hover:text-red-500" />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => { setEditTarget(u); setShowEditModal(true) }}
+                          className="p-2 hover:bg-clinical-50 rounded-lg transition-colors group" title="Editar universidad"
+                        >
+                          <Pencil className="w-4 h-4 text-slate-400 group-hover:text-clinical-600" />
+                        </button>
+                        <button
+                          onClick={() => { setDeleteTarget(u); setShowDeleteConfirm(true) }}
+                          className="p-2 hover:bg-red-50 rounded-lg transition-colors group" title="Eliminar universidad"
+                        >
+                          <Trash2 className="w-4 h-4 text-slate-400 group-hover:text-red-500" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
