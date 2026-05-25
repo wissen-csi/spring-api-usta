@@ -29,7 +29,7 @@ public class MedicineController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('DOCTOR')")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('DOCTOR')")
     public ResponseEntity<Void> save(@RequestBody MedicineCreateDTO medicineCreateDTO) {
 
         this.medicineService.save(medicineCreateDTO);
@@ -41,7 +41,7 @@ public class MedicineController {
 
     @GetMapping
     @PreAuthorize(
-            "hasRole('ADMIN') or hasRole('DOCTOR')"
+            "hasRole('STUDENT') or hasRole('ADMIN') or hasRole('DOCTOR')"
     )
     public ResponseEntity<Page<MedicineResponseDTO>> findAll(Pageable pageable) {
 
@@ -81,7 +81,7 @@ public class MedicineController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         this.medicineService.delete(id);
         return ResponseEntity.noContent().build();

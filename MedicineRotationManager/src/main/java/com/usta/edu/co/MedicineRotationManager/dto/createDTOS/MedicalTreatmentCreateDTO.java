@@ -7,8 +7,9 @@ import jakarta.validation.constraints.NotNull;
 
 public record MedicalTreatmentCreateDTO(
         @NotBlank
+        String title,
+        @NotBlank
         String medicineId,
-        @NotBlank 
         String studentId,
         @NotNull 
         LocalDate startMedication,

@@ -36,7 +36,7 @@ public class StudentDiseaseController {
      */
     @PostMapping
     @PreAuthorize(
-            "hasRole('DOCTOR') or hasRole('ADMIN')"
+            "hasRole('DOCTOR') or hasRole('ADMIN') or hasRole('STUDENT')"
     )
     public ResponseEntity<Void> save(@RequestBody StudentDiseaseCreateDTO studentDiseaseCreateDTO) {
 
@@ -54,7 +54,7 @@ public class StudentDiseaseController {
      */
     @GetMapping
     @PreAuthorize(
-            "hasRole('DOCTOR') or hasRole('ADMIN')"
+            "hasRole('DOCTOR') or hasRole('ADMIN') or hasRole('STUDENT')"
     )
     public ResponseEntity<Page<StudentDiseaseResponseDTO>> findAll(
             Pageable pageable
@@ -122,7 +122,7 @@ public class StudentDiseaseController {
      * DELETE
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
 
         this.studentDiseaseService.delete(

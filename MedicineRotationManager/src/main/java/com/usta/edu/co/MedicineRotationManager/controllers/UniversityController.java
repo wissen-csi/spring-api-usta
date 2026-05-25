@@ -50,7 +50,7 @@ public class UniversityController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("restore/{id}")
+    @PutMapping("/restore/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> restore(@PathVariable String id){
         serviceUniversity.restore(id);
@@ -58,7 +58,7 @@ public class UniversityController {
     }
 
     @GetMapping("/find/all")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Page<UniversityResponseDTO>> findAll(Pageable pageable){
         Page<University> page = serviceUniversity.findAll(pageable);
         Page<UniversityResponseDTO> response = page.map(x->UniversityResponseDTO.builder()
@@ -74,7 +74,7 @@ public class UniversityController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/find/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<UniversityResponseDTO> findById(@PathVariable String id){
         University university = serviceUniversity.findById(id);
         return ResponseEntity.ok(UniversityResponseDTO.builder()

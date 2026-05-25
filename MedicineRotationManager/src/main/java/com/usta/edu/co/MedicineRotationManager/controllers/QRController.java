@@ -6,8 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.zxing.WriterException;
@@ -30,16 +30,17 @@ public class QRController {
     }
 
 
+
     @GetMapping("/generate/{id}")
     public ResponseEntity<byte[]> generateQR(
-            @RequestParam String id)
+            @PathVariable String id)
             throws WriterException, IOException {
                 EntryPractice entryPractice = serviceEntryPractice.findById(id);
 
         byte[] qrImage = qrService.generateQR(entryPractice.getQrCode(), 300, 300);
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=qr.png")
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+        "attachment; filename=qr.png")
                 .contentType(MediaType.IMAGE_PNG)
                 .body(qrImage);
     }

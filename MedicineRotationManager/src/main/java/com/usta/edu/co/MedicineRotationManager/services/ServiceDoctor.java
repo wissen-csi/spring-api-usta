@@ -14,8 +14,19 @@ import com.usta.edu.co.MedicineRotationManager.models.University;
 import com.usta.edu.co.MedicineRotationManager.repositories.DoctorRepository;
 import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import com.usta.edu.co.MedicineRotationManager.models.GroupAssignment;
+import com.usta.edu.co.MedicineRotationManager.models.Rotation;
+import com.usta.edu.co.MedicineRotationManager.models.Group;
+import com.usta.edu.co.MedicineRotationManager.models.EntryPractice;
+import com.usta.edu.co.MedicineRotationManager.repositories.GroupAssignmentRepository;
+import com.usta.edu.co.MedicineRotationManager.repositories.GroupRepository;
+import com.usta.edu.co.MedicineRotationManager.repositories.EntryPracticeRepository;
+
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -25,17 +36,23 @@ public class ServiceDoctor {
     private ServiceLocation serviceLocation;
     private ServiceUniversity serviceUniversity;
     private AuthUserService userService;
-
-
-
+    private GroupAssignmentRepository groupAssignmentRepository;
+    private EntryPracticeRepository entryPracticeRepository;
+    private GroupRepository groupRepository;
 
     public ServiceDoctor(DoctorRepository repository, ObjectMapper objectMapper, ServiceLocation serviceLocation,
-            ServiceUniversity serviceUniversity, AuthUserService userService) {
+            ServiceUniversity serviceUniversity, AuthUserService userService,
+            GroupAssignmentRepository groupAssignmentRepository,
+            EntryPracticeRepository entryPracticeRepository,
+            GroupRepository groupRepository) {
         this.repository = repository;
         this.objectMapper = objectMapper;
         this.serviceLocation = serviceLocation;
         this.serviceUniversity = serviceUniversity;
         this.userService = userService;
+        this.groupAssignmentRepository = groupAssignmentRepository;
+        this.entryPracticeRepository = entryPracticeRepository;
+        this.groupRepository = groupRepository;
     }
 
     public Doctor findById(String id) {
@@ -49,6 +66,23 @@ public class ServiceDoctor {
     @Transactional
     public void delete(String id) {
         Doctor doctor = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+
+        List<Rotation> rotations = doctor.getRotations();
+        for (Rotation rotation : rotations) {
+            List<Group> groups = rotation.getGroups();
+            for (Group group : groups) {
+                List<GroupAssignment> assignments = group.getGroupAssignments();
+                for (GroupAssignment ga : assignments) {
+                    groupAssignmentRepository.delete(ga);
+                }
+                List<EntryPractice> practices = group.getEntryPractices();
+                for (EntryPractice ep : practices) {
+                    entryPracticeRepository.delete(ep);
+                }
+                groupRepository.delete(group);
+            }
+        }
+
         userService.deleteUser(doctor);
         repository.delete(doctor);
     }
@@ -95,25 +129,28 @@ public class ServiceDoctor {
         Doctor doctor = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
 
-
-
-        University university = serviceUniversity.findById(dto.universityId());
-
-        doctor.setName(dto.name());
-        doctor.setLastName(dto.lastName());
-        doctor.setDni(dto.dni());
-        
-        doctor.setMaritalStatus(dto.maritalStatus());
-
-        doctor.setPhoneNumber(dto.phoneNumber());
-        doctor.setEmail(dto.email());
-
-        doctor.setTypeBlood(dto.typeBlood());
-        doctor.setWeight(dto.weight());
-        doctor.setImc(dto.imc());
-
-        doctor.setSpecialty(dto.specialty());
-        doctor.setUniversity(university);
+        if (dto.name() != null) doctor.setName(dto.name());
+        if (dto.lastName() != null) doctor.setLastName(dto.lastName());
+        if (dto.dni() != null) doctor.setDni(dto.dni());
+        if (dto.maritalStatus() != null) doctor.setMaritalStatus(dto.maritalStatus());
+        if (dto.phoneNumber() != null) doctor.setPhoneNumber(dto.phoneNumber());
+        if (dto.email() != null) doctor.setEmail(dto.email());
+        if (dto.typeBlood() != null) doctor.setTypeBlood(dto.typeBlood());
+        if (dto.weight() != null) doctor.setWeight(dto.weight());
+        if (dto.imc() != null) doctor.setImc(dto.imc());
+        if (dto.specialty() != null) doctor.setSpecialty(dto.specialty());
+        if (dto.universityId() != null) {
+            University university = serviceUniversity.findById(dto.universityId());
+            doctor.setUniversity(university);
+        }
+        if (dto.placeBirth() != null) {
+            Location placeBirth = serviceLocation.findOrCreate(dto.placeBirth());
+            doctor.setPlaceBirth(placeBirth);
+        }
+        if (dto.residenceAddress() != null) {
+            Location residenceAddress = serviceLocation.findOrCreate(dto.residenceAddress());
+            doctor.setResidenceAddress(residenceAddress);
+        }
         repository.save(doctor);
 
         userService.updateUsername(doctor);

@@ -70,7 +70,7 @@ public class FileController {
      */
     @GetMapping
     @PreAuthorize(
-            "hasRole('ADMIN') or hasRole('DOCTOR')"
+            "hasRole('ADMIN') or hasRole('DOCTOR') or hasRole('STUDENT')"
     )
     public ResponseEntity<Page<EntryPracticeResponseDTO.FileResponseDTO>> findAll(
             Pageable pageable
@@ -158,7 +158,7 @@ public class FileController {
      * DELETE FILE
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR') or hasRole('STUDENT')")
     public ResponseEntity<Void> delete(
             @PathVariable String id
     ) throws IOException {

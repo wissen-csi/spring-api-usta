@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.GroupAssignmentCreateDTO;
+import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.GroupAssignmentDetailDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.GroupAssignmentResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.models.AuthUser;
 import com.usta.edu.co.MedicineRotationManager.models.GroupAssignment;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("group/assignment")
+@RequestMapping("/group/assignment")
 public class GroupAssignmentController {
     private ServiceGroupAssignment serviceGroupAssignment;
 
@@ -31,30 +32,51 @@ public class GroupAssignmentController {
         this.serviceGroupAssignment = serviceGroupAssignment;
     }
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Void> create(@RequestBody GroupAssignmentCreateDTO dto){
         serviceGroupAssignment.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/delete")
-    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
-
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Void> delete(@PathVariable String id){
         serviceGroupAssignment.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/find/all")
-    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
-
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Page<GroupAssignmentResponseDTO>> findAll(Pageable pageable){
         Page<GroupAssignment> page = serviceGroupAssignment.findAll(pageable);
         Page<GroupAssignmentResponseDTO> response = page.map(x-> new GroupAssignmentResponseDTO(x.getId(),x.getStudent().getId(),x.getGroup().getId()));
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/find/all/detailed")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+    public ResponseEntity<Page<GroupAssignmentDetailDTO>> findAllDetailed(Pageable pageable){
+        Page<GroupAssignment> page = serviceGroupAssignment.findAll(pageable);
+        Page<GroupAssignmentDetailDTO> response = page.map(x -> GroupAssignmentDetailDTO.builder()
+            .assignmentId(x.getId())
+            .studentId(x.getStudent().getId())
+            .studentName(x.getStudent().getName() + " " + x.getStudent().getLastName())
+            .studentDni(x.getStudent().getDni())
+            .groupId(x.getGroup().getId())
+            .groupName(x.getGroup().getName())
+            .capacity(x.getGroup().getCapacity())
+            .rotationId(x.getGroup().getRotation().getId())
+            .rotationType(x.getGroup().getRotation().getTypeRotation().name())
+            .hospitalLocation(x.getGroup().getRotation().getHospitalLocation().name())
+            .startDate(x.getGroup().getRotation().getStartDate())
+            .completionDate(x.getGroup().getRotation().getCompletionDate())
+            .doctorName(x.getGroup().getRotation().getDoctor().getName() + " " + x.getGroup().getRotation().getDoctor().getLastName())
+            .build()
+        );
+        return ResponseEntity.ok(response);
+    }
     @GetMapping("/find/{id}")
-    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<GroupAssignmentResponseDTO> findById(@PathVariable String id){
         GroupAssignment groupAssignment = serviceGroupAssignment.findById(id);
         return ResponseEntity.ok(new GroupAssignmentResponseDTO(groupAssignment.getId(),groupAssignment.getStudent().getId(),groupAssignment.getGroup().getId()));
@@ -67,8 +89,31 @@ public class GroupAssignmentController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/find/self/detailed")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<Page<GroupAssignmentDetailDTO>> findSelfDetailed(@AuthenticationPrincipal AuthUser user, Pageable pageable){
+        Page<GroupAssignment> page = serviceGroupAssignment.findAll(user.getId(), pageable);
+        Page<GroupAssignmentDetailDTO> response = page.map(x -> GroupAssignmentDetailDTO.builder()
+            .assignmentId(x.getId())
+            .studentId(x.getStudent().getId())
+            .studentName(x.getStudent().getName() + " " + x.getStudent().getLastName())
+            .studentDni(x.getStudent().getDni())
+            .groupId(x.getGroup().getId())
+            .groupName(x.getGroup().getName())
+            .capacity(x.getGroup().getCapacity())
+            .rotationId(x.getGroup().getRotation().getId())
+            .rotationType(x.getGroup().getRotation().getTypeRotation().name())
+            .hospitalLocation(x.getGroup().getRotation().getHospitalLocation().name())
+            .startDate(x.getGroup().getRotation().getStartDate())
+            .completionDate(x.getGroup().getRotation().getCompletionDate())
+            .doctorName(x.getGroup().getRotation().getDoctor().getName() + " " + x.getGroup().getRotation().getDoctor().getLastName())
+            .build()
+        );
+        return ResponseEntity.ok(response);
+    }
+    
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody GroupAssignmentCreateDTO dto){
         serviceGroupAssignment.update(id, dto);
         return  ResponseEntity.noContent().build();

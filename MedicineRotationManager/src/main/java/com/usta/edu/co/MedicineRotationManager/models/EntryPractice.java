@@ -27,6 +27,9 @@ public class EntryPractice {
     @Id
     private String id;
 
+    @Column(name = "title", nullable = false, length = 200)
+    private String title;
+
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 

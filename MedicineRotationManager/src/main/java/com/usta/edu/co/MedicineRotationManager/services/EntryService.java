@@ -27,7 +27,7 @@ public class EntryService {
 
     @Transactional
     public void save(EntryCreateDTO entryCreateDTO) {
-        Student student = findStudentById(entryCreateDTO.studentId());
+        Student student = findStudentByDni(entryCreateDTO.studentId());
         EntryPractice entryPractice = findEntryPracticeById(entryCreateDTO.entryPracticeId());
 
         Entry entry = Entry.builder()
@@ -35,6 +35,20 @@ public class EntryService {
                 .entryPractice(entryPractice)
                 .student(student)
 
+                .build();
+        entryRepository.save(entry);
+    }
+
+    @Transactional
+    public void saveByQrCode(String qrCode, String studentId, java.time.LocalDateTime assistance) {
+        EntryPractice entryPractice = entryPracticeService.findByQrCode(qrCode);
+        Student student = findStudentByDni(studentId);
+
+        Entry entry = Entry.builder()
+                .id(UUIDGenerator.generateNewId())
+                .entryPractice(entryPractice)
+                .student(student)
+                .assistance(assistance)
                 .build();
         entryRepository.save(entry);
     }
@@ -60,8 +74,8 @@ public class EntryService {
     }
 
     @Transactional
-    public Student findStudentById(String id) {
-        return this.serviceStudent.findById(id);
+    public Student findStudentByDni(String dni) {
+        return this.serviceStudent.findByDni(dni);
     }
 
     @Transactional(readOnly = true)
@@ -93,6 +107,8 @@ public class EntryService {
                 .assistance(entry.getAssistance())
 
                 .studentId(entry.getStudent().getId())
+
+                .studentDni(entry.getStudent().getDni())
 
                 .studentName(
                         entry.getStudent().getName()

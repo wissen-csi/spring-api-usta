@@ -36,11 +36,11 @@ public class FileService {
      */
     @Transactional
     public EntryPracticeResponseDTO.FileResponseDTO save(MultipartFile multipartFile,
-                                                         String personId
+                                                         String dni
     ) throws IOException {
 
         Person person =
-                personService.findById(personId);
+                personService.findByDni(dni);
 
         var response =
                 cloudinaryService.upload(multipartFile);
@@ -136,7 +136,8 @@ public class FileService {
                 findEntityById(id);
 
         cloudinaryService.delete(
-                file.getPublicId()
+                file.getPublicId(),
+                file.getResourceType()
         );
 
         fileRepository.delete(file);
@@ -158,7 +159,8 @@ public class FileService {
          * Elimina archivo viejo
          */
         cloudinaryService.delete(
-                existingFile.getPublicId()
+                existingFile.getPublicId(),
+                existingFile.getResourceType()
         );
 
         /*
@@ -235,7 +237,9 @@ public class FileService {
 
                 file.getSecureUrl(),
 
-                file.getOriginalName()
+                file.getOriginalName(),
+
+                file.getPerson().getDni()
         );
     }
 

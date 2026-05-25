@@ -15,26 +15,15 @@ import com.google.zxing.common.BitMatrix;
 public class QRService {
 
     public byte[] generateQR(String text, int width, int height) throws WriterException, IOException {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(
+                text,
+                BarcodeFormat.QR_CODE,
+                width,
+                height);
 
-       
-            QRCodeWriter qrCodeWriter = new QRCodeWriter();
-
-            BitMatrix bitMatrix = qrCodeWriter.encode(
-                    text,
-                    BarcodeFormat.QR_CODE,
-                    width,
-                    height);
-
-            ByteArrayOutputStream outputStream =
-                    new ByteArrayOutputStream();
-
-            MatrixToImageWriter.writeToStream(
-                    bitMatrix,
-                    "PNG",
-                    outputStream);
-
-            return outputStream.toByteArray();
-
-    
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
+        return outputStream.toByteArray();
     }
 }

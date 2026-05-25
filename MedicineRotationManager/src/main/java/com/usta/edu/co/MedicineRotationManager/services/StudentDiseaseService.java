@@ -1,25 +1,24 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DiseaseCieDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DiseaseCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.StudentDiseaseCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.StudentDiseaseResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.StudentDiseaseUpdateDTO;
-
 import com.usta.edu.co.MedicineRotationManager.models.Disease;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 import com.usta.edu.co.MedicineRotationManager.models.StudentDisease;
-
 import com.usta.edu.co.MedicineRotationManager.repositories.DiseaseRepository;
 import com.usta.edu.co.MedicineRotationManager.repositories.StudentDiseaseRepository;
+import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
 
 import jakarta.persistence.EntityNotFoundException;
-
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +35,7 @@ public class StudentDiseaseService {
     /*
      * SAVE
      */
+    @Transactional
     public void save(
             StudentDiseaseCreateDTO dto
     ) {
@@ -43,25 +43,23 @@ public class StudentDiseaseService {
         /*
          * FIND STUDENT
          */
+        /*
+         * FIND STUDENT BY DNI (frontend sends DNI)
+         */
         Student student =
-                studentService.findById(
+                studentService.findByDni(
                         dto.studentId()
                 );
 
         /*
-         * GET DISEASE FROM WHO ICD API
+         * FIND OR CREATE DISEASE FROM CIE DATA
          */
-        DiseaseCreateDTO diseaseData =
-                cieService.searchSpecificDiaseasse(
-                        dto.diseaseCieDTO());
+        DiseaseCieDTO cieData = dto.diseaseCieDTO();
 
-        /*
-         * FIND IF DISEASE ALREADY EXISTS
-         */
         Disease disease =
                 diseaseRepository
                         .findByCode(
-                                diseaseData.code()
+                                cieData.code()
                         )
                         .orElseGet(() -> {
 
@@ -69,19 +67,19 @@ public class StudentDiseaseService {
                                     new Disease();
 
                             newDisease.setId(
-                                    diseaseData.id()
+                                    cieData.fundationURI()
                             );
 
                             newDisease.setCode(
-                                    diseaseData.code()
+                                    cieData.code()
                             );
 
                             newDisease.setName(
-                                    diseaseData.name()
+                                    cieData.label()
                             );
 
                             newDisease.setDefinition(
-                                    diseaseData.definition()
+                                    cieData.label()
                             );
 
                             return diseaseRepository.save(
@@ -94,6 +92,10 @@ public class StudentDiseaseService {
          */
         StudentDisease studentDisease =
                 new StudentDisease();
+
+        studentDisease.setId(
+                UUIDGenerator.generateNewId()
+        );
 
         studentDisease.setStudent(student);
 
@@ -139,6 +141,7 @@ public class StudentDiseaseService {
     /*
      * UPDATE
      */
+    @Transactional
     public void update(
 
             StudentDiseaseUpdateDTO dto,
@@ -165,7 +168,7 @@ public class StudentDiseaseService {
         if (dto.studentId() != null) {
 
             Student student =
-                    studentService.findById(
+                    studentService.findByDni(
                             dto.studentId()
                     );
 
@@ -218,8 +221,7 @@ public class StudentDiseaseService {
             );
         }
 
-        studentDiseaseRepository.save(
-                studentDiseaseRepository.save(studentDisease));
+        studentDiseaseRepository.save(studentDisease);
     }
 
     /*

@@ -10,4 +10,5 @@ public interface ICloudinaryService {
     public Map<?,?> upload(MultipartFile multipartFile) throws IOException;
     public Map<?,?> upload(File file) throws IOException;
     public Map<?,?> delete(String id) throws IOException;
+    public Map<?,?> delete(String id, String resourceType) throws IOException;
 }

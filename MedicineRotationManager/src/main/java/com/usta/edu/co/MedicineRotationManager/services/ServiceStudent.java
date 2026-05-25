@@ -1,5 +1,6 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -12,6 +13,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.EcxelCreateStudentDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.StudentCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.StudentUpdateDTO;
+import com.usta.edu.co.MedicineRotationManager.enumerations.Language;
+import com.usta.edu.co.MedicineRotationManager.enumerations.MaritalStatus;
+import com.usta.edu.co.MedicineRotationManager.enumerations.StudentStatus;
+import com.usta.edu.co.MedicineRotationManager.enumerations.TypeBlood;
 import com.usta.edu.co.MedicineRotationManager.models.Location;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 import com.usta.edu.co.MedicineRotationManager.models.University;
@@ -48,6 +53,12 @@ public class ServiceStudent {
                         "Student not found with id: " + id));
     }
 
+    public Student findByDni(String dni) {
+        return repository.findByDni(dni)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Student not found with dni: " + dni));
+    }
+
     public Page<Student> findAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
@@ -57,21 +68,48 @@ public class ServiceStudent {
     }
 
     @Transactional
-    public void save(StudentCreateDTO dto) {
+    public String save(StudentCreateDTO dto) {
+
+        if (dto.startInductionDate() != null && dto.endInductionDate() != null
+                && dto.startInductionDate().isAfter(dto.endInductionDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de inducción no puede ser posterior a la fecha de fin");
+        }
+        if (dto.arlStartDate() != null && dto.arlEndDate() != null
+                && dto.arlStartDate().isAfter(dto.arlEndDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de ARL no puede ser posterior a la fecha de fin");
+        }
 
         Location placeBirth = serviceLocation.findOrCreate(dto.placeBirth());
 
         Location residenceAddress = serviceLocation.findOrCreate(dto.residenceAddress());
 
         University university = serviceUniversity.findById(dto.universityId());
+        String id = UUIDGenerator.generateNewId();
+
+        MaritalStatus maritalStatus = dto.maritalStatus() != null ? dto.maritalStatus() : MaritalStatus.OTHER;
+        TypeBlood typeBlood = dto.typeBlood() != null ? dto.typeBlood() : TypeBlood.O_POSITIVE;
+        Language secondLanguage = dto.secondLanguage() != null ? dto.secondLanguage() : Language.OTHER;
+        StudentStatus studentStatus = dto.studentStatus() != null ? dto.studentStatus() : StudentStatus.ACTIVE;
+        boolean courseApproved = dto.courseApproved() != null ? dto.courseApproved() : false;
+        LocalDate entryDateAcademicProgram = dto.entryDateAcademicProgram() != null
+                ? dto.entryDateAcademicProgram()
+                : LocalDate.now();
+        LocalDate arlStartDate = dto.arlStartDate() != null ? dto.arlStartDate()
+                : LocalDate.now();
+        LocalDate arlEndDate = dto.arlEndDate() != null ? dto.arlEndDate()
+                : LocalDate.now().plusYears(1);
+        String hobbies = dto.hobbies() != null ? dto.hobbies() : "";
+        Double weight = dto.weight() != null ? dto.weight() : 0.0;
+        Double imc = dto.imc() != null ? dto.imc() : 0.0;
+
         Student student = Student.builder()
-                .id(UUIDGenerator.generateNewId())
+                .id(id)
 
                 .name(dto.name())
                 .lastName(dto.lastName())
                 .dni(dto.dni())
 
-                .maritalStatus(dto.maritalStatus())
+                .maritalStatus(maritalStatus)
 
                 .placeBirth(placeBirth)
                 .residenceAddress(residenceAddress)
@@ -79,33 +117,30 @@ public class ServiceStudent {
                 .phoneNumber(dto.phoneNumber())
                 .email(dto.email())
 
-                .typeBlood(dto.typeBlood())
+                .typeBlood(typeBlood)
 
-                .weight(dto.weight())
-                .imc(dto.imc())
+                .weight(weight)
+                .imc(imc)
 
-                .secondLanguage(dto.secondLanguage())
+                .secondLanguage(secondLanguage)
 
                 .academicPrograms(dto.academicPrograms())
 
-                .studentStatus(dto.studentStatus())
+                .studentStatus(studentStatus)
 
-                .courseApproved(dto.courseApproved())
+                .courseApproved(courseApproved)
 
-                .entryDateAcademicProgram(
-                        dto.entryDateAcademicProgram())
+                .entryDateAcademicProgram(entryDateAcademicProgram)
 
-                .startInductionDate(
-                        dto.startInductionDate())
+                .startInductionDate(dto.startInductionDate())
 
-                .endInductionDate(
-                        dto.endInductionDate())
+                .endInductionDate(dto.endInductionDate())
 
-                .arlStartDate(dto.arlStartDate())
+                .arlStartDate(arlStartDate)
 
-                .arlEndDate(dto.arlEndDate())
+                .arlEndDate(arlEndDate)
 
-                .hobbies(dto.hobbies())
+                .hobbies(hobbies)
 
                 .university(university)
 
@@ -113,18 +148,52 @@ public class ServiceStudent {
         student = repository.save(
                 student);
         userService.createUser(student, dto.password());
+        return id;
     }
 
     @Transactional
     public void save(EcxelCreateStudentDTO dto) {
 
-        Location placeBirth = serviceLocation.findOrCreate(dto.getPlaceBirthCity(), dto.getPlaceBirthDepartment(),
-                dto.getPlaceBirthAddress());
+        if (dto.getStartInductionDate() != null && dto.getEndInductionDate() != null
+                && dto.getStartInductionDate().isAfter(dto.getEndInductionDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de inducción no puede ser posterior a la fecha de fin");
+        }
+        if (dto.getArlStartDate() != null && dto.getArlEndDate() != null
+                && dto.getArlStartDate().isAfter(dto.getArlEndDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de ARL no puede ser posterior a la fecha de fin");
+        }
 
-        Location residenceAddress = serviceLocation.findOrCreate(dto.getResidenceCity(), dto.getResidenceDepartment(),
-                dto.getResidenceAddress());
+        MaritalStatus maritalStatus = dto.getMaritalStatus() != null ? dto.getMaritalStatus() : MaritalStatus.OTHER;
+        TypeBlood typeBlood = dto.getTypeBlood() != null ? dto.getTypeBlood() : TypeBlood.O_POSITIVE;
+        Language secondLanguage = dto.getSecondLanguage() != null ? dto.getSecondLanguage() : Language.OTHER;
+        StudentStatus studentStatus = dto.getStudentStatus() != null ? dto.getStudentStatus() : StudentStatus.ACTIVE;
+        boolean courseApproved = dto.isCourseApproved();
+        LocalDate entryDateAcademicProgram = dto.getEntryDateAcademicProgram() != null
+                ? dto.getEntryDateAcademicProgram()
+                : LocalDate.now();
+        LocalDate arlStartDate = dto.getArlStartDate() != null ? dto.getArlStartDate()
+                : LocalDate.now();
+        LocalDate arlEndDate = dto.getArlEndDate() != null ? dto.getArlEndDate()
+                : LocalDate.now().plusYears(1);
+        String hobbies = dto.getHobbies() != null ? dto.getHobbies() : "";
+        double weight = dto.getWeight();
+        double imc = dto.getImc();
+        String password = dto.getPassword() != null ? dto.getPassword() : dto.getDni();
 
-        University university = serviceUniversity.findById(dto.getUniversityId());
+        Location placeBirth = dto.getPlaceBirthCity() != null && dto.getPlaceBirthDepartment() != null
+                ? serviceLocation.findOrCreate(dto.getPlaceBirthCity(), dto.getPlaceBirthDepartment(),
+                        dto.getPlaceBirthAddress())
+                : null;
+
+        Location residenceAddress = dto.getResidenceCity() != null && dto.getResidenceDepartment() != null
+                ? serviceLocation.findOrCreate(dto.getResidenceCity(), dto.getResidenceDepartment(),
+                        dto.getResidenceAddress())
+                : null;
+
+        University university = dto.getUniversityId() != null && !dto.getUniversityId().isEmpty()
+                ? serviceUniversity.findById(dto.getUniversityId())
+                : null;
+
         Student student = Student.builder()
                 .id(UUIDGenerator.generateNewId())
 
@@ -132,7 +201,7 @@ public class ServiceStudent {
                 .lastName(dto.getLastName())
                 .dni(dto.getDni())
 
-                .maritalStatus(dto.getMaritalStatus())
+                .maritalStatus(maritalStatus)
 
                 .placeBirth(placeBirth)
                 .residenceAddress(residenceAddress)
@@ -140,40 +209,37 @@ public class ServiceStudent {
                 .phoneNumber(dto.getPhoneNumber())
                 .email(dto.getEmail())
 
-                .typeBlood(dto.getTypeBlood())
+                .typeBlood(typeBlood)
 
-                .weight(dto.getWeight())
-                .imc(dto.getImc())
+                .weight(weight)
+                .imc(imc)
 
-                .secondLanguage(dto.getSecondLanguage())
+                .secondLanguage(secondLanguage)
 
                 .academicPrograms(dto.getAcademicPrograms())
 
-                .studentStatus(dto.getStudentStatus())
+                .studentStatus(studentStatus)
 
-                .courseApproved(dto.isCourseApproved())
+                .courseApproved(courseApproved)
 
-                .entryDateAcademicProgram(
-                        dto.getEntryDateAcademicProgram())
+                .entryDateAcademicProgram(entryDateAcademicProgram)
 
-                .startInductionDate(
-                        dto.getStartInductionDate())
+                .startInductionDate(dto.getStartInductionDate())
 
-                .endInductionDate(
-                        dto.getEndInductionDate())
+                .endInductionDate(dto.getEndInductionDate())
 
-                .arlStartDate(dto.getArlStartDate())
+                .arlStartDate(arlStartDate)
 
-                .arlEndDate(dto.getArlEndDate())
+                .arlEndDate(arlEndDate)
 
-                .hobbies(dto.getHobbies())
+                .hobbies(hobbies)
 
                 .university(university)
 
                 .build();
         student = repository.save(
                 student);
-        userService.createUser(student, dto.getPassword());
+        userService.createUser(student, password);
     }
 
     @Transactional
@@ -213,40 +279,46 @@ public class ServiceStudent {
 
         Student student = findById(id);
 
-        University university = serviceUniversity.findById(dto.universityId());
+        if (dto.startInductionDate() != null && dto.endInductionDate() != null
+                && dto.startInductionDate().isAfter(dto.endInductionDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de inducción no puede ser posterior a la fecha de fin");
+        }
+        if (dto.arlStartDate() != null && dto.arlEndDate() != null
+                && dto.arlStartDate().isAfter(dto.arlEndDate())) {
+            throw new IllegalArgumentException("La fecha de inicio de ARL no puede ser posterior a la fecha de fin");
+        }
 
-        student.setName(dto.name());
-        student.setLastName(dto.lastName());
-        student.setDni(dto.dni());
-        student.setMaritalStatus(dto.maritalStatus());
-        student.setPhoneNumber(dto.phoneNumber());
-        student.setEmail(dto.email());
-        student.setTypeBlood(dto.typeBlood());
-        student.setWeight(dto.weight());
-        student.setImc(dto.imc());
-
-        student.setSecondLanguage(dto.secondLanguage());
-        student.setAcademicPrograms(dto.academicPrograms());
-        student.setStudentStatus(dto.studentStatus());
-
-        student.setCourseApproved(dto.courseApproved());
-
-        student.setEntryDateAcademicProgram(
-                dto.entryDateAcademicProgram());
-
-        student.setStartInductionDate(
-                dto.startInductionDate());
-
-        student.setEndInductionDate(
-                dto.endInductionDate());
-
-        student.setArlStartDate(dto.arlStartDate());
-
-        student.setArlEndDate(dto.arlEndDate());
-
-        student.setHobbies(dto.hobbies());
-
-        student.setUniversity(university);
+        if (dto.name() != null) student.setName(dto.name());
+        if (dto.lastName() != null) student.setLastName(dto.lastName());
+        if (dto.dni() != null) student.setDni(dto.dni());
+        if (dto.maritalStatus() != null) student.setMaritalStatus(dto.maritalStatus());
+        if (dto.phoneNumber() != null) student.setPhoneNumber(dto.phoneNumber());
+        if (dto.email() != null) student.setEmail(dto.email());
+        if (dto.typeBlood() != null) student.setTypeBlood(dto.typeBlood());
+        if (dto.weight() != null) student.setWeight(dto.weight());
+        if (dto.imc() != null) student.setImc(dto.imc());
+        if (dto.secondLanguage() != null) student.setSecondLanguage(dto.secondLanguage());
+        if (dto.academicPrograms() != null) student.setAcademicPrograms(dto.academicPrograms());
+        if (dto.studentStatus() != null) student.setStudentStatus(dto.studentStatus());
+        if (dto.courseApproved() != null) student.setCourseApproved(dto.courseApproved());
+        if (dto.entryDateAcademicProgram() != null) student.setEntryDateAcademicProgram(dto.entryDateAcademicProgram());
+        if (dto.startInductionDate() != null) student.setStartInductionDate(dto.startInductionDate());
+        if (dto.endInductionDate() != null) student.setEndInductionDate(dto.endInductionDate());
+        if (dto.arlStartDate() != null) student.setArlStartDate(dto.arlStartDate());
+        if (dto.arlEndDate() != null) student.setArlEndDate(dto.arlEndDate());
+        if (dto.hobbies() != null) student.setHobbies(dto.hobbies());
+        if (dto.universityId() != null) {
+            University university = serviceUniversity.findById(dto.universityId());
+            student.setUniversity(university);
+        }
+        if (dto.placeBirth() != null) {
+            Location placeBirth = serviceLocation.findOrCreate(dto.placeBirth());
+            student.setPlaceBirth(placeBirth);
+        }
+        if (dto.residenceAddress() != null) {
+            Location residenceAddress = serviceLocation.findOrCreate(dto.residenceAddress());
+            student.setResidenceAddress(residenceAddress);
+        }
 
         repository.save(student);
     }

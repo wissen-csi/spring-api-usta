@@ -23,9 +23,9 @@ public class Porter extends Person {
 
     @Column(name = "employeeCode", nullable = false, length = 100, unique = true)
     private String employeeCode;
-    @Column(name = "hireDate", nullable = false, unique = true)
+    @Column(name = "hireDate", nullable = false)
     private LocalDate hireDate;
-    @Column(name = "isActive", nullable = false, unique = true)
+    @Column(name = "isActive", nullable = false)
     private boolean isActive;
 
 }

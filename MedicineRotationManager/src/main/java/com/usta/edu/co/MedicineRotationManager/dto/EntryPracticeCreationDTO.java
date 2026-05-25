@@ -6,8 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record EntryPracticeCreationDTO(
+    @NotBlank
+    String title,
     @NotNull
-    LocalDateTime starTime, 
+    LocalDateTime startTime, 
     @NotNull
     LocalDateTime endTime,
     @NotBlank

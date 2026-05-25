@@ -17,6 +17,7 @@ import lombok.extern.jackson.Jacksonized;
 
 public class EntryPracticeResponseDTO {
     private final String id;
+    private final String title;
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
     private final String groupName;
@@ -25,6 +26,7 @@ public class EntryPracticeResponseDTO {
 
     public static record FileResponseDTO(String id,
                                          String secureUrl,
-                                         String originalName) {
+                                         String originalName,
+                                         String personId) {
     }
 }

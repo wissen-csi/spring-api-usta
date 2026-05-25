@@ -31,6 +31,13 @@ public class EntryController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PostMapping("/qr/{qrCode}")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<Void> saveByQr(@PathVariable String qrCode, @RequestBody EntryCreateDTO dto) {
+        entryService.saveByQrCode(qrCode, dto.studentId(), dto.assitance());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     @GetMapping("/find/{id}")
     @PreAuthorize("hasRole('STUDENT') or hasRole('DOCTOR') or hasRole('ADMIN') or hasRole('PORTER')")
     public ResponseEntity<EntryResponseDTO> findById(@PathVariable String id) {
@@ -39,7 +46,7 @@ public class EntryController {
     }
 
     @GetMapping("/find/all")
-    @PreAuthorize("hasRole('DOCTOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('DOCTOR') or hasRole('ADMIN') or hasRole('STUDENT')")
     public ResponseEntity<Page<EntryResponseDTO>> findAll(Pageable pageable) {
         Page<Entry> page = entryService.findAll(pageable);
         Page<EntryResponseDTO> response = entryService.findAll(pageable).map(entryService::convertObjectToDTO);

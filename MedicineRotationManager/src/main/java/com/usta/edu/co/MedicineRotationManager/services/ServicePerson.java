@@ -24,5 +24,9 @@ public Person findById(String id){
     return this.personRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Persona no encontrada"));
 }
 
+public Person findByDni(String dni){
+    return this.personRepository.findByDni(dni).orElseThrow(()->new EntityNotFoundException("Persona no encontrada con ese DNI"));
+}
+
 
 }

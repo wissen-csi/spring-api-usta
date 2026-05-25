@@ -1,5 +1,6 @@
 package com.usta.edu.co.MedicineRotationManager.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.DiseaseCieDTO;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("api/test")
+@RequestMapping("/api/test")
 public class CieController {
 
     private final CieService cieService;
@@ -31,10 +32,12 @@ public class CieController {
     }
 
     @GetMapping("/search/{term}")
+    @PreAuthorize("isAuthenticated()")
     public List<DiseaseCieDTO> search(@PathVariable @NonNull String term) {
         return cieService.searchDiaseases(term);
     }
     @PostMapping("/search/especific")
+    @PreAuthorize("isAuthenticated()")
     public DiseaseCreateDTO especific(@RequestBody @NonNull DiseaseCieDTO diseaseCieDTO){
         return cieService.searchSpecificDiaseasse(diseaseCieDTO);
     }

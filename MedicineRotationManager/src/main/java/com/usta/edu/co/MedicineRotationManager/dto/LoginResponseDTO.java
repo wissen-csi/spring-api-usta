@@ -14,4 +14,10 @@ import lombok.Setter;
 public class LoginResponseDTO {
     @NotBlank
     private String token;
+
+    @NotBlank
+    private String name;
+
+    @NotBlank
+    private String role;
 }

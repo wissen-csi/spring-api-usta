@@ -88,8 +88,8 @@ public class InvestigationService {
     }
 
     @Transactional(readOnly = true)
-    public Student findStudentById(String id) {
-        return this.serviceStudent.findById(id);
+    public Student findStudentById(String dni) {
+        return this.serviceStudent.findByDni(dni);
     }
 
     @Transactional(readOnly = true)
@@ -105,6 +105,7 @@ public class InvestigationService {
                 .id(investigation.getId())
                 .description(investigation.getDescription())
                 .studentId(investigation.getStudent().getId())
+                .studentDni(investigation.getStudent().getDni())
                 .repositoryUrl(investigation.getRepositoryUrl())
                 .publicationDate(investigation.getPublicationDate())
                 .build();

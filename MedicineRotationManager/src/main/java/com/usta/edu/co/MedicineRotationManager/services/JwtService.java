@@ -4,19 +4,28 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class JwtService {
 
-    private static final String SECRET = "mySecretKeymySecretKeymySecretKey123456";
+    @Value("${jwt.secret-key}")
+    private String secretKey;
 
-    private SecretKey getKey() {
-        return Keys.hmacShaKeyFor(SECRET.getBytes());
+    @Value("${jwt.expiration}")
+    private long expirationMs;
+
+    private SecretKey key;
+
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
     public String generateToken(UserDetails user) {
@@ -24,16 +33,14 @@ public class JwtService {
                 .subject(user.getUsername())
                 .claim("role", user.getAuthorities().iterator().next().getAuthority())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-                .signWith(getKey())
+                .expiration(new Date(System.currentTimeMillis() + expirationMs))
+                .signWith(key)
                 .compact();
     }
 
     public String extractUsername(String token) {
-
         return Jwts.parser()
-
-                .verifyWith(getKey())
+                .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
@@ -46,15 +53,12 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token) {
-
         Date expiration = Jwts.parser()
-
-                .verifyWith(getKey())
+                .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
                 .getExpiration();
-
         return expiration.before(new Date());
     }
 }

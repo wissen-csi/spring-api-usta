@@ -82,20 +82,26 @@ public class ServiceUniversity {
                 .orElseThrow(
                         EntityNotFoundException::new);
 
-        university.setName(dto.name());
+        if (dto.name() != null) {
+            university.setName(dto.name());
+        }
 
-        university.setEmail(dto.email());
+        if (dto.email() != null) {
+            university.setEmail(dto.email());
+        }
 
-        university.setPhoneNumber(
-                dto.phoneNumber());
+        if (dto.phoneNumber() != null) {
+            university.setPhoneNumber(dto.phoneNumber());
+        }
 
-        university.setActive(
-                dto.isActive());
+        if (dto.isActive() != null) {
+            university.setActive(dto.isActive());
+        }
 
-        Location location = serviceLocation.findOrCreate(
-                dto.address());
-
-        university.setAddress(location);
+        if (dto.address() != null) {
+            Location location = serviceLocation.findOrCreate(dto.address());
+            university.setAddress(location);
+        }
 
         repository.save(university);
     }
