@@ -163,13 +163,37 @@ public class ServiceStudent {
             throw new IllegalArgumentException("La fecha de inicio de ARL no puede ser posterior a la fecha de fin");
         }
 
-        Location placeBirth = serviceLocation.findOrCreate(dto.getPlaceBirthCity(), dto.getPlaceBirthDepartment(),
-                dto.getPlaceBirthAddress());
+        MaritalStatus maritalStatus = dto.getMaritalStatus() != null ? dto.getMaritalStatus() : MaritalStatus.OTHER;
+        TypeBlood typeBlood = dto.getTypeBlood() != null ? dto.getTypeBlood() : TypeBlood.O_POSITIVE;
+        Language secondLanguage = dto.getSecondLanguage() != null ? dto.getSecondLanguage() : Language.OTHER;
+        StudentStatus studentStatus = dto.getStudentStatus() != null ? dto.getStudentStatus() : StudentStatus.ACTIVE;
+        boolean courseApproved = dto.isCourseApproved();
+        LocalDate entryDateAcademicProgram = dto.getEntryDateAcademicProgram() != null
+                ? dto.getEntryDateAcademicProgram()
+                : LocalDate.now();
+        LocalDate arlStartDate = dto.getArlStartDate() != null ? dto.getArlStartDate()
+                : LocalDate.now();
+        LocalDate arlEndDate = dto.getArlEndDate() != null ? dto.getArlEndDate()
+                : LocalDate.now().plusYears(1);
+        String hobbies = dto.getHobbies() != null ? dto.getHobbies() : "";
+        double weight = dto.getWeight();
+        double imc = dto.getImc();
+        String password = dto.getPassword() != null ? dto.getPassword() : dto.getDni();
 
-        Location residenceAddress = serviceLocation.findOrCreate(dto.getResidenceCity(), dto.getResidenceDepartment(),
-                dto.getResidenceAddress());
+        Location placeBirth = dto.getPlaceBirthCity() != null && dto.getPlaceBirthDepartment() != null
+                ? serviceLocation.findOrCreate(dto.getPlaceBirthCity(), dto.getPlaceBirthDepartment(),
+                        dto.getPlaceBirthAddress())
+                : null;
 
-        University university = serviceUniversity.findById(dto.getUniversityId());
+        Location residenceAddress = dto.getResidenceCity() != null && dto.getResidenceDepartment() != null
+                ? serviceLocation.findOrCreate(dto.getResidenceCity(), dto.getResidenceDepartment(),
+                        dto.getResidenceAddress())
+                : null;
+
+        University university = dto.getUniversityId() != null && !dto.getUniversityId().isEmpty()
+                ? serviceUniversity.findById(dto.getUniversityId())
+                : null;
+
         Student student = Student.builder()
                 .id(UUIDGenerator.generateNewId())
 
@@ -177,7 +201,7 @@ public class ServiceStudent {
                 .lastName(dto.getLastName())
                 .dni(dto.getDni())
 
-                .maritalStatus(dto.getMaritalStatus())
+                .maritalStatus(maritalStatus)
 
                 .placeBirth(placeBirth)
                 .residenceAddress(residenceAddress)
@@ -185,40 +209,37 @@ public class ServiceStudent {
                 .phoneNumber(dto.getPhoneNumber())
                 .email(dto.getEmail())
 
-                .typeBlood(dto.getTypeBlood())
+                .typeBlood(typeBlood)
 
-                .weight(dto.getWeight())
-                .imc(dto.getImc())
+                .weight(weight)
+                .imc(imc)
 
-                .secondLanguage(dto.getSecondLanguage())
+                .secondLanguage(secondLanguage)
 
                 .academicPrograms(dto.getAcademicPrograms())
 
-                .studentStatus(dto.getStudentStatus())
+                .studentStatus(studentStatus)
 
-                .courseApproved(dto.isCourseApproved())
+                .courseApproved(courseApproved)
 
-                .entryDateAcademicProgram(
-                        dto.getEntryDateAcademicProgram())
+                .entryDateAcademicProgram(entryDateAcademicProgram)
 
-                .startInductionDate(
-                        dto.getStartInductionDate())
+                .startInductionDate(dto.getStartInductionDate())
 
-                .endInductionDate(
-                        dto.getEndInductionDate())
+                .endInductionDate(dto.getEndInductionDate())
 
-                .arlStartDate(dto.getArlStartDate())
+                .arlStartDate(arlStartDate)
 
-                .arlEndDate(dto.getArlEndDate())
+                .arlEndDate(arlEndDate)
 
-                .hobbies(dto.getHobbies())
+                .hobbies(hobbies)
 
                 .university(university)
 
                 .build();
         student = repository.save(
                 student);
-        userService.createUser(student, dto.getPassword());
+        userService.createUser(student, password);
     }
 
     @Transactional

@@ -6,9 +6,7 @@ export const studentService = {
   findByDni: (dni) => api.get(`/student/find/dni/${dni}`),
   findSelf: () => api.get('/student/find/self'),
   create: (dto) => api.post('/student/create', dto),
-  createExcel: (formData) => api.post('/student/excel/import', formData, {
-    headers: { 'Content-Type': undefined }
-  }),
+  createExcel: (formData) => api.post('/student/excel/import', formData),
   update: (id, dto) => api.put(`/student/update/${id}`, dto),
   updateSelf: (dto) => api.put('/student/update/self', dto),
   delete: (id) => api.delete(`/student/delete/${id}`)
@@ -90,13 +88,9 @@ export const entryService = {
 export const fileService = {
   findAll: (pageable) => api.get('/api/v1/files', { params: pageable }),
   findById: (id) => api.get(`/api/v1/files/${id}`),
-  upload: (personId, formData) => api.post(`/api/v1/files/upload/${personId}`, formData, {
-    headers: { 'Content-Type': undefined }
-  }),
+  upload: (personId, formData) => api.post(`/api/v1/files/upload/${personId}`, formData),
   updateMetadata: (id, dto) => api.patch(`/api/v1/files/${id}/metadata`, dto),
-  replace: (id, formData) => api.put(`/api/v1/files/${id}/replace`, formData, {
-    headers: { 'Content-Type': undefined }
-  }),
+  replace: (id, formData) => api.put(`/api/v1/files/${id}/replace`, formData),
   delete: (id) => api.delete(`/api/v1/files/${id}`)
 }
 
