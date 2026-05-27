@@ -86,6 +86,10 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**")
                 .hasRole("ADMIN")
 
+                        // PRACTICAS - SOLO ADMIN Y DOCTOR (DELETE)
+                .requestMatchers(HttpMethod.DELETE, "/entry/practice/delete/**")
+                .hasAnyRole("ADMIN", "DOCTOR")
+
                         // QR PUBLICO (cargado por <img> sin token)
                 .requestMatchers("/qr/generate/**")
                 .permitAll()

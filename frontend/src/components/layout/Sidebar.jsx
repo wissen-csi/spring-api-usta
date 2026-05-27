@@ -37,7 +37,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       { path: '/universities', icon: Building2, label: 'Universidades' },
     ] : []),
     ...(!isStudent ? [
-      { path: '/practices', icon: QrCode, label: 'Prácticas' },
+      { path: '/practices', icon: QrCode, label: 'Ingreso' },
     ] : []),
     ...(isStudent ? [
       { path: '/attendance', icon: Camera, label: 'Asistencia' },
