@@ -10,5 +10,6 @@ import com.usta.edu.co.MedicineRotationManager.models.*;
 
 public interface EntryRepository extends JpaRepository<Entry, String> {
     Page<Entry> findAll(Pageable pageable);
+    boolean existsByStudent_IdAndEntryPractice_Id(String studentId,String entryPracticeId);
 
 }

@@ -36,9 +36,16 @@ public class EntryController {
     @PostMapping("/qr/{qrCode}")
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<Void> saveByQr(@PathVariable String qrCode, @RequestBody EntryCreateDTO dto) {
-        entryService.saveByQrCode(qrCode, dto.studentId(), LocalDateTime.now());
+
+        entryService.processQrEntry(
+                qrCode,
+                dto.studentId(),
+                LocalDateTime.now());
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+
 
     @GetMapping("/find/{id}")
     @PreAuthorize("hasRole('STUDENT') or hasRole('DOCTOR') or hasRole('ADMIN') or hasRole('PORTER')")

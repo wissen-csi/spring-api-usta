@@ -5,7 +5,10 @@ import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryResponseDTO
 import com.usta.edu.co.MedicineRotationManager.models.EntryPractice;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Optional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -44,6 +47,27 @@ public class EntryService {
     }
 
     @Transactional
+    public void processQrEntry(String qrCode, String studentId,LocalDateTime assistance){
+
+        EntryPractice entryPractice =
+                entryPracticeService.findByQrCode(qrCode);
+
+        Student student = findStudentByDni(studentId);
+
+        boolean exists = entryRepository
+                        .existsByStudent_IdAndEntryPractice_Id(
+                                student.getId(),
+                                entryPractice.getId());
+
+        if(exists){
+            throw new DataIntegrityViolationException(
+                    "Entrada del dia de hoy ya registrada ");
+        }
+
+        saveByQrCode(qrCode, studentId, assistance);
+    }
+
+    @Transactional
     public void saveByQrCode(String qrCode, String studentId, LocalDateTime assistance) {
 
         EntryPractice entryPractice = entryPracticeService.findByQrCode(qrCode);
@@ -68,6 +92,7 @@ public class EntryService {
 
             statusEntry = StatusEntry.FALLIDO;
         }
+
 
         Entry entry = Entry.builder()
                 .id(UUIDGenerator.generateNewId())

@@ -20,7 +20,7 @@ public class ExceptionHandlerValidation {
     public ResponseEntity<Err> failsValid(MethodArgumentNotValidException exception) {
         LOG.warn("invalid paramethers", exception);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new Err(400, "invalid paramthers", HttpStatus.BAD_REQUEST.name()));
+                .body(new Err(400, "invalid paramethers", HttpStatus.BAD_REQUEST.name()));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
