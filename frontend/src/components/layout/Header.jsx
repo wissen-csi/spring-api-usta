@@ -1,4 +1,4 @@
-import { Menu, Search, LogOut } from 'lucide-react'
+import { Menu, LogOut } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const roleLabels = {
@@ -21,15 +21,6 @@ export default function Header({ onMenuClick }) {
           <Menu className="w-5 h-5 text-slate-600" />
         </button>
         
-        <div className="relative hidden md:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input 
-            type="text" 
-            placeholder="Buscar..."
-            className="pl-10 pr-4 py-2 bg-slate-100 border-0 rounded-lg text-sm
-                       focus:outline-none focus:ring-2 focus:ring-clinical-500 w-64"
-          />
-        </div>
       </div>
 
       <div className="flex items-center gap-3">
