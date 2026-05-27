@@ -3,6 +3,9 @@ package com.usta.edu.co.MedicineRotationManager.services;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryPracticeResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.models.EntryPractice;
+
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.EntryCreateDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.EntryUpdateDTO;
+import com.usta.edu.co.MedicineRotationManager.enumerations.StatusEntry;
 import com.usta.edu.co.MedicineRotationManager.models.Entry;
 import com.usta.edu.co.MedicineRotationManager.models.Student;
 import com.usta.edu.co.MedicineRotationManager.repositories.EntryRepository;
@@ -40,16 +44,39 @@ public class EntryService {
     }
 
     @Transactional
-    public void saveByQrCode(String qrCode, String studentId, java.time.LocalDateTime assistance) {
+    public void saveByQrCode(String qrCode, String studentId, LocalDateTime assistance) {
+
         EntryPractice entryPractice = entryPracticeService.findByQrCode(qrCode);
         Student student = findStudentByDni(studentId);
+
+        LocalDateTime start = entryPractice.getStartTime();
+        LocalDateTime limit = start.plusMinutes(15);
+        LocalDateTime end = entryPractice.getEndTime();
+
+        StatusEntry statusEntry;
+
+        if (!assistance.isBefore(start) &&
+                !assistance.isAfter(limit)) {
+
+            statusEntry = StatusEntry.DENTRO;
+
+        } else if (assistance.isAfter(end)) {
+
+            statusEntry = StatusEntry.FUERA;
+
+        } else {
+
+            statusEntry = StatusEntry.FALLIDO;
+        }
 
         Entry entry = Entry.builder()
                 .id(UUIDGenerator.generateNewId())
                 .entryPractice(entryPractice)
                 .student(student)
+                .statusEntry(statusEntry)
                 .assistance(assistance)
                 .build();
+
         entryRepository.save(entry);
     }
 

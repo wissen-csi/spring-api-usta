@@ -6,6 +6,8 @@ import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.EntryUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Entry;
 import com.usta.edu.co.MedicineRotationManager.services.EntryService;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -34,7 +36,7 @@ public class EntryController {
     @PostMapping("/qr/{qrCode}")
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<Void> saveByQr(@PathVariable String qrCode, @RequestBody EntryCreateDTO dto) {
-        entryService.saveByQrCode(qrCode, dto.studentId(), dto.assitance());
+        entryService.saveByQrCode(qrCode, dto.studentId(), LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
