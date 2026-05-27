@@ -1,9 +1,7 @@
 package com.usta.edu.co.MedicineRotationManager.controllers;
 
 import com.usta.edu.co.MedicineRotationManager.dto.createDTOS.EntryCreateDTO;
-import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryPracticeResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryResponseDTO;
-import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.PorterResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.updateDTOS.EntryUpdateDTO;
 import com.usta.edu.co.MedicineRotationManager.models.Entry;
 import com.usta.edu.co.MedicineRotationManager.services.EntryService;

@@ -3,7 +3,6 @@ package com.usta.edu.co.MedicineRotationManager.services;
 import java.util.List;
 import java.util.Map;
 
-import com.usta.edu.co.MedicineRotationManager.models.Disease;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;

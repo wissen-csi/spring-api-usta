@@ -2,7 +2,6 @@ package com.usta.edu.co.MedicineRotationManager.dto.responseDTOS;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 

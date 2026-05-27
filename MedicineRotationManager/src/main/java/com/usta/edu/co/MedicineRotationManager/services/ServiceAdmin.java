@@ -1,16 +1,6 @@
 package com.usta.edu.co.MedicineRotationManager.services;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-import java.util.List;
-=======
 
-
->>>>>>> origin/features-crud
-=======
-
-
->>>>>>> origin/features-crud
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,23 +24,14 @@ public class ServiceAdmin {
     private AdminRepository adminRepository;
     private ServiceLocation serviceLocation;
     private ObjectMapper objectMapper;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-=======
     private AuthUserService userService;
 
->>>>>>> origin/features-crud
-=======
-    private AuthUserService userService;
 
     @SuppressWarnings("unused")
     @Autowired
     private PasswordEncoder passwordEncoder;
 
->>>>>>> origin/features-crud
 
 
     public ServiceAdmin(AdminRepository adminRepository, ServiceLocation serviceLocation, ObjectMapper objectMapper,

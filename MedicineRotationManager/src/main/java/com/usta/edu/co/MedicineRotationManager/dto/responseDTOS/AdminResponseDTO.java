@@ -9,7 +9,6 @@ import lombok.*;
 
 @Getter
 @Builder
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class AdminResponseDTO {
     private final String id;

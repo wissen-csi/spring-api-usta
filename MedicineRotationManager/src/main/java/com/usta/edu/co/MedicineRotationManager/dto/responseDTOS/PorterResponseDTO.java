@@ -1,9 +1,8 @@
 package com.usta.edu.co.MedicineRotationManager.dto.responseDTOS;
 
-import com.usta.edu.co.MedicineRotationManager.enumerations.Specialty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDate;
@@ -12,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Jacksonized
 @Builder
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class PorterResponseDTO {
     private final String id;
     private final String name;

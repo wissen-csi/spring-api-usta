@@ -2,7 +2,6 @@ package com.usta.edu.co.MedicineRotationManager.dto.responseDTOS;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.usta.edu.co.MedicineRotationManager.enumerations.AcademicPrograms;
 import com.usta.edu.co.MedicineRotationManager.enumerations.Language;
 import com.usta.edu.co.MedicineRotationManager.enumerations.StudentStatus;

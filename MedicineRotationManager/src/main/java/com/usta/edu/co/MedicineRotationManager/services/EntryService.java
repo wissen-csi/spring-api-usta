@@ -3,7 +3,6 @@ package com.usta.edu.co.MedicineRotationManager.services;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryPracticeResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.dto.responseDTOS.EntryResponseDTO;
 import com.usta.edu.co.MedicineRotationManager.models.EntryPractice;
-import com.usta.edu.co.MedicineRotationManager.repositories.EntryPracticeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
