@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.usta.edu.co.MedicineRotationManager.dto.EntryPracticeCreationDTO;
+import com.usta.edu.co.MedicineRotationManager.models.Entry;
 import com.usta.edu.co.MedicineRotationManager.models.EntryPractice;
 import com.usta.edu.co.MedicineRotationManager.models.Group;
 import com.usta.edu.co.MedicineRotationManager.models.Rotation;
 import com.usta.edu.co.MedicineRotationManager.repositories.EntryPracticeRepository;
+import com.usta.edu.co.MedicineRotationManager.repositories.EntryRepository;
 import com.usta.edu.co.MedicineRotationManager.utils.UUIDGenerator;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -17,10 +19,12 @@ import jakarta.persistence.EntityNotFoundException;
 public class ServiceEntryPractice {
     private EntryPracticeRepository repository;
     private ServiceGroup serviceGroup;
+    private EntryRepository entryRepository;
 
-    public ServiceEntryPractice(EntryPracticeRepository repository, ServiceGroup serviceGroup) {
+    public ServiceEntryPractice(EntryPracticeRepository repository, ServiceGroup serviceGroup, EntryRepository entryRepository) {
         this.repository = repository;
         this.serviceGroup = serviceGroup;
+        this.entryRepository = entryRepository;
     }
 
     @Transactional
@@ -54,6 +58,7 @@ public class ServiceEntryPractice {
     @Transactional
     public void delete(String id) {
         EntryPractice entryPractice = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+        entryRepository.deleteAll(entryRepository.findByEntryPracticeId(id));
         repository.delete(entryPractice);
     }
 
