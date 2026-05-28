@@ -244,12 +244,12 @@ export default function Tasks() {
                     <ClipboardList className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-800 group-hover:text-clinical-700 transition-colors">{rotation.id}</h3>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{rotation.typeRotation || 'OTHER'}</p>
+                    <h3 className="font-semibold text-slate-800 group-hover:text-clinical-700 transition-colors">{rotation.typeRotation?.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase()) || 'Rotación'}</h3>
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{rotation.hospitalLocation?.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase()) || 'OTRA'}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${new Date(rotation.completionDate) < new Date() ? 'bg-slate-100 text-slate-600 border-slate-200' : 'bg-emerald-100 text-emerald-700 border-emerald-200'}`}>
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${new Date(rotation.completionDate) < new Date() ? 'bg-clinical-100 text-clinical-600 border-clinical-200' : 'bg-emerald-100 text-emerald-700 border-emerald-200'}`}>
                     {new Date(rotation.completionDate) < new Date() ? 'Completada' : 'Activa'}
                   </span>
                   <button
@@ -262,10 +262,10 @@ export default function Tasks() {
               </div>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-4">
-                <div className="flex-1 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <div className="flex-1 p-3 bg-clinical-50 rounded-xl border border-clinical-100">
                   <div className="flex items-center gap-2 mb-1">
                     <Stethoscope className="w-4 h-4 text-clinical-500" />
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Supervisor</span>
+                    <span className="text-[10px] font-bold text-clinical-400 uppercase tracking-wider">Supervisor</span>
                   </div>
                   <p className="text-sm font-semibold text-slate-800 line-clamp-1">{rotation.doctorName}</p>
                 </div>
@@ -301,8 +301,8 @@ export default function Tasks() {
                   </button>
                 </div>
 
-                {creatingGroup === rotation.id && (
-                  <form onSubmit={(e) => handleCreateGroup(rotation.id, e)} className="flex items-center gap-2 mb-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                  {creatingGroup === rotation.id && (
+                  <form onSubmit={(e) => handleCreateGroup(rotation.id, e)} className="flex items-center gap-2 mb-3 p-3 bg-clinical-50 rounded-xl border border-clinical-100">
                     <input
                       type="text"
                       placeholder="Nombre del grupo"
@@ -355,16 +355,16 @@ export default function Tasks() {
       )}
 
       {!loading && filteredRotations.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-2xl border border-slate-100 shadow-sm">
-          <ClipboardList className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+        <div className="text-center py-16 bg-white rounded-2xl border border-clinical-100 shadow-sm">
+          <ClipboardList className="w-12 h-12 text-clinical-300 mx-auto mb-4" />
           <p className="text-slate-500 font-medium">No se encontraron rotaciones programadas</p>
         </div>
       )}
 
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100 transform transition-all animate-in scale-in duration-200">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-clinical-600" />
                 <h2 className="text-xl font-bold text-slate-800">Nueva Rotación Médica</h2>
@@ -452,7 +452,7 @@ export default function Tasks() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
                 <button 
                   type="button"
                   onClick={() => setShowModal(false)}
@@ -473,7 +473,7 @@ export default function Tasks() {
       )}
 
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200">
             <div className="flex items-center gap-3 p-6 border-b border-slate-100">
               <div className="w-10 h-10 bg-red-50 text-red-600 rounded-full flex items-center justify-center">
@@ -486,10 +486,10 @@ export default function Tasks() {
             </div>
             <div className="p-6">
               <p className="text-slate-600">
-                ¿Estás seguro de eliminar la rotación <strong>{deleteTarget?.id}</strong>?
+                ¿Estás seguro de eliminar esta rotación?
               </p>
             </div>
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
               <button
                 onClick={() => { setShowDeleteConfirm(false); setDeleteTarget(null) }}
                 className="btn-secondary"

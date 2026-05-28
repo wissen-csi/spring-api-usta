@@ -57,15 +57,15 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     <>
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-clinical-900/50 z-40 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
       
-      <aside className={`fixed top-0 left-0 h-full bg-white border-r border-slate-200 z-50 
+      <aside className={`fixed top-0 left-0 h-full bg-clinical-800 border-r border-clinical-700 z-50 
                         transition-all duration-300 flex flex-col
                         ${isOpen ? 'w-64' : 'w-20'}`}>
-        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-clinical-600">
           {isOpen ? (
             <img src="/api/logo" alt="Logo" className="h-10" />
           ) : (
@@ -73,9 +73,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
           )}
           <button 
             onClick={() => setIsOpen(false)}
-            className="p-2 rounded-lg hover:bg-slate-100 lg:hidden"
+            className="p-2 rounded-lg hover:bg-clinical-700 lg:hidden"
           >
-            <X className="w-5 h-5 text-slate-500" />
+            <X className="w-5 h-5 text-clinical-200" />
           </button>
         </div>
 
@@ -87,8 +87,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
                 ${isActive 
-                  ? 'bg-clinical-50 text-clinical-700 font-medium' 
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-800'
+                  ? 'bg-white text-clinical-800 font-medium' 
+                  : 'text-clinical-200 hover:bg-clinical-700 hover:text-white'
                 }`
               }
             >

@@ -4,19 +4,30 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-800 antialiased;
+    @apply bg-clinical-50 text-slate-800 antialiased;
   }
+}
+
+#qr-reader {
+  overflow: hidden;
+  position: relative;
 }
 
 #qr-reader video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: inherit;
+}
+
+#qr-reader > div {
+  border-radius: inherit !important;
+  overflow: hidden !important;
 }
 
 @layer components {
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-slate-200 p-6;
+    @apply bg-white rounded-xl shadow-sm border border-clinical-200 p-6;
   }
   
   .btn-primary {
@@ -26,9 +37,9 @@
   }
   
   .btn-secondary {
-    @apply bg-white text-slate-700 px-4 py-2 rounded-lg font-medium
-           border border-slate-300 hover:bg-slate-50 transition-colors duration-200
-           focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2;
+    @apply bg-white text-clinical-700 px-4 py-2 rounded-lg font-medium
+           border border-clinical-300 hover:bg-clinical-50 transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-clinical-400 focus:ring-offset-2;
   }
   
   .input-field {
@@ -39,18 +50,18 @@
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-100;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400;
-}
+    @apply bg-transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-clinical-200 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-clinical-300;
+  }

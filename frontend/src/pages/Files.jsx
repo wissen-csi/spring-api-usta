@@ -177,7 +177,7 @@ export default function Files() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-100 bg-slate-50/50">
+                <tr className="border-b border-slate-100 bg-clinical-50/50">
                   <th className="text-left text-xs font-bold text-slate-500 uppercase tracking-wider px-6 py-4">Nombre</th>
                   <th className="text-left text-xs font-bold text-slate-500 uppercase tracking-wider px-6 py-4">Formato</th>
                   <th className="text-left text-xs font-bold text-slate-500 uppercase tracking-wider px-6 py-4">Tamaño</th>
@@ -187,7 +187,7 @@ export default function Files() {
               </thead>
               <tbody>
                 {filteredFiles.map((file) => (
-                  <tr key={file.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors group">
+                  <tr key={file.id} className="border-b border-slate-50 hover:bg-clinical-50/50 transition-colors group">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 bg-clinical-50 text-clinical-600 rounded-xl flex items-center justify-center">
@@ -242,9 +242,9 @@ export default function Files() {
       )}
 
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100 transform transition-all animate-in scale-in duration-200">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-clinical-600" />
                 <h2 className="text-xl font-bold text-slate-800">Subir Archivo</h2>
@@ -303,7 +303,7 @@ export default function Files() {
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
               <button
                 type="button"
                 onClick={() => { setShowModal(false); setSelectedFile(null) }}
@@ -324,7 +324,7 @@ export default function Files() {
       )}
 
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200">
             <div className="flex items-center gap-3 p-6 border-b border-slate-100">
               <div className="w-10 h-10 bg-red-50 text-red-600 rounded-full flex items-center justify-center">
@@ -340,7 +340,7 @@ export default function Files() {
                 ¿Estás seguro de eliminar el archivo <strong>{deleteTarget?.originalName}</strong>?
               </p>
             </div>
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
               <button
                 onClick={() => { setShowDeleteConfirm(false); setDeleteTarget(null) }}
                 className="btn-secondary"

@@ -165,7 +165,7 @@ export default function Diseases() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-100 bg-slate-50/50">
+                <tr className="border-b border-slate-100 bg-clinical-50/50">
                   <th className="text-left text-xs font-bold text-slate-500 uppercase tracking-wider px-6 py-4">Código</th>
                   <th className="text-left text-xs font-bold text-slate-500 uppercase tracking-wider px-6 py-4">Nombre</th>
                   <th className="text-left text-xs font-bold text-slate-500 uppercase tracking-wider px-6 py-4">Definición</th>
@@ -174,7 +174,7 @@ export default function Diseases() {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {filteredDiseases.map((d) => (
-                  <tr key={d.id} className="hover:bg-slate-50/50 transition-colors group">
+                  <tr key={d.id} className="hover:bg-clinical-50/50 transition-colors group">
                     <td className="px-6 py-4">
                       <span className="font-mono text-xs font-bold text-clinical-600 bg-clinical-50 px-2 py-0.5 rounded">{d.code}</span>
                     </td>
@@ -208,9 +208,9 @@ export default function Diseases() {
       )}
 
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100 transform transition-all animate-in scale-in duration-200">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-clinical-600" />
                 <h2 className="text-xl font-bold text-slate-800">{editTarget ? 'Editar Enfermedad' : 'Nueva Enfermedad'}</h2>
@@ -269,7 +269,7 @@ export default function Diseases() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
                 <button type="button" onClick={() => { setShowModal(false); setEditTarget(null); setForm(initialForm) }} className="btn-secondary">Cancelar</button>
                 <button type="submit" disabled={submitting} className="btn-primary shadow-lg shadow-clinical-600/10 disabled:opacity-50">
                   {submitting ? 'Guardando...' : (editTarget ? 'Actualizar Enfermedad' : 'Crear Enfermedad')}
@@ -281,7 +281,7 @@ export default function Diseases() {
       )}
 
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200">
             <div className="flex items-center gap-3 p-6 border-b border-slate-100">
               <div className="w-10 h-10 bg-red-50 text-red-600 rounded-full flex items-center justify-center">
@@ -297,7 +297,7 @@ export default function Diseases() {
                 ¿Estás seguro de eliminar la enfermedad <strong>{deleteTarget?.code} - {deleteTarget?.name}</strong>?
               </p>
             </div>
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
               <button onClick={() => { setShowDeleteConfirm(false); setDeleteTarget(null) }} className="btn-secondary">Cancelar</button>
               <button onClick={handleDelete} disabled={deleting} className="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 shadow-lg shadow-red-600/10">
                 {deleting ? 'Eliminando...' : 'Eliminar'}

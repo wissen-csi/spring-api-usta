@@ -180,7 +180,7 @@ export default function EntryPractices() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-100 bg-slate-50/50">
+                <tr className="border-b border-slate-100 bg-clinical-50/50">
                   <th className="text-left text-xs font-bold text-slate-500 uppercase tracking-wider px-6 py-4">Título</th>
                   <th className="text-left text-xs font-bold text-slate-500 uppercase tracking-wider px-6 py-4">Inicio</th>
                   <th className="text-left text-xs font-bold text-slate-500 uppercase tracking-wider px-6 py-4">Fin</th>
@@ -191,7 +191,7 @@ export default function EntryPractices() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filteredPractices.map((practice) => (
-                  <tr key={practice.id} className="hover:bg-slate-50/50 transition-colors group">
+                  <tr key={practice.id} className="hover:bg-clinical-50/50 transition-colors group">
                     <td className="px-6 py-4">
                       <span className="text-slate-700 font-medium">{practice.title || '—'}</span>
                     </td>
@@ -247,9 +247,9 @@ export default function EntryPractices() {
       )}
 
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100 transform transition-all animate-in scale-in duration-200">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-clinical-600" />
                 <h2 className="text-xl font-bold text-slate-800">Nueva Práctica</h2>
@@ -315,7 +315,7 @@ export default function EntryPractices() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
@@ -336,78 +336,82 @@ export default function EntryPractices() {
       )}
 
       {showQrModal && qrTarget && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
-              <div className="flex items-center gap-2">
-                <QrCode className="w-5 h-5 text-clinical-600" />
-                <h2 className="text-xl font-bold text-slate-800">Código QR</h2>
-              </div>
-              <button
-                onClick={() => { setShowQrModal(false); setQrTarget(null) }}
-                className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
-              >
-                <X className="w-5 h-5 text-slate-500" />
-              </button>
-            </div>
-            <div className="p-8 flex flex-col items-center gap-4">
-              <div className="text-center">
-                <p className="text-lg font-semibold text-slate-800">{qrTarget.title || 'Práctica'}</p>
-                <p className="text-xs text-slate-400 mt-1">{getGroupName(qrTarget.groupId)}</p>
-              </div>
-              <img
-                ref={qrImageRef}
-                src={`${QR_BASE_URL}/${qrTarget.id}`}
-                alt={`Código QR práctica`}
-                className="w-48 h-48 rounded-xl border border-slate-200 shadow-sm"
-                onError={(e) => {
-                  e.target.onerror = null
-                  e.target.style.display = 'none'
-                  e.target.nextSibling.style.display = 'flex'
-                }}
-              />
-              <div className="w-48 h-48 bg-slate-100 rounded-xl items-center justify-center hidden">
-                <QrCode className="w-12 h-12 text-slate-400" />
-              </div>
-              <div className="w-full bg-slate-50 rounded-xl p-3 border border-slate-200">
-                <div className="flex items-center justify-between gap-2">
-                  <code className="text-xs text-slate-700 font-mono break-all flex-1 select-all">
-                    {qrTarget.qrCode}
-                  </code>
-                  <button
-                    onClick={copyQrCode}
-                    className="p-2 bg-white rounded-lg border border-slate-200 hover:bg-slate-50 shrink-0"
-                    title="Copiar código"
-                  >
-                    <Copy className="w-4 h-4 text-slate-500" />
-                  </button>
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200 overflow-hidden">
+            <div className="max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
+                <div className="flex items-center gap-2">
+                  <QrCode className="w-5 h-5 text-clinical-600" />
+                  <h2 className="text-xl font-bold text-slate-800">Código QR</h2>
                 </div>
+                <button
+                  onClick={() => { setShowQrModal(false); setQrTarget(null) }}
+                  className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
+                >
+                  <X className="w-5 h-5 text-slate-500" />
+                </button>
               </div>
-              <p className="text-sm text-slate-500 text-center">
-                Comparte este código QR o el texto con los estudiantes para que registren su asistencia
-              </p>
-            </div>
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
-              <button
-                onClick={downloadQr}
-                className="btn-secondary flex items-center gap-2"
-              >
-                <Download className="w-4 h-4" />
-                Descargar QR
-              </button>
-              <button
-                onClick={() => { setShowQrModal(false); setQrTarget(null) }}
-                className="btn-primary shadow-lg shadow-clinical-600/10"
-              >
-                Cerrar
-              </button>
+              <div className="p-8 flex flex-col items-center gap-4">
+                <div className="text-center">
+                  <p className="text-lg font-semibold text-slate-800">{qrTarget.title || 'Práctica'}</p>
+                  <p className="text-xs text-slate-400 mt-1">{getGroupName(qrTarget.groupId)}</p>
+                </div>
+                <div className="bg-slate-100 rounded-xl p-2">
+                  <img
+                    ref={qrImageRef}
+                    src={`${QR_BASE_URL}/${qrTarget.id}`}
+                    alt={`Código QR práctica`}
+                    className="w-44 h-44 rounded-lg"
+                    onError={(e) => {
+                      e.target.onerror = null
+                      e.target.style.display = 'none'
+                      e.target.nextSibling.style.display = 'flex'
+                    }}
+                  />
+                  <div className="w-44 h-44 bg-slate-100 rounded-lg items-center justify-center hidden">
+                    <QrCode className="w-12 h-12 text-slate-400" />
+                  </div>
+                </div>
+                <div className="w-full bg-slate-50 rounded-xl p-3 border border-slate-200">
+                  <div className="flex items-center justify-between gap-2">
+                    <code className="text-xs text-slate-700 font-mono break-all flex-1 select-all">
+                      {qrTarget.qrCode}
+                    </code>
+                    <button
+                      onClick={copyQrCode}
+                      className="p-2 bg-white rounded-lg border border-slate-200 hover:bg-slate-50 shrink-0"
+                      title="Copiar código"
+                    >
+                      <Copy className="w-4 h-4 text-slate-500" />
+                    </button>
+                  </div>
+                </div>
+                <p className="text-sm text-slate-500 text-center">
+                  Comparte este código QR o el texto con los estudiantes para que registren su asistencia
+                </p>
+              </div>
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
+                <button
+                  onClick={downloadQr}
+                  className="btn-secondary flex items-center gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  Descargar QR
+                </button>
+                <button
+                  onClick={() => { setShowQrModal(false); setQrTarget(null) }}
+                  className="btn-primary shadow-lg shadow-clinical-600/10"
+                >
+                  Cerrar
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200">
             <div className="flex items-center gap-3 p-6 border-b border-slate-100">
               <div className="w-10 h-10 bg-red-50 text-red-600 rounded-full flex items-center justify-center">
@@ -423,7 +427,7 @@ export default function EntryPractices() {
                 ¿Estás seguro de eliminar la práctica <strong>"{deleteTarget?.title}"</strong> del grupo <strong>{getGroupName(deleteTarget?.groupId)}</strong>?
               </p>
             </div>
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
               <button
                 onClick={() => { setShowDeleteConfirm(false); setDeleteTarget(null) }}
                 className="btn-secondary"

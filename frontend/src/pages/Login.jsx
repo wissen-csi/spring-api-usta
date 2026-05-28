@@ -26,7 +26,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-slate-50 via-clinical-50/30 to-indigo-50/40 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-tr from-white via-clinical-50/30 to-indigo-50/40 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Decorative Blur Spheres */}
       <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-clinical-200/20 rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-indigo-200/20 rounded-full blur-3xl -z-10" />
@@ -55,7 +55,7 @@ export default function Login() {
                 type="text"
                 value={dni}
                 onChange={(e) => setDni(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-slate-50/50 border border-slate-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-clinical-500 focus:border-transparent outline-none transition-all duration-200 text-sm placeholder:text-slate-400 font-medium text-slate-700"
+                className="w-full pl-11 pr-4 py-3 bg-clinical-50/50 border border-slate-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-clinical-500 focus:border-transparent outline-none transition-all duration-200 text-sm placeholder:text-slate-400 font-medium text-slate-700"
                 placeholder="Ingrese su número de DNI"
                 required
               />
@@ -70,7 +70,7 @@ export default function Login() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-slate-50/50 border border-slate-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-clinical-500 focus:border-transparent outline-none transition-all duration-200 text-sm placeholder:text-slate-400 font-medium text-slate-700"
+                className="w-full pl-11 pr-4 py-3 bg-clinical-50/50 border border-slate-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-clinical-500 focus:border-transparent outline-none transition-all duration-200 text-sm placeholder:text-slate-400 font-medium text-slate-700"
                 placeholder="Ingrese su contraseña segura"
                 required
               />

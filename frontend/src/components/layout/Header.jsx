@@ -12,19 +12,19 @@ export default function Header({ onMenuClick }) {
   const { user, logout } = useAuth()
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-30">
+    <header className="h-16 bg-white border-b border-clinical-200 flex items-center justify-between px-6 sticky top-0 z-30">
       <div className="flex items-center gap-4">
         <button 
           onClick={onMenuClick}
-          className="p-2 rounded-lg hover:bg-slate-100 transition-colors lg:hidden"
+          className="p-2 rounded-lg hover:bg-clinical-100 transition-colors lg:hidden"
         >
-          <Menu className="w-5 h-5 text-slate-600" />
+          <Menu className="w-5 h-5 text-clinical-600" />
         </button>
         
       </div>
 
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-3 pl-3 border-l border-slate-200">
+        <div className="flex items-center gap-3 pl-3 border-l border-clinical-200">
           <div className="w-9 h-9 bg-clinical-600 rounded-full flex items-center justify-center">
             <span className="text-white font-medium text-sm">
               {user?.name ? user.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : user?.dni?.slice(0, 2).toUpperCase()}

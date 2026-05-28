@@ -154,7 +154,7 @@ export default function Health() {
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {investigations.map(inv => (
-                    <tr key={inv.id} className="hover:bg-slate-50/50 transition-colors">
+                    <tr key={inv.id} className="hover:bg-clinical-50/50 transition-colors">
                       <td className="p-4">
                         <a
                           href={inv.repositoryUrl}
@@ -187,9 +187,9 @@ export default function Health() {
       )}
 
       {showInvestigationModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
               <div className="flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-clinical-600" />
                 <h2 className="text-xl font-bold text-slate-800">Nueva Investigación</h2>
@@ -244,7 +244,7 @@ export default function Health() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
                 <button
                   type="button"
                   onClick={() => setShowInvestigationModal(false)}
@@ -265,7 +265,7 @@ export default function Health() {
       )}
 
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100">
             <div className="flex items-center gap-3 p-6 border-b border-slate-100">
               <div className="w-10 h-10 bg-red-50 text-red-600 rounded-full flex items-center justify-center">
@@ -281,7 +281,7 @@ export default function Health() {
                 ¿Estás seguro de eliminar la investigación "{deleteTarget?.description || ''}"?
               </p>
             </div>
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
               <button
                 onClick={() => { setShowDeleteConfirm(false); setDeleteTarget(null) }}
                 className="btn-secondary"

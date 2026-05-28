@@ -272,7 +272,7 @@ export default function Attendance() {
                   </thead>
                   <tbody>
                     {entries.map((entry) => (
-                      <tr key={entry.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                      <tr key={entry.id} className="border-b border-slate-50 hover:bg-clinical-50/50 transition-colors">
                         <td className="py-3 px-2 font-semibold text-slate-800">{getPracticeTitle(entry)}</td>
                         <td className="py-3 px-2 text-slate-600">{formatDate(entry.assistance)}</td>
                         <td className="py-3 px-2">

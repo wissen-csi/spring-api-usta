@@ -182,7 +182,7 @@ export default function Admin() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-3xl p-6 text-white shadow-xl">
+      <div className="bg-gradient-to-r from-clinical-800 to-clinical-900 rounded-3xl p-6 text-white shadow-xl">
         <div className="flex items-center gap-3 mb-4">
           <BarChart3 className="w-6 h-6" />
           <h2 className="text-lg font-semibold">Resumen Total de Personas</h2>
@@ -190,7 +190,7 @@ export default function Admin() {
         <p className="text-5xl font-bold tracking-tight">
           {loading ? '...' : total}
         </p>
-        <p className="text-slate-300 mt-2">personas registradas en el sistema</p>
+        <p className="text-clinical-200 mt-2">personas registradas en el sistema</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -340,9 +340,10 @@ export default function Admin() {
       )}
 
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-slate-100 transform transition-all animate-in scale-in duration-200">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50 sticky top-0 z-10">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden border border-slate-100 transform transition-all animate-in scale-in duration-200">
+            <div className="max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white sticky top-0 z-10">
               <div className="flex items-center gap-2">
                 <UserCog className="w-5 h-5 text-purple-600" />
                 <h2 className="text-xl font-bold text-slate-800">Crear Administrador</h2>
@@ -478,7 +479,7 @@ export default function Admin() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50 sticky bottom-0">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white sticky bottom-0">
                 <button type="button" onClick={() => setShowModal(false)} className="btn-secondary">
                   Cancelar
                 </button>
@@ -487,12 +488,13 @@ export default function Admin() {
                 </button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}
 
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200">
             <div className="flex items-center gap-3 p-6 border-b border-slate-100">
               <div className="w-10 h-10 bg-red-50 text-red-600 rounded-full flex items-center justify-center">
@@ -508,7 +510,7 @@ export default function Admin() {
                 ¿Estás seguro de eliminar al administrador <strong>{deleteTarget?.name} {deleteTarget?.lastName}</strong>?
               </p>
             </div>
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
               <button
                 onClick={() => { setShowDeleteConfirm(false); setDeleteTarget(null) }}
                 className="btn-secondary"

@@ -443,9 +443,10 @@ function StudentDashboard() {
       )}
 
       {showEditModal && editForm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-slate-100">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50 sticky top-0 z-10">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden border border-slate-100">
+            <div className="max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white sticky top-0 z-10">
               <h2 className="text-xl font-bold text-slate-800">Editar Mi Perfil</h2>
               <button onClick={() => setShowEditModal(false)} className="p-2 hover:bg-slate-100 rounded-xl transition-colors">
                 <X className="w-5 h-5 text-slate-500" />
@@ -704,13 +705,14 @@ function StudentDashboard() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
                 <button type="button" onClick={() => setShowEditModal(false)} className="btn-secondary">Cancelar</button>
                 <button type="submit" disabled={saving} className="btn-primary disabled:opacity-50">
                   {saving ? 'Guardando...' : 'Guardar Cambios'}
                 </button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}
@@ -991,9 +993,10 @@ function DoctorDashboard() {
       )}
 
       {showEditModal && editForm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-slate-100">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50 sticky top-0 z-10">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden border border-slate-100">
+            <div className="max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white sticky top-0 z-10">
               <h2 className="text-xl font-bold text-slate-800">Editar Mi Perfil</h2>
               <button onClick={() => setShowEditModal(false)} className="p-2 hover:bg-slate-100 rounded-xl transition-colors">
                 <X className="w-5 h-5 text-slate-500" />
@@ -1102,13 +1105,14 @@ function DoctorDashboard() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
                 <button type="button" onClick={() => setShowEditModal(false)} className="btn-secondary">Cancelar</button>
                 <button type="submit" disabled={saving} className="btn-primary disabled:opacity-50">
                   {saving ? 'Guardando...' : 'Guardar Cambios'}
                 </button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}

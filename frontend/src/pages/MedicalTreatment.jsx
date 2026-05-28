@@ -229,7 +229,7 @@ export default function MedicalTreatment() {
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {medicines.map(m => (
-                    <tr key={m.id} className="hover:bg-slate-50/50 transition-colors group">
+                    <tr key={m.id} className="hover:bg-clinical-50/50 transition-colors group">
                       <td className="p-4 font-medium text-slate-800">{m.name}</td>
                       <td className="p-4 text-slate-600">{m.gramaje}</td>
                       <td className="p-4 text-right">
@@ -272,7 +272,7 @@ export default function MedicalTreatment() {
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {treatments.map(t => (
-                    <tr key={t.medicineTreatmentId} className="hover:bg-slate-50/50 transition-colors group">
+                    <tr key={t.medicineTreatmentId} className="hover:bg-clinical-50/50 transition-colors group">
                       <td className="p-4 font-medium text-slate-800">{t.title}</td>
                       <td className="p-4 text-slate-600">{getMedicineLabel(t.medicineId)}</td>
                       <td className="p-4">
@@ -327,7 +327,7 @@ export default function MedicalTreatment() {
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {treatments.map(t => (
-                    <tr key={t.medicineTreatmentId} className="hover:bg-slate-50/50 transition-colors group">
+                    <tr key={t.medicineTreatmentId} className="hover:bg-clinical-50/50 transition-colors group">
                       <td className="p-4 font-medium text-slate-800">{t.title}</td>
                       <td className="p-4 text-slate-600">{t.studentDni || t.studentId}</td>
                       <td className="p-4 text-slate-600">{getMedicineLabel(t.medicineId)}</td>
@@ -362,9 +362,9 @@ export default function MedicalTreatment() {
       )}
 
       {showMedicineModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
               <div className="flex items-center gap-2">
                 <Pill className="w-5 h-5 text-clinical-600" />
                 <h2 className="text-xl font-bold text-slate-800">Nuevo Medicamento</h2>
@@ -388,7 +388,7 @@ export default function MedicalTreatment() {
                     onChange={(e) => setNewMedicine({ ...newMedicine, gramaje: e.target.value })} />
                 </div>
               </div>
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
                 <button type="button" onClick={() => setShowMedicineModal(false)} className="btn-secondary">Cancelar</button>
                 <button type="submit" disabled={submittingMedicine} className="btn-primary disabled:opacity-50">
                   {submittingMedicine ? 'Creando...' : 'Crear Medicamento'}
@@ -400,9 +400,9 @@ export default function MedicalTreatment() {
       )}
 
       {showTreatmentModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-clinical-600" />
                 <h2 className="text-xl font-bold text-slate-800">Nuevo Tratamiento</h2>
@@ -446,7 +446,7 @@ export default function MedicalTreatment() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
                 <button type="button" onClick={() => setShowTreatmentModal(false)} className="btn-secondary">Cancelar</button>
                 <button type="submit" disabled={submittingTreatment} className="btn-primary disabled:opacity-50">
                   {submittingTreatment ? 'Creando...' : 'Crear Tratamiento'}
@@ -458,7 +458,7 @@ export default function MedicalTreatment() {
       )}
 
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100">
             <div className="flex items-center gap-3 p-6 border-b border-slate-100">
               <div className="w-10 h-10 bg-red-50 text-red-600 rounded-full flex items-center justify-center">
@@ -477,7 +477,7 @@ export default function MedicalTreatment() {
                 }
               </p>
             </div>
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
               <button onClick={() => { setShowDeleteConfirm(false); setDeleteTarget(null) }} className="btn-secondary">Cancelar</button>
               <button onClick={handleDelete} disabled={deleting} className="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 shadow-lg shadow-red-600/10">
                 {deleting ? 'Eliminando...' : 'Eliminar'}

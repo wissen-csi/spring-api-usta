@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Search, Plus, X, CheckCircle, Building2, Trash2, AlertTriangle, Pencil } from 'lucide-react'
+import { Search, Plus, X, CheckCircle, Building2, Trash2, AlertTriangle, Pencil, Eye } from 'lucide-react'
 import { universityService } from '../services/api'
 
 export default function Universities() {
@@ -13,6 +13,8 @@ export default function Universities() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [detailTarget, setDetailTarget] = useState(null)
   const [showEditModal, setShowEditModal] = useState(false)
   const [editTarget, setEditTarget] = useState(null)
   const [editing, setEditing] = useState(false)
@@ -175,6 +177,12 @@ export default function Universities() {
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-2">
                         <button
+                          onClick={() => { setDetailTarget(u); setShowDetailModal(true) }}
+                          className="p-2 hover:bg-clinical-50 rounded-lg transition-colors group" title="Ver detalles"
+                        >
+                          <Eye className="w-4 h-4 text-slate-400 group-hover:text-clinical-600" />
+                        </button>
+                        <button
                           onClick={() => { setEditTarget(u); setShowEditModal(true) }}
                           className="p-2 hover:bg-clinical-50 rounded-lg transition-colors group" title="Editar universidad"
                         >
@@ -204,20 +212,21 @@ export default function Universities() {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-slate-100 transform transition-all animate-in scale-in duration-200">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50 sticky top-0 z-10">
-              <div className="flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-clinical-600" />
-                <h2 className="text-xl font-bold text-slate-800">Crear Universidad</h2>
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg border border-slate-100 transform transition-all animate-in scale-in duration-200 overflow-hidden">
+            <div className="max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white sticky top-0 z-10">
+                <div className="flex items-center gap-2">
+                  <Building2 className="w-5 h-5 text-clinical-600" />
+                  <h2 className="text-xl font-bold text-slate-800">Crear Universidad</h2>
+                </div>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
+                >
+                  <X className="w-5 h-5 text-slate-500" />
+                </button>
               </div>
-              <button
-                onClick={() => setShowModal(false)}
-                className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
-              >
-                <X className="w-5 h-5 text-slate-500" />
-              </button>
-            </div>
 
             <form onSubmit={handleCreate}>
               <div className="p-6 space-y-6">
@@ -272,7 +281,7 @@ export default function Universities() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50 sticky bottom-0">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white sticky bottom-0">
                 <button type="button" onClick={() => setShowModal(false)} className="btn-secondary">
                   Cancelar
                 </button>
@@ -281,14 +290,15 @@ export default function Universities() {
                 </button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}
 
       {showEditModal && editTarget && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg border border-slate-100 transform transition-all animate-in scale-in duration-200">
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
               <div className="flex items-center gap-2">
                 <Pencil className="w-5 h-5 text-clinical-600" />
                 <h2 className="text-xl font-bold text-slate-800">Editar Universidad</h2>
@@ -338,7 +348,7 @@ export default function Universities() {
                     onChange={(e) => setEditTarget({ ...editTarget, phoneNumber: e.target.value })} />
                 </div>
               </div>
-              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
                 <button type="button" onClick={() => { setShowEditModal(false); setEditTarget(null) }} className="btn-secondary">Cancelar</button>
                 <button type="submit" disabled={editing} className="btn-primary disabled:opacity-50">
                   {editing ? 'Guardando...' : 'Guardar Cambios'}
@@ -349,8 +359,45 @@ export default function Universities() {
         </div>
       )}
 
+      {showDetailModal && detailTarget && (
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200">
+            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-white">
+              <div className="flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-clinical-600" />
+                <h2 className="text-xl font-bold text-slate-800">{detailTarget.name}</h2>
+              </div>
+              <button onClick={() => { setShowDetailModal(false); setDetailTarget(null) }} className="p-2 hover:bg-slate-100 rounded-xl transition-colors">
+                <X className="w-5 h-5 text-slate-500" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">ID Interno</label>
+              <div className="flex items-center gap-2 bg-clinical-50/60 rounded-xl px-4 py-3 border border-clinical-200/50">
+                <code className="text-sm font-mono font-bold text-slate-800 tracking-wide break-all">{detailTarget.id}</code>
+                <button
+                  onClick={() => { navigator.clipboard.writeText(detailTarget.id); setToast({ show: true, message: 'ID copiado al portapapeles' }); setTimeout(() => setToast({ show: false, message: '' }), 3000) }}
+                  className="ml-auto p-1.5 hover:bg-clinical-100 rounded-lg transition-colors shrink-0" title="Copiar ID"
+                >
+                  <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end p-6 border-t border-slate-100 bg-white">
+              <button onClick={() => { setShowDetailModal(false); setDetailTarget(null) }} className="btn-primary">
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-clinical-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 transform transition-all animate-in scale-in duration-200">
             <div className="flex items-center gap-3 p-6 border-b border-slate-100">
               <div className="w-10 h-10 bg-red-50 text-red-600 rounded-full flex items-center justify-center">
@@ -366,7 +413,7 @@ export default function Universities() {
                 ¿Estás seguro de eliminar la universidad <strong>{deleteTarget?.name}</strong>?
               </p>
             </div>
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-100 bg-white">
               <button
                 onClick={() => { setShowDeleteConfirm(false); setDeleteTarget(null) }}
                 className="btn-secondary"
