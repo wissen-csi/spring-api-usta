@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Users, Stethoscope, UserCog, ClipboardList, BarChart3, Plus, X, CheckCircle, Trash2, AlertTriangle } from 'lucide-react'
+import { Users, Stethoscope, UserCog, ClipboardList, BarChart3, Plus, X, Trash2, AlertTriangle } from 'lucide-react'
 import { studentService, doctorService, adminService, rotationService } from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import Toast from '../components/Toast'
 
 const maritalStatusOptions = [
   { value: 'MARRIED', label: 'Casado/a' },
@@ -121,7 +122,7 @@ export default function Admin() {
       })
       setShowModal(false)
       setToast({ show: true, message: 'Administrador creado exitosamente' })
-      setTimeout(() => setToast({ show: false, message: '' }), 4000)
+      setTimeout(() => setToast({ show: false, message: '' }), 3000)
       const res = await adminService.findAll({ page: currentPage, size: itemsPerPage })
       setAdmins(res.data.content || [])
       setTotalPages(res.data.totalPages)
@@ -142,7 +143,7 @@ export default function Admin() {
       setShowDeleteConfirm(false)
       setDeleteTarget(null)
       setToast({ show: true, message: 'Administrador eliminado exitosamente' })
-      setTimeout(() => setToast({ show: false, message: '' }), 4000)
+      setTimeout(() => setToast({ show: false, message: '' }), 3000)
       const res = await adminService.findAll({ page: currentPage, size: itemsPerPage })
       setAdmins(res.data.content || [])
       setTotalPages(res.data.totalPages)
@@ -159,17 +160,7 @@ export default function Admin() {
 
   return (
     <div className="space-y-6">
-      {toast.show && (
-        <div className="fixed top-5 right-5 z-[100] flex items-center gap-3 bg-white border border-emerald-200 shadow-2xl rounded-2xl px-6 py-4 animate-in slide-in-from-top duration-300">
-          <div className="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-6 h-6" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-slate-800 text-sm">Operación Completada</h4>
-            <p className="text-xs text-slate-500">{toast.message}</p>
-          </div>
-        </div>
-      )}
+      <Toast show={toast.show} message={toast.message} />
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

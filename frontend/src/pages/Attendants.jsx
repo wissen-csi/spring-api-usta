@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Plus, Search, Pencil, Trash2, X, Sparkles, CheckCircle, AlertTriangle, Users } from 'lucide-react'
+import { Plus, Search, Pencil, Trash2, X, Sparkles, AlertTriangle, Users } from 'lucide-react'
 import { attendantService } from '../services/api'
+import Toast from '../components/Toast'
 import { useAuth } from '../context/AuthContext'
 
 const typeAttendantOptions = [
@@ -100,7 +101,7 @@ export default function Attendants() {
         setToast({ show: true, message: 'Familiar agregado exitosamente' })
       }
 
-      setTimeout(() => setToast({ show: false, message: '' }), 4000)
+      setTimeout(() => setToast({ show: false, message: '' }), 3000)
       setShowModal(false)
       setEditTarget(null)
       setForm(initialForm)
@@ -121,7 +122,7 @@ export default function Attendants() {
       setShowDeleteConfirm(false)
       setDeleteTarget(null)
       setToast({ show: true, message: 'Familiar eliminado exitosamente' })
-      setTimeout(() => setToast({ show: false, message: '' }), 4000)
+      setTimeout(() => setToast({ show: false, message: '' }), 3000)
       await loadData()
     } catch (err) {
       const msg = err.response?.data?.message || err.response?.data || 'Error al eliminar el familiar'
@@ -141,17 +142,7 @@ export default function Attendants() {
 
   return (
     <div className="space-y-6 relative">
-      {toast.show && (
-        <div className="fixed top-5 right-5 z-[100] flex items-center gap-3 bg-white border border-emerald-200 shadow-2xl rounded-2xl px-6 py-4 animate-in slide-in-from-top duration-300">
-          <div className="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-6 h-6" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-slate-800 text-sm">Operación Completada</h4>
-            <p className="text-xs text-slate-500">{toast.message}</p>
-          </div>
-        </div>
-      )}
+      <Toast show={toast.show} message={toast.message} />
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

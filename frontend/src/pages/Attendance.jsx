@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { QrCode, Camera, CheckCircle, Clock, X, Scan } from 'lucide-react'
+import { QrCode, Camera, Clock, Scan } from 'lucide-react'
+import Toast from '../components/Toast'
 import { entryService } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import { Html5Qrcode } from 'html5-qrcode'
@@ -71,12 +72,12 @@ export default function Attendance() {
         assitance: new Date().toISOString()
       })
       setToast({ show: true, message: 'Asistencia registrada exitosamente', type: 'success' })
-      setTimeout(() => setToast({ show: false, message: '', type: '' }), 4000)
+      setTimeout(() => setToast({ show: false, message: '', type: '' }), 3000)
       await loadEntries()
     } catch (err) {
       const msg = err.response?.data?.message || err.response?.data || 'Error al registrar asistencia'
       setToast({ show: true, message: typeof msg === 'string' ? msg : JSON.stringify(msg), type: 'error' })
-      setTimeout(() => setToast({ show: false, message: '', type: '' }), 4000)
+      setTimeout(() => setToast({ show: false, message: '', type: '' }), 3000)
     } finally {
       submittingRef.current = false
       setSubmitting(false)
@@ -91,7 +92,7 @@ export default function Attendance() {
       const cameras = await Html5Qrcode.getCameras()
       if (!cameras || cameras.length === 0) {
         setToast({ show: true, message: 'No se encontró ninguna cámara.', type: 'error' })
-        setTimeout(() => setToast({ show: false, message: '', type: '' }), 5000)
+        setTimeout(() => setToast({ show: false, message: '', type: '' }), 3000)
         return
       }
       setScanning(true)
@@ -108,13 +109,13 @@ export default function Attendance() {
           )
         } catch (err) {
           setToast({ show: true, message: 'Error al iniciar la cámara: ' + (err.message || err), type: 'error' })
-          setTimeout(() => setToast({ show: false, message: '', type: '' }), 5000)
+          setTimeout(() => setToast({ show: false, message: '', type: '' }), 3000)
           setScanning(false)
         }
       }, 100)
     } catch (err) {
       setToast({ show: true, message: 'Error al acceder a la cámara: ' + (err.message || err) + '. Asegúrate de permitir el acceso a la cámara en tu navegador.', type: 'error' })
-      setTimeout(() => setToast({ show: false, message: '', type: '' }), 6000)
+      setTimeout(() => setToast({ show: false, message: '', type: '' }), 3000)
     }
   }
 
@@ -128,13 +129,13 @@ export default function Attendance() {
         assitance: new Date().toISOString()
       })
       setToast({ show: true, message: 'Asistencia registrada exitosamente', type: 'success' })
-      setTimeout(() => setToast({ show: false, message: '', type: '' }), 4000)
+      setTimeout(() => setToast({ show: false, message: '', type: '' }), 3000)
       setManualId('')
       await loadEntries()
     } catch (err) {
       const msg = err.response?.data?.message || err.response?.data || 'Error al registrar asistencia'
       setToast({ show: true, message: typeof msg === 'string' ? msg : JSON.stringify(msg), type: 'error' })
-      setTimeout(() => setToast({ show: false, message: '', type: '' }), 4000)
+      setTimeout(() => setToast({ show: false, message: '', type: '' }), 3000)
     } finally {
       setSubmitting(false)
     }
@@ -154,17 +155,7 @@ export default function Attendance() {
 
   return (
     <div className="space-y-6 relative">
-      {toast.show && (
-        <div className={`fixed top-5 right-5 z-[100] flex items-center gap-3 bg-white border shadow-2xl rounded-2xl px-6 py-4 animate-in slide-in-from-top duration-300 ${toast.type === 'error' ? 'border-red-200' : 'border-emerald-200'}`}>
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${toast.type === 'error' ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}`}>
-            {toast.type === 'error' ? <X className="w-6 h-6" /> : <CheckCircle className="w-6 h-6" />}
-          </div>
-          <div>
-            <h4 className="font-semibold text-slate-800 text-sm">{toast.type === 'error' ? 'Error' : 'Operación Completada'}</h4>
-            <p className="text-xs text-slate-500">{toast.message}</p>
-          </div>
-        </div>
-      )}
+      <Toast show={toast.show} message={toast.message} type={toast.type || 'success'} />
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

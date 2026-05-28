@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Users, Stethoscope, ClipboardList, TrendingUp, Calendar, BookOpen, MapPin, User, X, Pencil, CheckCircle, Search, Activity, Plus, Trash2 } from 'lucide-react'
+import { Users, Stethoscope, ClipboardList, TrendingUp, Calendar, BookOpen, MapPin, User, X, Pencil, Search, Activity, Plus, Trash2 } from 'lucide-react'
 import { studentService, doctorService, rotationService, groupAssignmentService, studentDiseaseService, cieService, universityService, academicPeriodService, studentAcademicPeriodService } from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import Toast from '../components/Toast'
 
 const maritalStatusOptions = [
   { value: 'MARRIED', label: 'Casado/a' },
@@ -219,7 +220,7 @@ function StudentDashboard() {
       }
       setShowEditModal(false)
       setToast({ show: true, message: 'Perfil actualizado exitosamente' })
-      setTimeout(() => setToast({ show: false, message: '' }), 4000)
+      setTimeout(() => setToast({ show: false, message: '' }), 3000)
       const profileRes = await studentService.findSelf()
       setProfile(profileRes.data)
     } catch (err) {
@@ -319,17 +320,7 @@ function StudentDashboard() {
 
   return (
     <div className="space-y-6">
-      {toast.show && (
-        <div className="fixed top-5 right-5 z-[100] flex items-center gap-3 bg-white border border-emerald-200 shadow-2xl rounded-2xl px-6 py-4 animate-in slide-in-from-top duration-300">
-          <div className="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-6 h-6" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-slate-800 text-sm">Operación Completada</h4>
-            <p className="text-xs text-slate-500">{toast.message}</p>
-          </div>
-        </div>
-      )}
+      <Toast show={toast.show} message={toast.message} />
 
       <div className="flex items-center justify-between">
         <div>
@@ -798,7 +789,7 @@ function DoctorDashboard() {
       })
       setShowEditModal(false)
       setToast({ show: true, message: 'Perfil actualizado exitosamente' })
-      setTimeout(() => setToast({ show: false, message: '' }), 4000)
+      setTimeout(() => setToast({ show: false, message: '' }), 3000)
       const profileRes = await doctorService.findSelf()
       setProfile(profileRes.data)
     } catch (err) {
@@ -828,17 +819,7 @@ function DoctorDashboard() {
 
   return (
     <div className="space-y-6">
-      {toast.show && (
-        <div className="fixed top-5 right-5 z-[100] flex items-center gap-3 bg-white border border-emerald-200 shadow-2xl rounded-2xl px-6 py-4 animate-in slide-in-from-top duration-300">
-          <div className="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-6 h-6" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-slate-800 text-sm">Operación Completada</h4>
-            <p className="text-xs text-slate-500">{toast.message}</p>
-          </div>
-        </div>
-      )}
+      <Toast show={toast.show} message={toast.message} />
 
       <div className="flex items-center justify-between">
         <div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Upload, File, Trash2, Download, Search, X, Sparkles, CheckCircle, AlertTriangle } from 'lucide-react'
+import { Upload, File, Trash2, Download, Search, X, Sparkles, AlertTriangle } from 'lucide-react'
 import { fileService } from '../services/api'
+import Toast from '../components/Toast'
 import { useAuth } from '../context/AuthContext'
 
 export default function Files() {
@@ -23,7 +24,7 @@ export default function Files() {
 
   const showToast = (message) => {
     setToast({ show: true, message })
-    setTimeout(() => setToast({ show: false, message: '' }), 4000)
+    setTimeout(() => setToast({ show: false, message: '' }), 3000)
   }
 
   const loadFiles = useCallback(async () => {
@@ -127,17 +128,7 @@ export default function Files() {
 
   return (
     <div className="space-y-6 relative">
-      {toast.show && (
-        <div className="fixed top-5 right-5 z-[100] flex items-center gap-3 bg-white border border-emerald-200 shadow-2xl rounded-2xl px-6 py-4 animate-in slide-in-from-top duration-300">
-          <div className="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-6 h-6" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-slate-800 text-sm">Operación Completada</h4>
-            <p className="text-xs text-slate-500">{toast.message}</p>
-          </div>
-        </div>
-      )}
+      <Toast show={toast.show} message={toast.message} />
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
